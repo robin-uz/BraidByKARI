@@ -15,6 +15,8 @@ import ContactPage from "@/pages/contact-page";
 import AuthPage from "@/pages/auth-page";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
+import AdminAnalytics from "@/pages/admin/analytics";
+import AdminReminders from "@/pages/admin/reminders";
 import NotFound from "@/pages/not-found";
 
 // Client pages
@@ -49,6 +51,8 @@ function Router() {
         {/* Admin routes - protected */}
         <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
         <ProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
+        <ProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
+        <ProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />

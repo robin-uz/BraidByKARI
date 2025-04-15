@@ -13,7 +13,8 @@ import {
   ChevronRight,
   Check,
   Clock,
-  Ban
+  Ban,
+  BarChart3
 } from "lucide-react";
 import {
   Area,
@@ -403,6 +404,18 @@ export default function AdminDashboard() {
                   </span>
                   <span className="font-medium">Manage Bookings</span>
                   <span className="text-sm text-neutral-500 mt-1">Review and update appointment status</span>
+                </div>
+              </Button>
+            </Link>
+            
+            <Link href="/admin/analytics">
+              <Button variant="outline" className="w-full justify-start h-auto py-4">
+                <div className="flex flex-col items-start">
+                  <span className="text-primary text-lg mb-1">
+                    <BarChart3 className="h-5 w-5" />
+                  </span>
+                  <span className="font-medium">Business Analytics</span>
+                  <span className="text-sm text-neutral-500 mt-1">View detailed performance metrics</span>
                 </div>
               </Button>
             </Link>

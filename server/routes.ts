@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import nodemailer from 'nodemailer';
 import { insertBookingSchema, insertGallerySchema, insertServiceSchema, insertTestimonialSchema } from "@shared/schema";
+import { processReminderBatch, scheduleReminderCheck } from "./reminder";
 
 // Email configuration
 const gmailTransporter = nodemailer.createTransport({
@@ -323,6 +324,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       await storage.deleteTestimonial(id);
       res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // Appointment reminder routes
+  app.post("/api/admin/reminders/send", isAdmin, async (req, res, next) => {
+    try {
+      const remindersSent = await processReminderBatch();
+      res.json({ success: true, remindersSent });
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+  // This would normally be triggered by a cron job
+  app.post("/api/admin/reminders/schedule", isAdmin, async (req, res, next) => {
+    try {
+      // Start the reminder check process
+      scheduleReminderCheck();
+      res.json({ success: true, message: "Reminder check scheduled" });
     } catch (error) {
       next(error);
     }
