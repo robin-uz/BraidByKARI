@@ -41,7 +41,7 @@ export const services = pgTable("services", {
   description: text("description").notNull(),
   price: integer("price").notNull(),
   duration: text("duration").notNull(),
-  icon: text("icon").default("crown"),
+  icon: text("icon"),
 });
 
 export const testimonials = pgTable("testimonials", {

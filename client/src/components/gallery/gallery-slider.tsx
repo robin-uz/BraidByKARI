@@ -41,6 +41,20 @@ export default function GallerySlider() {
       description: "Stylish bob-length braids with elegant curls - $250",
       imageUrl: "/images/bob-braids.jpg",
       order: 3
+    },
+    {
+      id: 5,
+      title: "Curly Top Braids",
+      description: "Natural curly top with beautifully styled braids",
+      imageUrl: "/images/curly-braids.jpg",
+      order: 4
+    },
+    {
+      id: 6,
+      title: "Long Box Braids",
+      description: "Classic long box braids with clean parting",
+      imageUrl: "/images/long-braids.jpg",
+      order: 5
     }
   ];
 
@@ -126,7 +140,7 @@ export default function GallerySlider() {
         </div>
       </div>
       
-      <div className="grid grid-cols-4 gap-3 mt-4">
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mt-4">
         {displayGallery.map((item, index) => (
           <button 
             key={item.id} 
@@ -138,7 +152,7 @@ export default function GallerySlider() {
             <img 
               src={item.imageUrl} 
               alt={`${item.title} thumbnail`}
-              className="w-full h-20 object-cover"
+              className="w-full h-16 md:h-20 object-cover"
             />
           </button>
         ))}

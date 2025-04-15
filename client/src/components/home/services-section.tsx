@@ -3,7 +3,9 @@ import { Service } from "@shared/schema";
 import { Loader2, Crown, Feather, Wind } from "lucide-react";
 
 // Icons for services
-const getIconComponent = (iconName: string) => {
+const getIconComponent = (iconName: string | null) => {
+  if (!iconName) return <Crown className="w-8 h-8" />;
+  
   switch (iconName) {
     case "crown":
       return <Crown className="w-8 h-8" />;
@@ -57,10 +59,10 @@ export default function ServicesSection() {
     },
     {
       id: 3,
-      name: "Bob Boho Braids",
-      description: "Stylish bob-length braids with elegant curls, perfect for a chic, sophisticated look.",
-      price: 25000, // $250.00
-      duration: "4-6 hours",
+      name: "Long Box Braids",
+      description: "Classic long box braids with clean parting, perfect for an elegant, sophisticated look.",
+      price: 23000, // $230.00
+      duration: "5-7 hours",
       icon: "wind",
     },
   ];
@@ -146,11 +148,23 @@ export default function ServicesSection() {
                   <td className="px-6 py-4">4-6 hours</td>
                   <td className="px-6 py-4 text-primary font-semibold">$180</td>
                 </tr>
-                <tr>
+                <tr className="border-b border-neutral-200 dark:border-neutral-800">
                   <td className="px-6 py-4 font-medium">Bob Boho Braids</td>
                   <td className="px-6 py-4">Stylish bob-length braids with elegant curls</td>
                   <td className="px-6 py-4">4-6 hours</td>
                   <td className="px-6 py-4 text-primary font-semibold">$250</td>
+                </tr>
+                <tr className="border-b border-neutral-200 dark:border-neutral-800">
+                  <td className="px-6 py-4 font-medium">Curly Top Braids</td>
+                  <td className="px-6 py-4">Natural curly top with beautifully styled braids</td>
+                  <td className="px-6 py-4">3-5 hours</td>
+                  <td className="px-6 py-4 text-primary font-semibold">$200</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 font-medium">Long Box Braids</td>
+                  <td className="px-6 py-4">Classic long box braids with clean parting</td>
+                  <td className="px-6 py-4">5-7 hours</td>
+                  <td className="px-6 py-4 text-primary font-semibold">$230</td>
                 </tr>
               </tbody>
             </table>
