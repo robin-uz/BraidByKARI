@@ -30,6 +30,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   setupAuth(app);
 
+  // Client routes
+  app.get("/api/client/bookings", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      // Get bookings associated with this user's email
+      const bookings = await storage.getBookings();
+      const userBookings = bookings.filter(booking => 
+        booking.email === req.user.email
+      );
+      
+      res.json(userBookings);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   // Booking routes
   app.post("/api/bookings", async (req, res, next) => {
     try {
