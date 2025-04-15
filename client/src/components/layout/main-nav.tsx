@@ -90,6 +90,15 @@ export default function MainNav() {
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
 
+            {/* Client Portal Link (if user is logged in) */}
+            {user && (
+              <Link href="/client/dashboard">
+                <Button variant="outline" size="sm">
+                  My Portal
+                </Button>
+              </Link>
+            )}
+
             {/* Admin Link (if user is admin) */}
             {user?.role === "admin" && (
               <Link href="/admin/dashboard">
@@ -168,6 +177,30 @@ export default function MainNav() {
                   Contact
                 </a>
               </Link>
+              
+              {/* Client Portal in Mobile Menu */}
+              {user && (
+                <Link href="/client/dashboard">
+                  <a 
+                    className={`font-medium hover:text-primary transition-all px-4 ${isActive("/client/dashboard") ? "text-primary" : ""}`} 
+                    onClick={closeMobileMenu}
+                  >
+                    My Portal
+                  </a>
+                </Link>
+              )}
+              
+              {/* Admin Link in Mobile Menu */}
+              {user?.role === "admin" && (
+                <Link href="/admin/dashboard">
+                  <a 
+                    className={`font-medium hover:text-primary transition-all px-4 ${isActive("/admin/dashboard") ? "text-primary" : ""}`} 
+                    onClick={closeMobileMenu}
+                  >
+                    Admin Dashboard
+                  </a>
+                </Link>
+              )}
             </nav>
           </div>
         )}

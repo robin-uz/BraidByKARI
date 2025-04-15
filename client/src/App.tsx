@@ -17,6 +17,10 @@ import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
 import NotFound from "@/pages/not-found";
 
+// Client pages
+import ClientDashboard from "@/pages/client/dashboard";
+import HairSimulator from "@/pages/client/hair-simulator";
+
 // Legal Pages
 import PrivacyPolicy from "@/pages/legal/privacy-policy";
 import TermsAndConditions from "@/pages/legal/terms";
@@ -38,6 +42,10 @@ function Router() {
         <Route path="/legal/terms" component={TermsAndConditions} />
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         
+        {/* Client routes - protected */}
+        <ProtectedRoute path="/client/dashboard" component={ClientDashboard} />
+        <ProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+
         {/* Admin routes - protected */}
         <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
         <ProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
