@@ -37,9 +37,9 @@ export default function GallerySlider() {
     },
     {
       id: 4,
-      title: "Natural Textured Look",
-      description: "Embracing natural texture with minimal styling",
-      imageUrl: "/images/natural-hair1.jpg",
+      title: "Bob Boho Braids",
+      description: "Stylish bob-length braids with elegant curls - $250",
+      imageUrl: "/images/bob-braids.jpg",
       order: 3
     }
   ];

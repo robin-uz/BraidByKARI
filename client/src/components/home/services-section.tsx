@@ -57,9 +57,9 @@ export default function ServicesSection() {
     },
     {
       id: 3,
-      name: "Feed-in Braids",
-      description: "Sleek, natural-looking braids that gradually incorporate extensions for a seamless finish.",
-      price: 16000, // $160.00
+      name: "Bob Boho Braids",
+      description: "Stylish bob-length braids with elegant curls, perfect for a chic, sophisticated look.",
+      price: 25000, // $250.00
       duration: "4-6 hours",
       icon: "wind",
     },
@@ -140,11 +140,17 @@ export default function ServicesSection() {
                   <td className="px-6 py-4">5-8 hours</td>
                   <td className="px-6 py-4 text-primary font-semibold">$220</td>
                 </tr>
-                <tr>
+                <tr className="border-b border-neutral-200 dark:border-neutral-800">
                   <td className="px-6 py-4 font-medium">Feed-in Braids</td>
                   <td className="px-6 py-4">Sleek braids with a natural transition</td>
                   <td className="px-6 py-4">4-6 hours</td>
                   <td className="px-6 py-4 text-primary font-semibold">$180</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 font-medium">Bob Boho Braids</td>
+                  <td className="px-6 py-4">Stylish bob-length braids with elegant curls</td>
+                  <td className="px-6 py-4">4-6 hours</td>
+                  <td className="px-6 py-4 text-primary font-semibold">$250</td>
                 </tr>
               </tbody>
             </table>
