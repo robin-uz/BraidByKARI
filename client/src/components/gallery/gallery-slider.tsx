@@ -4,6 +4,11 @@ import { Gallery } from "@shared/schema";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Import gallery images
+import braidsStyleImg from "../../assets/braids-style.png";
+import afroStyleImg from "../../assets/afro-style.png";
+import boxBraidsImg from "../../assets/box-braids.png";
+
 export default function GallerySlider() {
   const { data: galleryItems, isLoading, error } = useQuery<Gallery[]>({
     queryKey: ["/api/gallery"],
@@ -16,25 +21,25 @@ export default function GallerySlider() {
   const defaultGalleryItems = [
     {
       id: 1,
-      title: "Classic Box Braids",
-      description: "Medium size with gold accessories",
-      imageUrl: "https://images.unsplash.com/photo-1602192322874-89cf62fe24fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+      title: "Long Knotless Braids",
+      description: "Elegant long braids with a clean, natural look",
+      imageUrl: braidsStyleImg,
       order: 0
     },
     {
       id: 2,
-      title: "Knotless Braids",
-      description: "With elegant curled ends",
-      imageUrl: "https://images.unsplash.com/photo-1605980625600-88b46a80471a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+      title: "Natural Afro Style",
+      description: "Beautiful natural afro with defined curls",
+      imageUrl: afroStyleImg,
       order: 1
     },
     {
       id: 3,
-      title: "Feed-in Braids",
-      description: "Styled in an elegant updo",
-      imageUrl: "https://images.unsplash.com/photo-1513097847644-f00cfe868607?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+      title: "Medium Box Braids",
+      description: "Classic box braids for versatile styling",
+      imageUrl: boxBraidsImg,
       order: 2
-    },
+    }
   ];
 
   // Use galleryItems from API or fallback to default if empty
