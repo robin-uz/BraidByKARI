@@ -4,11 +4,6 @@ import { Gallery } from "@shared/schema";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Import gallery images
-import braidsStyleImg from "../../assets/braids-style.png";
-import afroStyleImg from "../../assets/afro-style.png";
-import boxBraidsImg from "../../assets/box-braids.png";
-
 export default function GallerySlider() {
   const { data: galleryItems, isLoading, error } = useQuery<Gallery[]>({
     queryKey: ["/api/gallery"],
@@ -21,24 +16,31 @@ export default function GallerySlider() {
   const defaultGalleryItems = [
     {
       id: 1,
-      title: "Long Knotless Braids",
-      description: "Elegant long braids with a clean, natural look",
-      imageUrl: braidsStyleImg,
+      title: "Elegant Box Braids",
+      description: "Medium size box braids with perfect symmetry",
+      imageUrl: "/images/box-braids.jpg",
       order: 0
     },
     {
       id: 2,
-      title: "Natural Afro Style",
-      description: "Beautiful natural afro with defined curls",
-      imageUrl: afroStyleImg,
+      title: "Knotless Braids",
+      description: "Beautiful knotless braids with elegant styling",
+      imageUrl: "/images/braids-style2.jpg",
       order: 1
     },
     {
       id: 3,
-      title: "Medium Box Braids",
-      description: "Classic box braids for versatile styling",
-      imageUrl: boxBraidsImg,
+      title: "Natural Afro Style",
+      description: "Gorgeous natural hair with defined curls",
+      imageUrl: "/images/afro-style.jpg",
       order: 2
+    },
+    {
+      id: 4,
+      title: "Natural Textured Look",
+      description: "Embracing natural texture with minimal styling",
+      imageUrl: "/images/natural-hair1.jpg",
+      order: 3
     }
   ];
 
@@ -124,7 +126,7 @@ export default function GallerySlider() {
         </div>
       </div>
       
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-4 gap-3 mt-4">
         {displayGallery.map((item, index) => (
           <button 
             key={item.id} 
@@ -136,7 +138,7 @@ export default function GallerySlider() {
             <img 
               src={item.imageUrl} 
               alt={`${item.title} thumbnail`}
-              className="w-full h-24 object-cover"
+              className="w-full h-20 object-cover"
             />
           </button>
         ))}
