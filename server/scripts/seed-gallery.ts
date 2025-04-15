@@ -46,15 +46,5 @@ async function seedGallery() {
   console.log("Gallery seeded successfully");
 }
 
-// Export to be used in server startup
+// Export the function to be called from the main server
 export { seedGallery };
-
-// If run directly, execute seeding
-if (require.main === module) {
-  seedGallery()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error("Error seeding gallery:", error);
-      process.exit(1);
-    });
-}
