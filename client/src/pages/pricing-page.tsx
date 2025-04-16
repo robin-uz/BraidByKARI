@@ -157,7 +157,7 @@ const STANDARD_SERVICES = [
 export default function PricingPage() {
   const [selectedService, setSelectedService] = useState<any | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [viewMode, setViewMode] = useState<"grid" | "table" | "bento">("bento");
+  const [viewMode, setViewMode] = useState<"grid" | "bento">("bento");
   const prefersReducedMotion = useReducedMotion();
   
   // Filter services based on the selected category
