@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Button } from "@/components/ui/button";
 import { 
   Calendar, 
@@ -21,14 +21,39 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useMutation } from "@tanstack/react-query";
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, logoutMutation } = useAuth();
+  const { user } = useServerAuth();
   const [location] = useLocation();
+  const { toast } = useToast();
+  
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest("POST", "/api/logout");
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(["/api/user"], null);
+      window.location.href = "/";
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Logout failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const menuItems = [

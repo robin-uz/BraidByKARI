@@ -30,12 +30,12 @@ import {
   Pie,
   Cell
 } from "recharts";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerAuth } from "@/contexts/DebugAuthContext";
 import AdminLayout from "@/components/admin/admin-layout";
 import { Booking, Gallery, Service, Testimonial } from "@shared/schema";
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const { user } = useServerAuth();
   
   // Query bookings
   const { data: bookings = [], isLoading: bookingsLoading } = useQuery<Booking[]>({
