@@ -420,26 +420,27 @@ export default function ServerAuthPage() {
         </div>
         
         {/* Hero Section Column */}
-        <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-purple-700 to-pink-600 items-center justify-center">
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-amber-700 to-amber-600 items-center justify-center">
           <div className="max-w-md text-white p-8">
-            <h2 className="text-3xl font-bold mb-4">Artistry in Every Braid</h2>
+            <h2 className="text-4xl font-heading font-bold mb-4">Where Style Meets Artistry</h2>
+            <div className="h-1 w-24 bg-amber-300 rounded mb-6"></div>
             <p className="mb-6">
-              Welcome to Divine Braids, your premium destination for exquisite, 
-              professional hair braiding services. Create an account to book appointments, 
-              view your history, and unlock exclusive offers.
+              Welcome to KARI STYLEZ, your premium destination for exquisite, 
+              professional hair braiding and styling. Create an account to book appointments, 
+              track your favorite styles, and unlock exclusive offers.
             </p>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               <li className="flex items-center">
-                <span className="mr-2">✓</span> Easy appointment booking
+                <span className="mr-2 text-amber-300">✓</span> Easy online appointment booking
               </li>
               <li className="flex items-center">
-                <span className="mr-2">✓</span> Personalized style recommendations
+                <span className="mr-2 text-amber-300">✓</span> Personalized style consultations
               </li>
               <li className="flex items-center">
-                <span className="mr-2">✓</span> Access to exclusive promotions
+                <span className="mr-2 text-amber-300">✓</span> Access to exclusive member promotions
               </li>
               <li className="flex items-center">
-                <span className="mr-2">✓</span> Hair color and style simulator
+                <span className="mr-2 text-amber-300">✓</span> Style inspiration and tips
               </li>
             </ul>
           </div>

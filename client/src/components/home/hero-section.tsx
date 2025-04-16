@@ -52,7 +52,7 @@ export default function HeroSection() {
       transition: {
         duration: 4,
         repeat: Infinity,
-        repeatType: "reverse",
+        repeatType: "reverse" as const,
         ease: "easeInOut"
       }
     }

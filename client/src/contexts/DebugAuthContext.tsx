@@ -151,7 +151,7 @@ export function ServerAuthProvider({ children }: { children: ReactNode }) {
       setUser(userData);
       toast({
         title: "Registration successful",
-        description: `Welcome to Divine Braids, ${userData.username || userData.email}!`,
+        description: `Welcome to KARI STYLEZ, ${userData.username || userData.email}!`,
       });
       
       // Invalidate any relevant queries
