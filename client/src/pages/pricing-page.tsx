@@ -4,15 +4,33 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, Scissors, Clock, Star, ArrowRight, ChevronRight, ShoppingBag } from "lucide-react";
+import { 
+  CheckCircle, 
+  Scissors, 
+  Clock, 
+  Star, 
+  ArrowRight, 
+  ChevronRight, 
+  ShoppingBag, 
+  Info, 
+  X, 
+  Eye 
+} from "lucide-react";
 import { Link } from "wouter";
 import { Service, Gallery } from "@shared/schema";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { 
+  motion, 
+  AnimatePresence,
+  useReducedMotion 
+} from "framer-motion";
 
 export default function PricingPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   
   // Fetch services data
   const { data: services, isLoading: servicesLoading } = useQuery({
@@ -326,32 +344,64 @@ export default function PricingPage() {
             </div>
           </div>
           
-          <div className="flex flex-col space-y-10">
-            {/* Categories Tabs */}
-            <Tabs 
-              defaultValue="all" 
-              value={activeTab}
-              onValueChange={(value) => {
-                setActiveTab(value);
-                setSelectedCategory(value);
-              }}
-              className="w-full max-w-3xl mx-auto"
-            >
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 h-auto p-1">
-                {categories.map((category) => (
-                  <TabsTrigger 
-                    key={category.id} 
-                    value={category.id}
-                    className="data-[state=active]:bg-amber-100 data-[state=active]:text-amber-900 dark:data-[state=active]:bg-amber-900 dark:data-[state=active]:text-amber-100 py-2 px-3"
-                  >
-                    <span className="mr-2">{category.icon}</span>
-                    <span className="hidden md:inline">{category.name}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+          <div className="flex flex-col space-y-6">
+            {/* View Mode and Categories */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <Tabs 
+                defaultValue="all" 
+                value={activeTab}
+                onValueChange={(value) => {
+                  setActiveTab(value);
+                  setSelectedCategory(value);
+                }}
+                className="w-full max-w-3xl"
+              >
+                <TabsList className="grid grid-cols-3 md:grid-cols-6 h-auto p-1">
+                  {categories.map((category) => (
+                    <TabsTrigger 
+                      key={category.id} 
+                      value={category.id}
+                      className="data-[state=active]:bg-amber-100 data-[state=active]:text-amber-900 dark:data-[state=active]:bg-amber-900 dark:data-[state=active]:text-amber-100 py-2 px-3"
+                    >
+                      <span className="mr-2">{category.icon}</span>
+                      <span className="hidden md:inline">{category.name}</span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+              
+              {/* View Mode Toggle */}
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="flex items-center"
+                >
+                  <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor" />
+                  </svg>
+                  Grid
+                </Button>
+                <Button
+                  variant={viewMode === "table" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("table")}
+                  className="flex items-center"
+                >
+                  <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" stroke="currentColor" strokeWidth="2" />
+                    <path d="M3 10h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                  Table
+                </Button>
+              </div>
+            </div>
             
-            {/* Services Grid */}
+            {/* Services View (Grid or Table) */}
             {isLoading ? (
               <div className="text-center py-12">
                 <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" role="status">
@@ -359,7 +409,8 @@ export default function PricingPage() {
                 </div>
                 <p className="mt-4 text-muted-foreground">Loading services...</p>
               </div>
-            ) : (
+            ) : viewMode === "grid" ? (
+              // Grid View
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6"
                 variants={containerVariants}
@@ -406,10 +457,19 @@ export default function PricingPage() {
                             </div>
                           </CardContent>
                           
-                          <CardFooter className="pt-0">
-                            <Link href={`/booking?service=${service.name}`} className="w-full">
-                              <Button variant="outline" className="w-full text-sm">
-                                Book This Style
+                          <CardFooter className="pt-0 flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              className="flex-1"
+                              onClick={() => setSelectedService(service)}
+                            >
+                              <Eye className="h-4 w-4 mr-1.5" />
+                              Details
+                            </Button>
+                            <Link href={`/booking?service=${service.name}`} className="flex-1">
+                              <Button variant="default" size="sm" className="w-full">
+                                Book Now
                               </Button>
                             </Link>
                           </CardFooter>
@@ -419,6 +479,75 @@ export default function PricingPage() {
                   );
                 })}
               </motion.div>
+            ) : (
+              // Table View
+              <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-full table-auto text-left">
+                    <thead className="bg-neutral-50 dark:bg-neutral-900/50 text-neutral-600 dark:text-neutral-400 text-sm font-medium">
+                      <tr>
+                        <th scope="col" className="px-6 py-4">Style</th>
+                        <th scope="col" className="px-6 py-4">Description</th>
+                        <th scope="col" className="px-6 py-4">Duration</th>
+                        <th scope="col" className="px-6 py-4">Price</th>
+                        <th scope="col" className="px-6 py-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                      {getFilteredServices().map((service) => (
+                        <motion.tr 
+                          key={service.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="bg-white dark:bg-neutral-950 hover:bg-neutral-50 dark:hover:bg-neutral-900/50"
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex items-center gap-3">
+                              {service.icon && (
+                                <div className="bg-amber-100 dark:bg-amber-900/70 h-8 w-8 rounded-full flex items-center justify-center">
+                                  <span className="text-lg">{service.icon}</span>
+                                </div>
+                              )}
+                              {service.name}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400 max-w-xs">
+                            {service.description}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
+                            {service.duration}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">
+                            ${service.price}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8"
+                                onClick={() => setSelectedService(service)}
+                              >
+                                <Eye className="h-3.5 w-3.5 mr-1" />
+                                Details
+                              </Button>
+                              <Link href={`/booking?service=${service.name}`}>
+                                <Button
+                                  size="sm"
+                                  className="h-8"
+                                >
+                                  Book Now
+                                </Button>
+                              </Link>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -494,6 +623,140 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
+
+      {/* Service Detail Modal */}
+      <AnimatePresence>
+        {selectedService && (
+          <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ 
+                type: prefersReducedMotion ? "tween" : "spring",
+                duration: prefersReducedMotion ? 0.2 : 0.5
+              }}
+              className="relative w-full max-w-3xl mx-4 md:mx-auto"
+            >
+              <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-xl overflow-hidden">
+                <div className="relative">
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setSelectedService(null)}
+                    className="absolute top-4 right-4 z-10 bg-black/20 hover:bg-black/40 dark:bg-white/20 dark:hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                  
+                  {/* Service Image */}
+                  <div className="h-56 md:h-72 bg-gradient-to-r from-pink-50 via-amber-100 to-pink-50 dark:from-neutral-800 dark:via-amber-900/50 dark:to-neutral-800">
+                    {(() => {
+                      const serviceImage = findServiceImage(selectedService.name);
+                      if (serviceImage) {
+                        return (
+                          <img
+                            src={serviceImage.imageUrl}
+                            alt={selectedService.name}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        );
+                      } else {
+                        return (
+                          <div className="h-full w-full flex items-center justify-center">
+                            <div className="text-5xl opacity-70">{selectedService.icon || '✨'}</div>
+                          </div>
+                        );
+                      }
+                    })()}
+                  </div>
+                </div>
+                
+                <div className="p-6 md:p-8">
+                  <div className="flex justify-between items-start gap-4 mb-6">
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2">{selectedService.name}</h3>
+                      <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
+                        <Clock className="h-4 w-4 mr-1.5" />
+                        <span>{selectedService.duration}</span>
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">
+                      ${selectedService.price}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-lg font-medium mb-2">Description</h4>
+                      <p className="text-neutral-600 dark:text-neutral-300">
+                        {selectedService.description}
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-medium">What's Included</h4>
+                        <ul className="space-y-2">
+                          <li className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Professional consultation</span>
+                          </li>
+                          <li className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Styling and finishing</span>
+                          </li>
+                          <li className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Aftercare instructions</span>
+                          </li>
+                          <li className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Edge control application</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-medium">Additional Notes</h4>
+                        <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
+                          <li className="flex items-start">
+                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Hair extensions not included in price</span>
+                          </li>
+                          <li className="flex items-start">
+                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Pricing may vary with hair length and thickness</span>
+                          </li>
+                          <li className="flex items-start">
+                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <span>Additional fee for complex patterns or color work</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4 flex gap-4">
+                      <Button
+                        onClick={() => setSelectedService(null)}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        Close
+                      </Button>
+                      <Link href={`/booking?service=${selectedService.name}`} className="flex-1">
+                        <Button className="w-full">
+                          Book Appointment
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
