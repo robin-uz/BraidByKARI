@@ -97,7 +97,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Booking routes
   app.post("/api/bookings", async (req, res, next) => {
     try {
-      const bookingData = insertBookingSchema.parse(req.body);
+      const bookingData = insertBookingSchema.parse({
+        ...req.body,
+        notes: req.body.notes || null // Ensure notes is never undefined
+      });
       const booking = await storage.createBooking(bookingData);
       
       // Send confirmation and notification emails
@@ -196,7 +199,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/gallery", isAdmin, async (req, res, next) => {
     try {
-      const galleryData = insertGallerySchema.parse(req.body);
+      const galleryData = insertGallerySchema.parse({
+        ...req.body,
+        description: req.body.description || null, // Ensure description is never undefined
+        order: req.body.order || null // Ensure order is never undefined
+      });
       const galleryItem = await storage.createGalleryItem(galleryData);
       res.status(201).json(galleryItem);
     } catch (error) {
@@ -244,7 +251,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/services", isAdmin, async (req, res, next) => {
     try {
-      const serviceData = insertServiceSchema.parse(req.body);
+      const serviceData = insertServiceSchema.parse({
+        ...req.body,
+        icon: req.body.icon || null // Ensure icon is never undefined
+      });
       const service = await storage.createService(serviceData);
       res.status(201).json(service);
     } catch (error) {
@@ -295,7 +305,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/testimonials", isAdmin, async (req, res, next) => {
     try {
-      const testimonialData = insertTestimonialSchema.parse(req.body);
+      const testimonialData = insertTestimonialSchema.parse({
+        ...req.body,
+        imageUrl: req.body.imageUrl || null, // Ensure imageUrl is never undefined
+        rating: req.body.rating || null // Ensure rating is never undefined
+      });
       const testimonial = await storage.createTestimonial(testimonialData);
       res.status(201).json(testimonial);
     } catch (error) {
