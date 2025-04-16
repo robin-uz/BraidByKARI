@@ -38,6 +38,9 @@ import BookingCancellationModal from "@/components/booking/booking-cancellation-
 
 export default function ClientDashboard() {
   const { user } = useAuth();
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  
   const { data: userBookings, isLoading } = useQuery<Booking[]>({
     queryKey: ['/api/client/bookings'],
     queryFn: getQueryFn({ on401: "throw" }),
@@ -584,7 +587,17 @@ export default function ClientDashboard() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between pt-2 pb-6 border-t">
-                  <Button variant="outline">Cancel</Button>
+                  <Button 
+                    variant="outline" 
+                    className="text-red-500 border-red-200 hover:border-red-300 dark:border-red-800 dark:hover:border-red-700"
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setIsCancelModalOpen(true);
+                    }}
+                  >
+                    <XCircle className="mr-2 h-4 w-4" />
+                    Cancel
+                  </Button>
                   <Button className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-700 hover:to-fuchsia-700">
                     Update Profile
                   </Button>
@@ -594,6 +607,16 @@ export default function ClientDashboard() {
           </Tabs>
         </div>
       </ClientLayout>
+      
+      {/* Cancellation Modal */}
+      <BookingCancellationModal
+        booking={selectedBooking}
+        isOpen={isCancelModalOpen}
+        onClose={() => {
+          setIsCancelModalOpen(false);
+          setSelectedBooking(null);
+        }}
+      />
     </>
   );
 }
