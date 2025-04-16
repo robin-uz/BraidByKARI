@@ -5,9 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, KeyRound, User, ShieldAlert } from 'lucide-react';
-import { PasswordChangeForm } from '@/components/profile/password-change-form';
+// Temporarily comment out until we implement this component
+// import { PasswordChangeForm } from '@/components/profile/password-change-form';
 import { useToast } from '@/hooks/use-toast';
-import { redirect } from 'wouter/use-location';
+import { useLocation } from 'wouter';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -121,7 +122,17 @@ export default function ProfilePage() {
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Change Password</h3>
-                  <PasswordChangeForm />
+                  {/* Temporarily using a button instead of the form component */}
+                  <Button
+                    onClick={() => {
+                      toast({
+                        title: "Coming Soon!",
+                        description: "Password change functionality will be available in a future update.",
+                      });
+                    }}
+                  >
+                    Change Password
+                  </Button>
                 </div>
 
                 <div className="space-y-4 pt-4 border-t">

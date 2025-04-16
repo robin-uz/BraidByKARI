@@ -57,6 +57,7 @@ function Router() {
         {/* Client routes - protected */}
         <ProtectedRoute path="/client/dashboard" component={ClientDashboard} />
         <ProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+        <ProtectedRoute path="/client/profile" component={ProfilePage} />
 
         {/* Admin routes - protected */}
         <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />

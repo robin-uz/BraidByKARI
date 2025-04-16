@@ -100,11 +100,18 @@ export default function MainNav() {
 
             {/* Client Portal Link (if user is logged in) */}
             {user && (
-              <Link href="/client/dashboard">
-                <Button variant="outline" size="sm">
-                  My Portal
-                </Button>
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link href="/client/dashboard">
+                  <Button variant="outline" size="sm">
+                    My Portal
+                  </Button>
+                </Link>
+                <Link href="/client/profile">
+                  <Button variant="ghost" size="sm">
+                    Profile
+                  </Button>
+                </Link>
+              </div>
             )}
 
             {/* Admin Link (if user is admin) */}
@@ -188,14 +195,24 @@ export default function MainNav() {
               
               {/* Client Portal in Mobile Menu */}
               {user && (
-                <Link href="/client/dashboard">
-                  <span 
-                    className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/client/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
-                    onClick={closeMobileMenu}
-                  >
-                    My Portal
-                  </span>
-                </Link>
+                <>
+                  <Link href="/client/dashboard">
+                    <span 
+                      className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/client/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
+                      onClick={closeMobileMenu}
+                    >
+                      My Portal
+                    </span>
+                  </Link>
+                  <Link href="/client/profile">
+                    <span 
+                      className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/client/profile") ? "text-purple-600 dark:text-purple-400" : ""}`} 
+                      onClick={closeMobileMenu}
+                    >
+                      Profile Settings
+                    </span>
+                  </Link>
+                </>
               )}
               
               {/* Admin Link in Mobile Menu */}
