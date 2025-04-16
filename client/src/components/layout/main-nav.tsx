@@ -83,14 +83,18 @@ export default function MainNav() {
 
           {/* Theme Toggle & Mobile Menu Trigger */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle */}
+            {/* Theme Toggle - Enhanced and More Visible */}
             <Button 
-              variant="ghost" 
+              variant="outline" 
               size="icon" 
               onClick={toggleTheme} 
-              className="text-neutral-900 dark:text-neutral-100 hover:text-purple-600 dark:hover:text-purple-400 transition-all"
+              className="relative overflow-hidden border-2 border-amber-500 dark:border-amber-400 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-all duration-300 p-2 rounded-full"
             >
-              {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+              <div className="absolute inset-0 bg-gradient-to-tr from-amber-200/40 to-amber-100/0 dark:from-amber-800/40 dark:to-amber-900/0 z-0"></div>
+              <span className="relative z-10">
+                {theme === "light" ? <Moon size={20} className="transition-all duration-500" /> : <Sun size={20} className="transition-all duration-500" />}
+              </span>
+              <span className="sr-only">{theme === "light" ? "Switch to dark mode" : "Switch to light mode"}</span>
             </Button>
 
             {/* Client Portal Link (if user is logged in) */}

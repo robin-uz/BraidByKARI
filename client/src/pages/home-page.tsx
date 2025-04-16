@@ -1,6 +1,7 @@
 import HeroSection from "@/components/home/hero-section";
 import ServicesSection from "@/components/home/services-section";
 import TestimonialsSection from "@/components/home/testimonials-section";
+import FeatureSection from "@/components/home/feature-section";
 import { Helmet } from "react-helmet";
 import PageTransition from "@/components/ui/page-transition";
 import { useEffect, useContext } from "react";
@@ -23,12 +24,13 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Divine Braids | Premium Hair Braiding Salon</title>
-        <meta name="description" content="Experience luxury hair braiding services at Divine Braids. Book your appointment today for box braids, knotless braids, feed-ins, and more." />
+        <title>KARI STYLEZ | Luxury Hair Braiding Salon</title>
+        <meta name="description" content="Experience premium hair braiding at KARI STYLEZ. Our expert stylists create stunning box braids, knotless braids, feed-ins, and more. Book now!" />
       </Helmet>
       
       <PageTransition>
         <HeroSection />
+        <FeatureSection />
         <ServicesSection />
         <TestimonialsSection />
       </PageTransition>

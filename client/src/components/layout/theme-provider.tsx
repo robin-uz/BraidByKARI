@@ -23,23 +23,74 @@ export function ThemeProvider({
   children,
   defaultTheme = "light",
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  // Initialize theme from localStorage or system preference
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Check if running in the browser
+    if (typeof window !== "undefined") {
+      // Check localStorage first
+      const storedTheme = localStorage.getItem("theme") as Theme | null;
+      if (storedTheme) {
+        return storedTheme;
+      }
+      
+      // Fall back to system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return "dark";
+      }
+    }
+    
+    // Default to the provided default theme
+    return defaultTheme;
+  });
 
   useEffect(() => {
+    // Apply theme immediately on first render
+    applyTheme(theme);
+    
+    // Log theme change for debugging
+    console.log("Theme changed to:", theme);
+    
+    // Listen for system preference changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (!localStorage.getItem("theme")) {
+        const newTheme = mediaQuery.matches ? "dark" : "light";
+        setTheme(newTheme);
+        applyTheme(newTheme);
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+  
+  // Apply theme whenever it changes
+  useEffect(() => {
+    applyTheme(theme);
+    
+    // Save to localStorage
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+  
+  // Function to apply theme to document
+  const applyTheme = (newTheme: Theme) => {
     const root = window.document.documentElement;
     
-    // Remove the old theme class
-    root.classList.remove("light", "dark");
-    
-    // Add the new theme class
-    root.classList.add(theme);
-  }, [theme]);
+    if (newTheme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+      root.style.colorScheme = "dark";
+    } else {
+      root.classList.add("light");
+      root.classList.remove("dark");
+      root.style.colorScheme = "light";
+    }
+  };
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem("theme", theme);
-      setTheme(theme);
+    setTheme: (newTheme: Theme) => {
+      setTheme(newTheme);
     },
   };
 
