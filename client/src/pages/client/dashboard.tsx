@@ -590,10 +590,6 @@ export default function ClientDashboard() {
                   <Button 
                     variant="outline" 
                     className="text-red-500 border-red-200 hover:border-red-300 dark:border-red-800 dark:hover:border-red-700"
-                    onClick={() => {
-                      setSelectedBooking(booking);
-                      setIsCancelModalOpen(true);
-                    }}
                   >
                     <XCircle className="mr-2 h-4 w-4" />
                     Cancel
