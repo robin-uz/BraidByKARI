@@ -1,4 +1,4 @@
-import { useState, useRef, ChangeEvent } from "react";
+import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import ClientLayout from "@/components/client/client-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { HexColorPicker } from "react-colorful";
-import { Download, Upload, Undo2, Trash2, Save } from "lucide-react";
+import { Download, Upload, Undo2, Trash2, Save, Sparkles, Brush, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import BraidTemplates, { BraidStyle } from "@/components/hair/braid-templates";
+import StylingTips from "@/components/hair/styling-tips";
 
 const PRESET_COLORS = [
   { name: "Black", hex: "#000000" },
@@ -27,9 +29,28 @@ export default function HairSimulator() {
   const [hairColor, setHairColor] = useState("#3B2314"); // Default hair color (dark brown)
   const [intensity, setIntensity] = useState([50]);
   const [undoStack, setUndoStack] = useState<string[]>([]);
+  const [selectedBraidStyle, setSelectedBraidStyle] = useState<BraidStyle | null>(null);
+  const [simulationMode, setSimulationMode] = useState<"color" | "style">("color");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
+
+  // Initialize canvas when image is loaded
+  useEffect(() => {
+    if (selectedImage && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+        };
+        img.src = selectedImage;
+      }
+    }
+  }, [selectedImage]);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,8 +61,18 @@ export default function HairSimulator() {
       const result = event.target?.result as string;
       setSelectedImage(result);
       setUndoStack([]);
+      setSelectedBraidStyle(null);
     };
     reader.readAsDataURL(file);
+  };
+  
+  const handleBraidStyleSelect = (style: BraidStyle) => {
+    setSelectedBraidStyle(style);
+    
+    toast({
+      title: "Style Selected",
+      description: `${style.name} has been selected. Click 'Apply Style' to visualize it.`,
+    });
   };
 
   const handleColorChange = (newColor: string) => {
