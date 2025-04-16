@@ -76,14 +76,30 @@ export default function ServicesSection() {
   };
 
   return (
-    <section id="services" className="py-20 bg-white dark:bg-neutral-900">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600 dark:text-purple-400">
-            Our Premium Services
+    <section id="services" className="relative py-24 bg-gradient-to-b from-white to-purple-50 dark:from-neutral-900 dark:to-purple-950/20 overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-64 overflow-hidden">
+        <div className="curved-divider">
+          <div className="absolute top-0 right-[10%] w-24 h-24 bg-purple-200/20 dark:bg-purple-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-10 left-[15%] w-32 h-32 bg-fuchsia-200/20 dark:bg-fuchsia-600/10 rounded-full blur-3xl"></div>
+        </div>
+      </div>
+      
+      {/* Floating elements */}
+      <div className="absolute top-1/4 right-[5%] w-16 h-16 rounded-full bg-gradient-to-r from-purple-400/20 to-fuchsia-400/20 backdrop-blur-sm floating-icon"></div>
+      <div className="absolute bottom-1/4 left-[7%] w-20 h-20 rounded-full bg-gradient-to-r from-fuchsia-400/20 to-purple-400/20 backdrop-blur-sm floating-icon" style={{animationDelay: '1.5s'}}></div>
+      
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <div className="max-w-3xl mx-auto mb-16 text-center">
+          <span className="inline-block py-1.5 px-4 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mb-4">
+            Our Expertise
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-fuchsia-600 dark:from-purple-400 dark:to-fuchsia-400 text-transparent bg-clip-text">
+            Signature Services
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-            We offer a wide range of braiding styles to match your personal style and preferences, all executed with exceptional skill and care by our experienced stylists.
+            We offer a wide range of braiding styles to match your personal style and preferences, 
+            all executed with exceptional skill and care by our experienced stylists.
           </p>
         </div>
         
@@ -99,14 +115,14 @@ export default function ServicesSection() {
             
             <div className="space-y-6">
               {displayServices.slice(0, 3).map((service) => (
-                <div key={service.id} className="flex items-start">
-                  <div className="shrink-0 bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg mr-4">
-                    <div className="text-purple-600 dark:text-purple-400 text-xl">
+                <div key={service.id} className="flex items-start glassmorphism p-4 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-purple-500/10 hover:shadow-lg">
+                  <div className="shrink-0 bg-gradient-to-br from-purple-500 to-fuchsia-500 p-3 rounded-xl mr-4 shadow-md">
+                    <div className="text-white text-xl">
                       {getIconComponent(service.icon)}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold mb-1">{service.name}</h4>
+                    <h4 className="text-lg font-semibold mb-1 text-purple-700 dark:text-purple-300">{service.name}</h4>
                     <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-1">{service.description}</p>
                     <span className="text-purple-600 dark:text-purple-400 font-medium text-sm">
                       Starting at {formatPrice(service.price)}
@@ -116,43 +132,84 @@ export default function ServicesSection() {
               ))}
             </div>
             
-            <Link href="/pricing" className="inline-flex items-center mt-8 text-purple-600 dark:text-purple-400 font-medium">
-              View all services
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="/pricing">
+              <button className="glow-button mt-10">
+                View All Services
+                <ArrowRight className="ml-2 h-4 w-4 inline" />
+              </button>
             </Link>
           </div>
           
-          <div className="rounded-lg overflow-hidden shadow-xl order-1 lg:order-2">
-            <img 
-              src="/images/afro-style.jpg" 
-              alt="Woman with beautiful braided hairstyle" 
-              className="w-full h-auto object-cover"
-            />
+          <div className="relative order-1 lg:order-2 group">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-fuchsia-600/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-70"></div>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20 backdrop-blur-sm">
+              <img 
+                src="/images/afro-style.jpg" 
+                alt="Woman with beautiful braided hairstyle" 
+                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                <h4 className="text-white text-xl font-semibold">Artistic Excellence</h4>
+                <p className="text-white/80 text-sm">Our braiding techniques combine tradition with modern artistry</p>
+              </div>
+            </div>
+            
+            {/* Decorative element */}
+            <div className="absolute -top-5 -right-5 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-lg p-3 shadow-lg z-10 floating-icon">
+              <Crown className="h-6 w-6 text-white" />
+            </div>
           </div>
         </div>
         
-        {/* Services grid - condensed version */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          {displayServices.map((service) => (
-            <div key={service.id} className="bg-purple-50 dark:bg-neutral-950 rounded-lg shadow-md hover:shadow-lg transition-all p-6 group">
-              <div className="mb-4 text-purple-600 dark:text-purple-400 text-3xl">
-                {getIconComponent(service.icon)}
+        {/* Services grid - luxury cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+          {displayServices.map((service, index) => (
+            <div key={service.id} className="luxury-card relative p-1 group">
+              <div className="relative z-10 bg-white dark:bg-neutral-900 p-6 rounded-xl h-full flex flex-col">
+                <div className="mb-4 relative">
+                  <div className="absolute -top-10 -left-10 w-20 h-20 bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 rounded-full blur-xl"></div>
+                  <div className="relative z-10 w-16 h-16 flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white text-3xl shadow-lg">
+                    {getIconComponent(service.icon)}
+                  </div>
+                </div>
+                
+                <h3 className="font-heading text-xl font-semibold mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-all">
+                  {service.name}
+                </h3>
+                
+                <p className="text-neutral-700 dark:text-neutral-300 mb-4 flex-grow">
+                  {service.description}
+                </p>
+                
+                <div className="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+                  <span className="text-purple-600 dark:text-purple-400 font-semibold">
+                    {formatPrice(service.price)}
+                  </span>
+                  <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                    {service.duration}
+                  </span>
+                </div>
               </div>
-              <h3 className="font-heading text-xl font-semibold mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-all">
-                {service.name}
-              </h3>
-              <p className="text-neutral-700 dark:text-neutral-300 mb-4">
-                {service.description}
-              </p>
-              <div className="mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800">
-                <span className="text-purple-600 dark:text-purple-400 font-semibold">Starting at {formatPrice(service.price)}</span>
-              </div>
+              
+              {/* Gradient border animation on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-700 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
             </div>
           ))}
         </div>
         
-
+        {/* Call to action */}
+        <div className="mt-20 text-center">
+          <Link href="/booking">
+            <button className="glow-button">
+              Book Your Appointment Today
+              <ArrowRight className="ml-2 h-4 w-4 inline" />
+            </button>
+          </Link>
+        </div>
       </div>
+      
+      {/* Wavy bottom */}
+      <div className="wavy-bottom mt-24"></div>
     </section>
   );
 }
