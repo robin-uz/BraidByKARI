@@ -1,79 +1,66 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative pt-16 md:pt-24 pb-32 md:pb-48 bg-purple-50 dark:bg-purple-950 overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 overflow-hidden">
+      {/* Background gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-200/20 to-transparent pointer-events-none"></div>
+      
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="flex flex-col items-center">
-          <div className="w-full max-w-4xl mx-auto text-center mb-12">
-            <div className="relative mb-8">
-              <img 
-                src="/images/hero-image.jpg" 
-                alt="Beautiful braided hairstyle" 
-                className="rounded-lg shadow-xl w-full h-auto object-cover mx-auto"
-              />
-            </div>
-            
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-purple-600 dark:text-purple-400" style={{ fontFamily: "'Great Vibes', cursive" }}>
-              Hair by Design<br/>
-              <span className="text-purple-700 dark:text-purple-300">Where Imagination Takes Shape</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Text Content */}
+          <div className="max-w-xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <span className="text-purple-600 dark:text-purple-400 block">Hair by Design:</span>
+              <span className="text-neutral-900 dark:text-white">Where Imagination Takes Shape</span>
             </h1>
             
-            <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-neutral-800 dark:text-neutral-200">
+            <p className="mt-6 text-lg text-neutral-700 dark:text-neutral-300">
               Experience the art of luxurious hair braiding that combines tradition with modern styles for a truly stunning look that tells your unique story.
             </p>
             
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/booking">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white shadow-md hover:shadow-lg">
-                  Book Appointment
+                <Button size="lg" className="rounded-full px-6 bg-purple-600 hover:bg-purple-700 text-white">
+                  Book now
                 </Button>
               </Link>
               <Link href="/gallery">
-                <Button variant="outline" size="lg" className="border-purple-400 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/40">
-                  View Gallery
+                <Button variant="outline" size="lg" className="rounded-full px-6 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
+                  Get Started
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>
           </div>
           
-          <div className="grid grid-cols-4 gap-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 w-full max-w-3xl">
-            <div className="text-center">
-              <div className="flex justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-              </div>
-              <p className="text-xs mt-1">In-salon</p>
-            </div>
-            <div className="text-center">
-              <div className="flex justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-              <p className="text-xs mt-1">Expert Stylists</p>
-            </div>
-            <div className="text-center">
-              <div className="flex justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                </svg>
-              </div>
-              <p className="text-xs mt-1">Premium Products</p>
-            </div>
-            <div className="text-center">
-              <div className="flex justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                </svg>
-              </div>
-              <p className="text-xs mt-1">Aftercare</p>
-            </div>
+          {/* Hero Image */}
+          <div className="relative hidden lg:block">
+            <img 
+              src="/images/hero-hairstyle.png" 
+              alt="Beautiful hairstyle" 
+              className="w-full h-auto object-contain rounded-lg"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80";
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      
+      {/* Brands Section */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-neutral-950 py-8">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mb-6">Brands that we collaborated with</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">GQ</div>
+            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">ELLE</div>
+            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">COSMOPOLITAN</div>
+            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">VOGUE</div>
+            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">teespring</div>
           </div>
         </div>
       </div>
