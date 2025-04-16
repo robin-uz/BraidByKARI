@@ -172,8 +172,8 @@ export default function PricingPage() {
         <meta name="description" content="Explore our braiding packages and service pricing at Divine Braids salon. Find the perfect style and price for your hair needs." />
       </Helmet>
       
-      {/* Hero Section with Parallax */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-pink-50 via-amber-50 to-pink-50 dark:from-neutral-900 dark:via-amber-950 dark:to-neutral-900">
+      {/* Hero Section with new purple theme */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         <motion.div 
           initial={{ opacity: 0 }}
@@ -188,27 +188,23 @@ export default function PricingPage() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="text-center lg:text-left space-y-6"
             >
-              <div className="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100 text-sm font-medium mb-2">
-                Premium Styles
-              </div>
               <h1 className="text-4xl md:text-5xl font-bold font-heading leading-tight">
-                <span className="block">Exquisite Braiding</span>
-                <span className="block text-amber-600 dark:text-amber-400">Services & Packages</span>
+                <span className="block text-purple-600 dark:text-purple-400">Hair by Design:</span>
+                <span className="block text-neutral-800 dark:text-white">Where Imagination Takes Shape</span>
               </h1>
               <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto lg:mx-0">
                 Discover our artfully crafted braiding services designed to elevate your style with premium care and expertise.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/booking">
-                  <Button size="lg" className="rounded-full px-8">
-                    Book Appointment
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                  <Button size="lg" className="rounded-full px-8 bg-purple-600 hover:bg-purple-700">
+                    Book Now
                   </Button>
                 </Link>
                 <Link href="/gallery">
-                  <Button variant="outline" size="lg" className="rounded-full px-8">
-                    Explore Gallery
-                    <ChevronRight className="ml-2 h-4 w-4" />
+                  <Button variant="outline" size="lg" className="rounded-full px-8 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </div>
@@ -241,7 +237,7 @@ export default function PricingPage() {
                 ))}
                 
                 <motion.div 
-                  className="col-span-3 row-span-2 bg-amber-100 dark:bg-amber-900/50 rounded-xl p-6 flex flex-col justify-center"
+                  className="col-span-3 row-span-2 bg-purple-100 dark:bg-purple-900/50 rounded-xl p-6 flex flex-col justify-center"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
@@ -251,7 +247,7 @@ export default function PricingPage() {
                   </p>
                   <div className="flex space-x-2">
                     {PREMIUM_STYLES.map(style => (
-                      <Badge key={style.id} variant="outline" className="border-amber-200 dark:border-amber-700">
+                      <Badge key={style.id} variant="outline" className="border-purple-200 dark:border-purple-700">
                         {style.name.split(" ")[0]}
                       </Badge>
                     ))}
@@ -259,16 +255,16 @@ export default function PricingPage() {
                 </motion.div>
                 
                 <motion.div 
-                  className="col-span-2 row-span-3 bg-gradient-to-b from-amber-200 to-pink-100 dark:from-amber-900 dark:to-pink-900/50 rounded-xl p-6 flex flex-col justify-center text-center"
+                  className="col-span-2 row-span-3 bg-gradient-to-b from-purple-200 to-purple-100 dark:from-purple-900 dark:to-purple-800/50 rounded-xl p-6 flex flex-col justify-center text-center"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Star className="h-10 w-10 mx-auto mb-3 text-amber-600 dark:text-amber-400" />
+                  <Star className="h-10 w-10 mx-auto mb-3 text-purple-600 dark:text-purple-400" />
                   <h3 className="text-lg font-bold mb-2">Client Favorite</h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
                     Goddess Box Braids with premium accessories
                   </p>
-                  <span className="mt-3 text-xl font-bold text-amber-600 dark:text-amber-400">$280</span>
+                  <span className="mt-3 text-xl font-bold text-purple-600 dark:text-purple-400">$280</span>
                 </motion.div>
               </div>
             </motion.div>
@@ -313,7 +309,7 @@ export default function PricingPage() {
                     />
                     {style.popular && (
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-900 dark:hover:bg-amber-800 dark:text-amber-100 border-0">
+                        <Badge className="bg-purple-100 hover:bg-purple-200 text-purple-800 dark:bg-purple-900 dark:hover:bg-purple-800 dark:text-purple-100 border-0">
                           Most Popular
                         </Badge>
                       </div>
@@ -323,7 +319,7 @@ export default function PricingPage() {
                   <CardHeader className="pt-6 pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-xl">{style.name}</CardTitle>
-                      <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">${style.price}</span>
+                      <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">${style.price}</span>
                     </div>
                     <div className="flex gap-2 mt-2">
                       {style.tags.map(tag => (
@@ -501,7 +497,7 @@ export default function PricingPage() {
                         <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
                           <div className="flex justify-between items-end">
                             <div>
-                              <h3 className="text-lg md:text-xl font-bold mb-1 group-hover:text-amber-300 transition-colors">
+                              <h3 className="text-lg md:text-xl font-bold mb-1 group-hover:text-purple-300 transition-colors">
                                 {service.style}
                               </h3>
                               <p className="text-sm text-white/80 mb-2 line-clamp-1">
@@ -511,7 +507,7 @@ export default function PricingPage() {
                                 <Clock className="h-3 w-3 mr-1" />
                                 {service.duration}
                                 <span className="mx-2">•</span>
-                                <span className="font-semibold text-amber-300">${service.price}</span>
+                                <span className="font-semibold text-purple-300">${service.price}</span>
                               </div>
                             </div>
                             <motion.div 
@@ -528,7 +524,7 @@ export default function PricingPage() {
                   
                   {/* Service collection card */}
                   <motion.div 
-                    className="col-span-12 md:col-span-4 row-span-1 bg-gradient-to-r from-amber-100 to-pink-100 dark:from-amber-900/50 dark:to-pink-900/30 rounded-xl p-6 flex flex-col justify-center"
+                    className="col-span-12 md:col-span-4 row-span-1 bg-gradient-to-r from-purple-100 to-purple-50 dark:from-purple-900/50 dark:to-purple-800/30 rounded-xl p-6 flex flex-col justify-center"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -743,7 +739,7 @@ export default function PricingPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-amber-50 to-pink-50 dark:from-amber-950/20 dark:to-pink-950/20 rounded-xl p-8 shadow-sm"
+          className="mt-16 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/20 rounded-xl p-8 shadow-sm"
         >
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-3">Additional Pricing Information</h2>
@@ -759,8 +755,8 @@ export default function PricingPage() {
               className="space-y-3"
             >
               <div className="flex items-center">
-                <div className="bg-amber-100 dark:bg-amber-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <ShoppingBag className="h-5 w-5 text-amber-800 dark:text-amber-200" />
+                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                  <ShoppingBag className="h-5 w-5 text-purple-800 dark:text-purple-200" />
                 </div>
                 <h3 className="text-lg font-medium">Hair Extensions</h3>
               </div>
@@ -778,8 +774,8 @@ export default function PricingPage() {
               className="space-y-3"
             >
               <div className="flex items-center">
-                <div className="bg-amber-100 dark:bg-amber-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <Clock className="h-5 w-5 text-amber-800 dark:text-amber-200" />
+                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                  <Clock className="h-5 w-5 text-purple-800 dark:text-purple-200" />
                 </div>
                 <h3 className="text-lg font-medium">Length & Thickness</h3>
               </div>
