@@ -32,8 +32,8 @@ export default function ContactInfo({
   },
 }: ContactInfoProps) {
   return (
-    <div className="bg-primary-50 dark:bg-neutral-950 rounded-lg shadow-lg p-6 md:p-8">
-      <h3 className="font-heading text-2xl font-semibold mb-6">Contact Information</h3>
+    <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg shadow-lg p-6 md:p-8">
+      <h3 className="font-heading text-2xl font-semibold mb-6 text-purple-700 dark:text-purple-300">Contact Information</h3>
       
       <div className="space-y-6">
         <div className="flex items-start">
@@ -100,8 +100,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="WhatsApp"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-primary/10 border-primary hover:bg-primary/20">
-              <FaWhatsapp className="h-5 w-5 text-primary" />
+            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
+              <FaWhatsapp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -110,8 +110,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="Instagram"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-primary/10 border-primary hover:bg-primary/20">
-              <FaInstagram className="h-5 w-5 text-primary" />
+            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
+              <FaInstagram className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -120,8 +120,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="Facebook"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-primary/10 border-primary hover:bg-primary/20">
-              <FaFacebookF className="h-5 w-5 text-primary" />
+            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
+              <FaFacebookF className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -130,8 +130,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="TikTok"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-primary/10 border-primary hover:bg-primary/20">
-              <FaTiktok className="h-5 w-5 text-primary" />
+            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
+              <FaTiktok className="h-5 w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
         </div>

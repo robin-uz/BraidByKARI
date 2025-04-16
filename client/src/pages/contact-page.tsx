@@ -30,8 +30,8 @@ export default function ContactPage() {
           </div>
           
           <div className="mt-16">
-            <div className="bg-primary-50 dark:bg-neutral-950 rounded-lg shadow-lg p-6 md:p-8 max-w-3xl mx-auto">
-              <h2 className="font-heading text-2xl font-semibold mb-6 text-center">Send Us a Message</h2>
+            <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg shadow-lg p-6 md:p-8 max-w-3xl mx-auto">
+              <h2 className="font-heading text-2xl font-semibold mb-6 text-center text-purple-700 dark:text-purple-300">Send Us a Message</h2>
               
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -40,7 +40,7 @@ export default function ContactPage() {
                     <input 
                       type="text" 
                       id="name" 
-                      className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-neutral-900"
+                      className="w-full px-4 py-2 border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
                       required
                     />
                   </div>
@@ -50,7 +50,7 @@ export default function ContactPage() {
                     <input 
                       type="email" 
                       id="email" 
-                      className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-neutral-900"
+                      className="w-full px-4 py-2 border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
                       required
                     />
                   </div>
@@ -61,7 +61,7 @@ export default function ContactPage() {
                   <input 
                     type="text" 
                     id="subject" 
-                    className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-neutral-900"
+                    className="w-full px-4 py-2 border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
                     required
                   />
                 </div>
@@ -71,7 +71,7 @@ export default function ContactPage() {
                   <textarea 
                     id="message" 
                     rows={5}
-                    className="w-full px-4 py-2 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-neutral-900 resize-none"
+                    className="w-full px-4 py-2 border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900 resize-none"
                     required
                   ></textarea>
                 </div>
@@ -79,7 +79,7 @@ export default function ContactPage() {
                 <div className="flex justify-center">
                   <button 
                     type="submit" 
-                    className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all shadow-md hover:shadow-lg"
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-8 rounded-lg transition-all shadow-md hover:shadow-lg"
                   >
                     Send Message
                   </button>
