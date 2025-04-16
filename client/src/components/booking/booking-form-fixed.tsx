@@ -86,12 +86,14 @@ export default function BookingForm() {
   
   return (
     <div>
+      {/* Styling tips popup */}
       <StylingTipsPopup 
         isOpen={showStylingTips} 
         onClose={handleClosePopup} 
         bookingData={submittedBooking}
       />
       
+      {/* Booking form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column */}
