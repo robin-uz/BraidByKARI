@@ -44,7 +44,7 @@ export default function MainNav() {
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
-              <span className="text-primary font-serif text-3xl" style={{ fontFamily: "'Great Vibes', cursive" }}>Divine</span>
+              <span className="text-purple-600 dark:text-purple-400 font-serif text-3xl" style={{ fontFamily: "'Great Vibes', cursive" }}>Divine</span>
               <span className="text-neutral-900 dark:text-neutral-100 font-heading text-xl font-semibold">Braids</span>
             </div>
           </Link>
@@ -52,34 +52,34 @@ export default function MainNav() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link href="/">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Home
-              </a>
+              </span>
             </Link>
             <Link href="/services">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/services") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Services
-              </a>
+              </span>
             </Link>
             <Link href="/pricing">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/pricing") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Pricing
-              </a>
+              </span>
             </Link>
             <Link href="/gallery">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/gallery") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/gallery") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Gallery
-              </a>
+              </span>
             </Link>
             <Link href="/booking">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/booking") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/booking") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Book Now
-              </a>
+              </span>
             </Link>
             <Link href="/contact">
-              <a className={`font-medium hover:text-primary transition-all ${isActive("/contact") ? "text-primary" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/contact") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Contact
-              </a>
+              </span>
             </Link>
           </nav>
 
@@ -90,7 +90,7 @@ export default function MainNav() {
               variant="ghost" 
               size="icon" 
               onClick={toggleTheme} 
-              className="text-neutral-900 dark:text-neutral-100 hover:text-primary dark:hover:text-primary transition-all"
+              className="text-neutral-900 dark:text-neutral-100 hover:text-purple-600 dark:hover:text-purple-400 transition-all"
             >
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
@@ -143,75 +143,75 @@ export default function MainNav() {
           <div className="md:hidden bg-white dark:bg-neutral-900 py-4 border-t border-neutral-200 dark:border-neutral-800">
             <nav className="flex flex-col space-y-4">
               <Link href="/">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Home
-                </a>
+                </span>
               </Link>
               <Link href="/services">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/services") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Services
-                </a>
+                </span>
               </Link>
               <Link href="/pricing">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/pricing") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Pricing
-                </a>
+                </span>
               </Link>
               <Link href="/gallery">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/gallery") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/gallery") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Gallery
-                </a>
+                </span>
               </Link>
               <Link href="/booking">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/booking") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/booking") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Book Now
-                </a>
+                </span>
               </Link>
               <Link href="/contact">
-                <a 
-                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/contact") ? "text-primary" : ""}`} 
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/contact") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Contact
-                </a>
+                </span>
               </Link>
               
               {/* Client Portal in Mobile Menu */}
               {user && (
                 <Link href="/client/dashboard">
-                  <a 
-                    className={`font-medium hover:text-primary transition-all px-4 ${isActive("/client/dashboard") ? "text-primary" : ""}`} 
+                  <span 
+                    className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/client/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                     onClick={closeMobileMenu}
                   >
                     My Portal
-                  </a>
+                  </span>
                 </Link>
               )}
               
               {/* Admin Link in Mobile Menu */}
               {user?.role === "admin" && (
                 <Link href="/admin/dashboard">
-                  <a 
-                    className={`font-medium hover:text-primary transition-all px-4 ${isActive("/admin/dashboard") ? "text-primary" : ""}`} 
+                  <span 
+                    className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/admin/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                     onClick={closeMobileMenu}
                   >
                     Admin Dashboard
-                  </a>
+                  </span>
                 </Link>
               )}
             </nav>

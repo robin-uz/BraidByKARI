@@ -55,9 +55,11 @@ export default function TestimonialsSection() {
   // Use testimonials from API or fallback to default if empty
   const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
 
-  const renderStars = (rating: number) => {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+  const renderStars = (rating: number | null | undefined) => {
+    // Default to 5 stars if rating is null or undefined
+    const actualRating = rating ?? 5;
+    const fullStars = Math.floor(actualRating);
+    const hasHalfStar = actualRating % 1 >= 0.5;
     const stars = [];
 
     // Add full stars
