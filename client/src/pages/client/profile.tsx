@@ -34,7 +34,8 @@ export default function ProfilePage() {
   }
 
   if (!user) {
-    return null; // This will be handled by the useEffect redirect
+    // Return an empty div instead of null to satisfy the component type
+    return <div className="hidden"></div>; // This will be handled by the useEffect redirect
   }
 
   // Extract user profile data

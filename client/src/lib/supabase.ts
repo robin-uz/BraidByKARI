@@ -4,9 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 const getSupabaseCredentials = () => {
   // For client side (Vite injects these as import.meta.env)
   if (typeof window !== 'undefined') {
+    // Try to get from VITE_ prefixed variables first, if not available use non-prefixed versions
     return {
-      url: import.meta.env.VITE_SUPABASE_URL,
-      key: import.meta.env.VITE_SUPABASE_ANON_KEY,
+      url: import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL,
+      key: import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY,
     };
   } 
   // For server side

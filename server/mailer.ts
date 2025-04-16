@@ -29,6 +29,9 @@ function setupMailer() {
       logger: true, // Log information to the console
     });
     
+    // Log the user we're trying to authenticate with for debugging
+    console.log(`Attempting to authenticate with email: ${process.env.EMAIL_USER}`);
+    
     // Verify connection configuration
     transporter.verify(function(error, success) {
       if (error) {
