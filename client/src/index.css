@@ -3,11 +3,58 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --minerva-beige: #f5f0ea;
+    --minerva-brown: #8a5a44;
+    --minerva-red: #a93a38;
+    --minerva-dark-red: #8c2826;
+    --minerva-cream: #f9f5f0;
+    --minerva-dark-brown: #5a3c2a;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    background-color: var(--minerva-beige);
+    color: #3e2d21;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-semibold;
+  }
+  
+  .bg-minerva-beige {
+    background-color: var(--minerva-beige);
+  }
+  
+  .bg-minerva-cream {
+    background-color: var(--minerva-cream);
+  }
+  
+  .bg-minerva-brown {
+    background-color: var(--minerva-brown);
+  }
+  
+  .bg-minerva-red {
+    background-color: var(--minerva-red);
+  }
+  
+  .text-minerva-red {
+    color: var(--minerva-red);
+  }
+  
+  .text-minerva-brown {
+    color: var(--minerva-brown);
+  }
+  
+  .border-minerva-brown {
+    border-color: var(--minerva-brown);
+  }
+  
+  .border-minerva-red {
+    border-color: var(--minerva-red);
   }
 }
