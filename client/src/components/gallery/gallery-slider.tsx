@@ -13,13 +13,16 @@ import model3 from "@/assets/kari-stylez/braids-model-3.png";
 import model4 from "@/assets/kari-stylez/braids-model-4.jpg";
 import model5 from "@/assets/kari-stylez/braids-model-5.jpg";
 
-// New client asset imports for extended gallery
+// Import ALL user uploaded assets for the gallery
 import IMG_12 from "@assets/IMG-20250416-WA0012.jpg";
 import IMG_14 from "@assets/IMG-20250416-WA0014.jpg";
 import IMG_15 from "@assets/IMG-20250416-WA0015.jpg";
 import IMG_17 from "@assets/IMG-20250416-WA0017.jpg";
 import IMG_19 from "@assets/IMG-20250416-WA0019.jpg";
 import IMG_21 from "@assets/IMG-20250416-WA0021.jpg";
+import ORIGINAL_1 from "@assets/original-4615b5c15dcc315f9da6b52662293325.png";
+import ORIGINAL_2 from "@assets/original-c34a69dc079e0dcad53963957bca37c2.jpg";
+import ORIGINAL_3 from "@assets/original-d67a3486b1058ea1029c2096e9c77e05.png";
 
 export default function GallerySlider() {
   const { data: galleryItems, isLoading, error } = useQuery<Gallery[]>({
@@ -37,7 +40,7 @@ export default function GallerySlider() {
     setIsImageExpanded(true);
   };
 
-  // Gallery items with client's actual salon images
+  // Gallery items with ALL client's actual salon images
   const braidGalleryItems = [
     {
       id: 1,
@@ -115,6 +118,27 @@ export default function GallerySlider() {
       description: "Durable, low-maintenance braids that protect natural hair.",
       imageUrl: IMG_21,
       price: 185
+    },
+    {
+      id: 12,
+      title: "Contemporary Braids",
+      description: "Modern take on classic braiding with elegant finishing touches.",
+      imageUrl: ORIGINAL_1,
+      price: 215
+    },
+    {
+      id: 13,
+      title: "Accent Highlights",
+      description: "Beautiful braids with subtle color accents for a unique look.",
+      imageUrl: ORIGINAL_2,
+      price: 225
+    },
+    {
+      id: 14,
+      title: "Detailed Pattern Work",
+      description: "Intricate braid patterns with exceptional attention to detail.",
+      imageUrl: ORIGINAL_3,
+      price: 240
     }
   ];
 

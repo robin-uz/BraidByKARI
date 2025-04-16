@@ -23,25 +23,29 @@ import {
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// Import our new braid images
-import braidsAuburn from "@/assets/gallery/braids-auburn.png";
-import braidsSide from "@/assets/gallery/braids-side.png";
-import braidsBun from "@/assets/gallery/braids-bun.png";
-import braidsCurls from "@/assets/gallery/braids-curls.png";
-import braidsBob from "@/assets/gallery/braids-bob.png";
+// Import ALL client's uploaded assets for the pricing page
+import IMG_12 from "@assets/IMG-20250416-WA0012.jpg";
+import IMG_14 from "@assets/IMG-20250416-WA0014.jpg";
+import IMG_15 from "@assets/IMG-20250416-WA0015.jpg";
+import IMG_17 from "@assets/IMG-20250416-WA0017.jpg";
+import IMG_19 from "@assets/IMG-20250416-WA0019.jpg";
+import IMG_21 from "@assets/IMG-20250416-WA0021.jpg";
+import ORIGINAL_1 from "@assets/original-4615b5c15dcc315f9da6b52662293325.png";
+import ORIGINAL_2 from "@assets/original-c34a69dc079e0dcad53963957bca37c2.jpg";
+import ORIGINAL_3 from "@assets/original-d67a3486b1058ea1029c2096e9c77e05.png";
 
-// Premium hairstyles with our new images
+// Premium hairstyles with ALL client's uploaded images
 const PREMIUM_STYLES = [
   {
     id: "premium-1",
-    name: "Auburn Box Braids",
-    description: "Stunning long box braids with auburn color for a rich, warm look",
+    name: "Signature Box Braids",
+    description: "Stunning long box braids for a rich, elegant look",
     duration: "4-5 hours",
     price: 220,
-    image: braidsAuburn,
+    image: IMG_21,
     popular: true,
     features: ["Premium colored extensions", "Heat-sealed ends", "Styling cream", "Aftercare kit"],
-    tags: ["box-braids", "auburn"]
+    tags: ["box-braids", "signature"]
   },
   {
     id: "premium-2",
@@ -49,25 +53,47 @@ const PREMIUM_STYLES = [
     description: "Beautiful knotless braids with expert side parting and sleek finish",
     duration: "3-4 hours",
     price: 190,
-    image: braidsSide,
+    image: IMG_17,
     popular: false,
     features: ["Premium hair", "Natural hairline", "Edge control", "Scalp treatment"],
     tags: ["knotless", "side-part"]
   },
   {
     id: "premium-3",
-    name: "Spiral Curls Updo",
-    description: "Creative updo with spiral curls for special occasions",
+    name: "Luxury Pattern Braids",
+    description: "Exquisite braided styles with intricate patterns for special occasions",
     duration: "3-4 hours",
     price: 200,
-    image: braidsCurls,
+    image: IMG_19,
     popular: false,
-    features: ["Professional curling", "Long-lasting hold", "Special occasion styling", "Decorative elements"],
-    tags: ["curls", "updo"]
+    features: ["Professional styling", "Long-lasting hold", "Special occasion styling", "Decorative elements"],
+    tags: ["patterns", "luxury"]
+  },
+  {
+    id: "premium-4",
+    name: "Accent Braids",
+    description: "Stunning braided style with subtle accent colors for a unique look",
+    duration: "4-5 hours",
+    price: 230,
+    image: ORIGINAL_2,
+    popular: false,
+    features: ["Premium colored accents", "Custom styling", "Edge finishing", "Care instructions"],
+    tags: ["accent", "color"]
+  },
+  {
+    id: "premium-5",
+    name: "Modern Cornrows",
+    description: "Contemporary cornrow designs with artistic flair and precision",
+    duration: "3-4 hours",
+    price: 210,
+    image: ORIGINAL_1,
+    popular: false,
+    features: ["Custom pattern design", "Scalp treatment", "Edge control", "Style consultation"],
+    tags: ["cornrows", "modern"]
   }
 ];
 
-// Standard service data
+// Standard service data with ALL client's uploaded images
 const STANDARD_SERVICES = [
   {
     id: 1,
@@ -75,7 +101,7 @@ const STANDARD_SERVICES = [
     description: "Thin box braids with detailed parting",
     duration: "5-6 hours",
     price: 200,
-    image: braidsAuburn,
+    image: IMG_21,
     icon: "📦",
     category: "box"
   },
@@ -85,7 +111,7 @@ const STANDARD_SERVICES = [
     description: "Standard size box braids",
     duration: "4-5 hours",
     price: 180,
-    image: braidsAuburn,
+    image: IMG_19,
     icon: "📦",
     category: "box"
   },
@@ -95,7 +121,7 @@ const STANDARD_SERVICES = [
     description: "Tension-free braids with a natural look",
     duration: "5-6 hours",
     price: 220,
-    image: braidsSide,
+    image: IMG_17,
     icon: "🪢",
     category: "knotless"
   },
@@ -105,7 +131,7 @@ const STANDARD_SERVICES = [
     description: "Modern shoulder-length braided bob for a chic, manageable style",
     duration: "3-4 hours",
     price: 175,
-    image: braidsBob,
+    image: IMG_12,
     icon: "✂️",
     category: "bob"
   },
@@ -115,7 +141,7 @@ const STANDARD_SERVICES = [
     description: "Elegant braided bun for a professional, protective style",
     duration: "2-3 hours",
     price: 160,
-    image: braidsBun,
+    image: IMG_14,
     icon: "👑",
     category: "protective"
   },
@@ -125,9 +151,39 @@ const STANDARD_SERVICES = [
     description: "Creative updo with spiral curls for special occasions",
     duration: "3-4 hours",
     price: 200,
-    image: braidsCurls,
+    image: IMG_15,
     icon: "🌀",
     category: "specialty"
+  },
+  {
+    id: 7,
+    style: "Pattern Braids",
+    description: "Intricate pattern designs with creative parting",
+    duration: "4-5 hours",
+    price: 230,
+    image: ORIGINAL_3,
+    icon: "🎨",
+    category: "specialty"
+  },
+  {
+    id: 8,
+    style: "Accent Color Braids",
+    description: "Beautiful braids with subtle color accents",
+    duration: "4-5 hours",
+    price: 225,
+    image: ORIGINAL_2,
+    icon: "🎭",
+    category: "specialty"
+  },
+  {
+    id: 9,
+    style: "Modern Cornrows",
+    description: "Contemporary cornrow designs with artistic precision",
+    duration: "3-4 hours",
+    price: 190,
+    image: ORIGINAL_1,
+    icon: "👑",
+    category: "protective"
   }
 ];
 
@@ -239,7 +295,7 @@ export default function PricingPage() {
                   <Star className="h-10 w-10 mx-auto mb-3 text-purple-600 dark:text-purple-400" />
                   <h3 className="text-lg font-bold mb-2">Client Favorite</h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    Auburn Box Braids with premium colored extensions
+                    Signature Box Braids with premium extensions
                   </p>
                   <span className="mt-3 text-xl font-bold text-purple-600 dark:text-purple-400">$220</span>
                 </motion.div>
