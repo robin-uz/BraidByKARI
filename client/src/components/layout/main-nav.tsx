@@ -61,6 +61,11 @@ export default function MainNav() {
                 Services
               </a>
             </Link>
+            <Link href="/pricing">
+              <a className={`font-medium hover:text-primary transition-all ${isActive("/pricing") ? "text-primary" : ""}`}>
+                Pricing
+              </a>
+            </Link>
             <Link href="/gallery">
               <a className={`font-medium hover:text-primary transition-all ${isActive("/gallery") ? "text-primary" : ""}`}>
                 Gallery
@@ -151,6 +156,14 @@ export default function MainNav() {
                   onClick={closeMobileMenu}
                 >
                   Services
+                </a>
+              </Link>
+              <Link href="/pricing">
+                <a 
+                  className={`font-medium hover:text-primary transition-all px-4 ${isActive("/pricing") ? "text-primary" : ""}`} 
+                  onClick={closeMobileMenu}
+                >
+                  Pricing
                 </a>
               </Link>
               <Link href="/gallery">

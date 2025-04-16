@@ -12,6 +12,7 @@ import HomePage from "@/pages/home-page";
 import GalleryPage from "@/pages/gallery-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
+import PricingPage from "@/pages/pricing-page";
 import AuthPage from "@/pages/auth-page";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/booking" component={BookingPage} />
         <Route path="/services" component={HomePage} />
+        <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/auth" component={AuthPage} />
         
