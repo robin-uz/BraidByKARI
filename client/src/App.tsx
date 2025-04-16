@@ -3,8 +3,8 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/lib/protected-route";
+import { ServerAuthProvider } from "@/contexts/DebugAuthContext";
+import { ServerProtectedRoute } from "./lib/server-protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -13,7 +13,7 @@ import GalleryPage from "@/pages/gallery-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
-import AuthPage from "@/pages/auth-page";
+import ServerAuthPage from "@/pages/auth/server-auth-page";
 import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ResetPasswordPage from "@/pages/auth/reset-password";
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -41,7 +41,7 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
-        <Route path="/auth" component={AuthPage} />
+        <Route path="/auth" component={ServerAuthPage} />
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
         
@@ -55,15 +55,15 @@ function Router() {
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         
         {/* Client routes - protected */}
-        <ProtectedRoute path="/client/dashboard" component={ClientDashboard} />
-        <ProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
-        <ProtectedRoute path="/client/profile" component={ProfilePage} />
+        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboard} />
+        <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+        <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
 
         {/* Admin routes - protected */}
-        <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
-        <ProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
-        <ProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
-        <ProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
@@ -76,10 +76,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light">
-        <AuthProvider>
+        <ServerAuthProvider>
           <Router />
           <Toaster />
-        </AuthProvider>
+        </ServerAuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

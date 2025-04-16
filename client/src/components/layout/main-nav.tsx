@@ -3,13 +3,13 @@ import { useThemeContext } from "./theme-provider";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/contexts/AuthContext";
+import { useServerAuth } from "@/contexts/DebugAuthContext";
 
 export default function MainNav() {
   const { theme, setTheme } = useThemeContext();
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
-  const { user, signOut, loading } = useAuth();
+  const { user, logout, loading } = useServerAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -22,17 +22,6 @@ export default function MainNav() {
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
-  };
-
-  const logout = async () => {
-    try {
-      setIsLoggingOut(true);
-      await signOut();
-    } catch (error) {
-      console.error('Error logging out:', error);
-    } finally {
-      setIsLoggingOut(false);
-    }
   };
 
   const isActive = (path: string) => {
@@ -125,7 +114,15 @@ export default function MainNav() {
 
             {/* Login/Logout Button */}
             {user ? (
-              <Button variant="outline" size="sm" onClick={logout} disabled={isLoggingOut}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  setIsLoggingOut(true);
+                  logout().finally(() => setIsLoggingOut(false));
+                }} 
+                disabled={isLoggingOut}
+              >
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </Button>
             ) : (
