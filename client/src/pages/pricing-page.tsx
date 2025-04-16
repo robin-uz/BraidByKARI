@@ -612,7 +612,7 @@ export default function PricingPage() {
                       <CardHeader className="pt-5 pb-2">
                         <div className="flex justify-between items-center">
                           <CardTitle className="text-lg">{service.style}</CardTitle>
-                          <div className="text-lg font-bold text-amber-600 dark:text-amber-400">${service.price}</div>
+                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">${service.price}</div>
                         </div>
                       </CardHeader>
                       
@@ -699,7 +699,7 @@ export default function PricingPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
                             {service.duration}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-purple-600 dark:text-purple-400">
                             ${service.price}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
@@ -793,8 +793,8 @@ export default function PricingPage() {
               className="space-y-3"
             >
               <div className="flex items-center">
-                <div className="bg-amber-100 dark:bg-amber-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <Star className="h-5 w-5 text-amber-800 dark:text-amber-200" />
+                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                  <Star className="h-5 w-5 text-purple-800 dark:text-purple-200" />
                 </div>
                 <h3 className="text-lg font-medium">Custom Designs</h3>
               </div>
@@ -886,7 +886,7 @@ export default function PricingPage() {
                         <span>{selectedService.duration}</span>
                       </div>
                     </div>
-                    <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">
+                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                       ${selectedService.price}
                     </div>
                   </div>
@@ -919,15 +919,15 @@ export default function PricingPage() {
                         <h4 className="text-lg font-medium">Additional Notes</h4>
                         <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
                           <li className="flex items-start">
-                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
                             <span>Hair extensions not included in price</span>
                           </li>
                           <li className="flex items-start">
-                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
                             <span>Pricing may vary with hair length and thickness</span>
                           </li>
                           <li className="flex items-start">
-                            <Info className="h-4 w-4 text-amber-500 mr-2 shrink-0 mt-0.5" />
+                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
                             <span>Additional fee for complex patterns or color work</span>
                           </li>
                         </ul>
