@@ -92,11 +92,21 @@ export default function ServerAuthPage() {
     try {
       setIsLoading(true);
       setError(null);
+      
+      console.log('Submitting login data:', { username: data.username });
+      
       await login(data.username, data.password);
       // Redirect is handled by the useEffect
     } catch (error) {
       console.error('Login error:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred during login');
+      
+      if (error instanceof Error) {
+        setError(error.message);
+      } else if (typeof error === 'string') {
+        setError(error);
+      } else {
+        setError('An unknown error occurred during login');
+      }
     } finally {
       setIsLoading(false);
     }

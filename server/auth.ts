@@ -48,13 +48,25 @@ export function setupAuth(app: Express) {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
+        console.log(`Attempting login for user: ${username}`);
+        
         const user = await storage.getUserByUsername(username);
-        if (!user || !(await comparePasswords(password, user.password))) {
-          return done(null, false);
-        } else {
-          return done(null, user);
+        if (!user) {
+          console.log(`User not found: ${username}`);
+          return done(null, false, { message: "User not found" });
         }
+        
+        const passwordValid = await comparePasswords(password, user.password);
+        console.log(`Password valid: ${passwordValid}`);
+        
+        if (!passwordValid) {
+          return done(null, false, { message: "Invalid password" });
+        } 
+        
+        console.log(`Authentication successful for: ${username}`);
+        return done(null, user);
       } catch (err) {
+        console.error("Authentication error:", err);
         return done(err);
       }
     }),
@@ -97,12 +109,34 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
+    console.log("Login request received:", req.body);
+    
+    // Validate request body
+    if (!req.body.username || !req.body.password) {
+      return res.status(400).json({ 
+        message: "Username and password are required" 
+      });
+    }
+    
     passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-      if (!user) return res.status(401).json({ message: "Invalid credentials" });
+      if (err) {
+        console.error("Login error:", err);
+        return next(err);
+      }
+      
+      if (!user) {
+        const errorMessage = info && info.message ? info.message : "Invalid credentials";
+        console.log("Authentication failed:", errorMessage);
+        return res.status(401).json({ message: errorMessage });
+      }
       
       req.login(user, (err) => {
-        if (err) return next(err);
+        if (err) {
+          console.error("Session setup error:", err);
+          return next(err);
+        }
+        
+        console.log("User logged in successfully:", user.username);
         res.status(200).json(user);
       });
     })(req, res, next);

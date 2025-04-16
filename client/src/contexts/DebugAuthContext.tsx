@@ -70,7 +70,8 @@ export function ServerAuthProvider({ children }: { children: ReactNode }) {
       const response = await apiRequest('POST', '/api/login', { username, password });
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch(() => ({ message: "Login failed" }));
+        console.error("Login API error:", response.status, errorData);
         throw new Error(errorData.message || `Login failed: ${response.statusText}`);
       }
       
@@ -86,6 +87,7 @@ export function ServerAuthProvider({ children }: { children: ReactNode }) {
       // Invalidate any relevant queries
       queryClient.invalidateQueries({ queryKey: ['/api/user'] });
       
+      return userData;
     } catch (err) {
       console.error("Login error:", err);
       const message = err instanceof Error ? err.message : String(err);
