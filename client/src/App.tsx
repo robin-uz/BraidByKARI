@@ -33,12 +33,16 @@ function Router() {
   return (
     <MainLayout>
       <Switch>
+        {/* Public routes */}
         <Route path="/" component={HomePage} />
         <Route path="/gallery" component={GalleryPage} />
-        <Route path="/booking" component={BookingPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/auth" component={AuthPage} />
+        
+        {/* Booking - protection optional as guests can book too, 
+            but if logged in we'll use their profile info */}
+        <Route path="/booking" component={BookingPage} />
         
         {/* Legal pages */}
         <Route path="/legal/privacy-policy" component={PrivacyPolicy} />

@@ -32,27 +32,28 @@ import {
 } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
 import AdminLayout from "@/components/admin/admin-layout";
+import { Booking, Gallery, Service, Testimonial } from "@shared/schema";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   
   // Query bookings
-  const { data: bookings, isLoading: bookingsLoading } = useQuery({
+  const { data: bookings = [], isLoading: bookingsLoading } = useQuery<Booking[]>({
     queryKey: ["/api/bookings"],
   });
   
   // Query testimonials
-  const { data: testimonials, isLoading: testimonialsLoading } = useQuery({
+  const { data: testimonials = [], isLoading: testimonialsLoading } = useQuery<Testimonial[]>({
     queryKey: ["/api/testimonials"],
   });
   
   // Query gallery
-  const { data: gallery, isLoading: galleryLoading } = useQuery({
+  const { data: gallery = [], isLoading: galleryLoading } = useQuery<Gallery[]>({
     queryKey: ["/api/gallery"],
   });
   
   // Query services
-  const { data: services, isLoading: servicesLoading } = useQuery({
+  const { data: services = [], isLoading: servicesLoading } = useQuery<Service[]>({
     queryKey: ["/api/services"],
   });
   
@@ -96,7 +97,7 @@ export default function AdminDashboard() {
   const getServicePopularityData = () => {
     if (!bookings || !bookings.length) return [];
     
-    const serviceCounts = {};
+    const serviceCounts: Record<string, number> = {};
     bookings.forEach(booking => {
       serviceCounts[booking.serviceType] = (serviceCounts[booking.serviceType] || 0) + 1;
     });
@@ -119,10 +120,15 @@ export default function AdminDashboard() {
   const COLORS = ['#D4AF37', '#8884d8', '#FF8042'];
   
   // Recent bookings
-  const recentBookings = bookings ? 
-    [...bookings].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ).slice(0, 5) : 
+  const recentBookings = bookings.length > 0 ? 
+    [...bookings].sort((a, b) => {
+      // Use createdAt timestamp for sorting, if available
+      // If not available, fallback to comparing IDs
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return b.id - a.id; // Most recent ID is probably newest
+    }).slice(0, 5) : 
     [];
   
   // Loading state
