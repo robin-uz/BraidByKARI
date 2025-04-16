@@ -31,9 +31,9 @@ export default function GoogleMap({
   
   return (
     <div className="bg-white dark:bg-neutral-950 rounded-lg shadow-lg overflow-hidden h-full flex flex-col">
-      <div className="p-4 bg-purple-50 dark:bg-purple-950/30 border-b border-purple-100 dark:border-purple-900/50">
-        <h3 className="font-heading text-lg font-semibold flex items-center text-purple-700 dark:text-purple-300">
-          <MapPin className="mr-2 h-5 w-5" />
+      <div className="p-3 sm:p-4 bg-purple-50 dark:bg-purple-950/30 border-b border-purple-100 dark:border-purple-900/50">
+        <h3 className="font-heading text-base sm:text-lg font-semibold flex items-center text-purple-700 dark:text-purple-300">
+          <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
           Our Location
         </h3>
       </div>
@@ -51,15 +51,15 @@ export default function GoogleMap({
         ></iframe>
       </div>
       
-      <div className="p-4 border-t border-purple-100 dark:border-purple-900/50 bg-purple-50 dark:bg-purple-950/30 flex justify-between items-center">
-        <p className="text-sm text-purple-700 dark:text-purple-300 font-medium truncate mr-4">
+      <div className="p-3 sm:p-4 border-t border-purple-100 dark:border-purple-900/50 bg-purple-50 dark:bg-purple-950/30 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
+        <p className="text-xs sm:text-sm text-purple-700 dark:text-purple-300 font-medium truncate sm:mr-4">
           {address}
         </p>
         <Button 
           size="sm" 
           variant="outline" 
           onClick={openDirections}
-          className="whitespace-nowrap border-purple-300 text-purple-700 hover:text-purple-800 hover:bg-purple-100 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900"
+          className="whitespace-nowrap text-xs sm:text-sm h-7 sm:h-9 px-2 sm:px-3 border-purple-300 text-purple-700 hover:text-purple-800 hover:bg-purple-100 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900"
         >
           Get Directions
         </Button>

@@ -32,17 +32,17 @@ export default function ContactInfo({
   },
 }: ContactInfoProps) {
   return (
-    <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg shadow-lg p-6 md:p-8">
-      <h3 className="font-heading text-2xl font-semibold mb-6 text-purple-700 dark:text-purple-300">Contact Information</h3>
+    <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
+      <h3 className="font-heading text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-purple-700 dark:text-purple-300">Contact Information</h3>
       
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="flex items-start">
           <div className="text-purple-600 dark:text-purple-400 mt-1">
-            <MapPin className="h-5 w-5" />
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="ml-4">
-            <h4 className="font-semibold mb-1">Location</h4>
-            <p className="text-neutral-700 dark:text-neutral-300">
+          <div className="ml-3 sm:ml-4">
+            <h4 className="font-semibold mb-1 text-sm sm:text-base">Location</h4>
+            <p className="text-neutral-700 dark:text-neutral-300 text-sm sm:text-base">
               {location.address}<br />
               {location.city}, {location.zip}
             </p>
@@ -51,11 +51,11 @@ export default function ContactInfo({
         
         <div className="flex items-start">
           <div className="text-purple-600 dark:text-purple-400 mt-1">
-            <Phone className="h-5 w-5" />
+            <Phone className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="ml-4">
-            <h4 className="font-semibold mb-1">Phone</h4>
-            <p className="text-neutral-700 dark:text-neutral-300">
+          <div className="ml-3 sm:ml-4">
+            <h4 className="font-semibold mb-1 text-sm sm:text-base">Phone</h4>
+            <p className="text-neutral-700 dark:text-neutral-300 text-sm sm:text-base">
               <a href={`tel:${phone.replace(/[^0-9]/g, '')}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-all">{phone}</a>
             </p>
           </div>
@@ -63,11 +63,11 @@ export default function ContactInfo({
         
         <div className="flex items-start">
           <div className="text-purple-600 dark:text-purple-400 mt-1">
-            <Mail className="h-5 w-5" />
+            <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="ml-4">
-            <h4 className="font-semibold mb-1">Email</h4>
-            <p className="text-neutral-700 dark:text-neutral-300">
+          <div className="ml-3 sm:ml-4">
+            <h4 className="font-semibold mb-1 text-sm sm:text-base">Email</h4>
+            <p className="text-neutral-700 dark:text-neutral-300 text-sm sm:text-base">
               <a href={`mailto:${email}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-all">{email}</a>
             </p>
           </div>
@@ -75,11 +75,11 @@ export default function ContactInfo({
         
         <div className="flex items-start">
           <div className="text-purple-600 dark:text-purple-400 mt-1">
-            <Clock className="h-5 w-5" />
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div className="ml-4">
-            <h4 className="font-semibold mb-1">Business Hours</h4>
-            <div className="text-neutral-700 dark:text-neutral-300 grid grid-cols-2 gap-2">
+          <div className="ml-3 sm:ml-4">
+            <h4 className="font-semibold mb-1 text-sm sm:text-base">Business Hours</h4>
+            <div className="text-neutral-700 dark:text-neutral-300 grid grid-cols-2 gap-2 text-sm sm:text-base">
               <div>Monday - Friday</div>
               <div>{hours.weekdays}</div>
               <div>Saturday</div>
@@ -91,17 +91,17 @@ export default function ContactInfo({
         </div>
       </div>
       
-      <div className="mt-8">
-        <h4 className="font-semibold mb-4">Quick Connect</h4>
-        <div className="flex space-x-4">
+      <div className="mt-6 sm:mt-8">
+        <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Quick Connect</h4>
+        <div className="flex flex-wrap gap-3 sm:gap-4">
           <a 
             href="https://wa.me/12345678901" 
             target="_blank" 
             rel="noopener noreferrer"
             aria-label="WhatsApp"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
-              <FaWhatsapp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <Button variant="outline" size="sm" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700 h-8 w-8 sm:h-10 sm:w-10 p-0">
+              <FaWhatsapp className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -110,8 +110,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="Instagram"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
-              <FaInstagram className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <Button variant="outline" size="sm" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700 h-8 w-8 sm:h-10 sm:w-10 p-0">
+              <FaInstagram className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -120,8 +120,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="Facebook"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
-              <FaFacebookF className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <Button variant="outline" size="sm" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700 h-8 w-8 sm:h-10 sm:w-10 p-0">
+              <FaFacebookF className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
           <a 
@@ -130,8 +130,8 @@ export default function ContactInfo({
             rel="noopener noreferrer"
             aria-label="TikTok"
           >
-            <Button variant="outline" size="icon" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700">
-              <FaTiktok className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <Button variant="outline" size="sm" className="rounded-full bg-purple-100/10 border-purple-500 hover:bg-purple-100/20 dark:border-purple-700 h-8 w-8 sm:h-10 sm:w-10 p-0">
+              <FaTiktok className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
             </Button>
           </a>
         </div>
