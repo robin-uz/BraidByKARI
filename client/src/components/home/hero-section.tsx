@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Sparkles, Star, Crown, Scissors, Heart, ChevronDown } from "lucide-react";
+import { ArrowRight, Star, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import model1 from "@/assets/kari-stylez/braids-model-1.png";
 import model2 from "@/assets/kari-stylez/braids-model-2.png";
@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 
 export default function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
+  const [currentImage, setCurrentImage] = useState(0);
+  const imageList = [model1, model2, model3, model4, model5];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +22,15 @@ export default function HeroSection() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Image rotation every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % imageList.length);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, [imageList.length]);
 
   // Animation variants
   const containerVariants = {
@@ -42,18 +53,6 @@ export default function HeroSection() {
         type: "spring", 
         stiffness: 300, 
         damping: 24
-      }
-    }
-  };
-  
-  const floatVariants = {
-    animate: {
-      y: [0, -10, 0],
-      transition: {
-        duration: 4,
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        ease: "easeInOut"
       }
     }
   };
@@ -211,91 +210,55 @@ export default function HeroSection() {
             </motion.div>
           </motion.div>
           
-          {/* Right content - Images */}
+          {/* Right side - Single large hero image that changes every 5 seconds */}
           <motion.div 
             variants={itemVariants}
-            className="w-full lg:w-1/2 relative min-h-[450px] sm:min-h-[550px] flex items-center"
+            className="w-full lg:w-1/2 relative min-h-[450px] sm:min-h-[550px] flex items-center justify-center"
           >
-            <div className="absolute inset-0 w-full h-full flex items-center justify-center">
-              {/* Circular accent */}
+            <div className="relative w-[90%] h-[90%] rounded-2xl overflow-hidden">
+              {/* Main rotating image */}
               <motion.div 
-                className="absolute w-[95%] h-[95%] rounded-full border-2 border-dashed border-amber-400/20 z-0"
-                animate={{ 
-                  rotate: 360,
-                }}
-                transition={{
-                  duration: 120,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
-              
-              {/* Main image */}
-              <motion.div 
-                className="absolute left-[5%] top-[5%] w-[70%] h-[70%] z-20 origin-bottom"
-                variants={floatVariants}
-                animate="animate"
+                className="absolute inset-0 rounded-2xl overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
               >
-                <div className="relative w-full h-full">
-                  <motion.div 
-                    className="absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-b from-amber-500/20 to-amber-700/20 backdrop-blur-sm p-1.5"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
+                {imageList.map((img, index) => (
+                  <motion.div
+                    key={index}
+                    className="absolute inset-0 h-full w-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: currentImage === index ? 1 : 0,
+                      scale: currentImage === index ? 1 : 1.1
+                    }}
+                    transition={{ 
+                      opacity: { duration: 0.8 },
+                      scale: { duration: 5 }
+                    }}
                   >
-                    <img 
-                      src={model1} 
-                      alt="Beautiful braided hairstyle by Kari Stylez" 
-                      className="w-full h-full object-cover rounded-xl"
-                    />
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-b from-amber-500/30 to-amber-700/30 backdrop-blur-sm p-1.5">
+                      <img 
+                        src={img} 
+                        alt={`KARI STYLEZ hairstyle showcase ${index + 1}`} 
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                    </div>
                   </motion.div>
-                  
-                  {/* Decorative elements */}
-                  <motion.div 
-                    className="absolute -top-4 -right-4 bg-gradient-to-br from-amber-500 to-amber-700 rounded-lg p-2 shadow-lg"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.8, duration: 0.4 }}
-                  >
-                    <Crown className="h-5 w-5 text-white" />
-                  </motion.div>
-                </div>
+                ))}
               </motion.div>
               
-              {/* Second image */}
-              <motion.div 
-                className="absolute right-[5%] bottom-[5%] w-[60%] h-[60%] z-10 origin-top"
-                variants={floatVariants}
-                animate="animate"
-                transition={{
-                  delay: 0.5,
-                }}
-              >
-                <div className="relative w-full h-full">
-                  <motion.div 
-                    className="absolute inset-0 rounded-2xl overflow-hidden bg-gradient-to-b from-amber-600/20 to-amber-800/20 backdrop-blur-sm p-1.5"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 0.6 }}
-                  >
-                    <img 
-                      src={model2} 
-                      alt="Professional hair braiding at Kari Stylez" 
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  </motion.div>
-                  
-                  {/* Decorative elements */}
-                  <motion.div 
-                    className="absolute -bottom-4 -left-4 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg p-2 shadow-lg"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1, duration: 0.4 }}
-                  >
-                    <Heart className="h-5 w-5 text-white" />
-                  </motion.div>
-                </div>
-              </motion.div>
+              {/* Image number indicators */}
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+                {imageList.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${currentImage === index ? 'bg-white scale-125' : 'bg-white/50'}`}
+                    onClick={() => setCurrentImage(index)}
+                    aria-label={`View image ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </motion.div>
         </motion.div>
