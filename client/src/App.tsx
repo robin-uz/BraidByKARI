@@ -25,6 +25,7 @@ import NotFound from "@/pages/not-found";
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
 import HairSimulator from "@/pages/client/hair-simulator";
+import ProfilePage from "@/pages/client/profile";
 
 // Legal Pages
 import PrivacyPolicy from "@/pages/legal/privacy-policy";

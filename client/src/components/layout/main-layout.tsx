@@ -15,14 +15,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
     window.scrollTo(0, 0);
   }, [location]);
   
-  // Check if we're on the admin dashboard
+  // Check if we're on the admin dashboard or auth-related pages
   const isAdminPage = location.startsWith('/admin');
+  const isAuthPage = location === '/auth';
+  const isPasswordResetPage = location.startsWith('/auth/forgot-password') || location.startsWith('/auth/reset-password');
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAdminPage && <MainNav />}
+      {!isAdminPage && !isPasswordResetPage && <MainNav />}
       <main className="flex-grow">{children}</main>
-      {!isAdminPage && <Footer />}
+      {!isAdminPage && !isPasswordResetPage && <Footer />}
     </div>
   );
 }
