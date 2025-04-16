@@ -3,18 +3,13 @@ import { createServer, type Server } from "http";
 import { z } from "zod";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import nodemailer from 'nodemailer';
 import { insertBookingSchema, insertGallerySchema, insertServiceSchema, insertTestimonialSchema } from "@shared/schema";
 import { processReminderBatch, scheduleReminderCheck } from "./reminder";
-
-// Email configuration
-const gmailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER || '',
-    pass: process.env.EMAIL_PASSWORD || '',
-  },
-});
+import { 
+  sendBookingConfirmationEmail, 
+  sendBookingNotificationEmail,
+  sendBookingCancellationEmail
+} from "./mailer";
 
 // Check if user is authenticated and is admin
 const isAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -85,6 +80,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ message: 'Failed to cancel booking' });
       }
       
+      // Send cancellation email notification
+      try {
+        await sendBookingCancellationEmail(updatedBooking);
+      } catch (emailError) {
+        console.error('Failed to send cancellation email:', emailError);
+        // Continue with the response even if email fails
+      }
+      
       res.json(updatedBooking);
     } catch (error) {
       next(error);
@@ -97,45 +100,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const bookingData = insertBookingSchema.parse(req.body);
       const booking = await storage.createBooking(bookingData);
       
-      // Send confirmation email
-      if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
-        try {
-          await gmailTransporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: booking.email,
-            subject: 'Booking Confirmation - Divine Braids',
-            html: `
-              <h1>Thank you for booking with Divine Braids!</h1>
-              <p>Dear ${booking.name},</p>
-              <p>We have received your booking request for ${booking.serviceType} on ${booking.date} at ${booking.time}.</p>
-              <p>Your booking is currently <strong>pending</strong>. We will confirm your appointment shortly.</p>
-              <p>If you have any questions, please contact us.</p>
-              <p>Best regards,</p>
-              <p>Divine Braids Team</p>
-            `
-          });
-          
-          // Also send notification to admin
-          await gmailTransporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: process.env.ADMIN_EMAIL || process.env.EMAIL_USER,
-            subject: 'New Booking - Divine Braids',
-            html: `
-              <h1>New Booking Request</h1>
-              <p>Client: ${booking.name}</p>
-              <p>Email: ${booking.email}</p>
-              <p>Phone: ${booking.phone}</p>
-              <p>Service: ${booking.serviceType}</p>
-              <p>Date: ${booking.date}</p>
-              <p>Time: ${booking.time}</p>
-              <p>Notes: ${booking.notes || 'N/A'}</p>
-              <p>Please login to the admin dashboard to confirm this booking.</p>
-            `
-          });
-        } catch (error) {
-          console.error('Email sending failed:', error);
-          // We don't want to fail the booking if email sending fails
-        }
+      // Send confirmation and notification emails
+      try {
+        // Send confirmation to client
+        await sendBookingConfirmationEmail(booking);
+        
+        // Send notification to salon
+        await sendBookingNotificationEmail(booking);
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+        // We don't want to fail the booking if email sending fails
       }
       
       res.status(201).json(booking);
@@ -171,29 +145,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: 'Booking not found' });
       }
       
-      // Send email notification about status change
-      if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
-        try {
-          await gmailTransporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: booking.email,
-            subject: `Booking ${status.charAt(0).toUpperCase() + status.slice(1)} - Divine Braids`,
-            html: `
-              <h1>Booking ${status.charAt(0).toUpperCase() + status.slice(1)}</h1>
-              <p>Dear ${booking.name},</p>
-              <p>Your booking for ${booking.serviceType} on ${booking.date} at ${booking.time} has been <strong>${status}</strong>.</p>
-              ${status === 'confirmed' ? 
-                `<p>We look forward to seeing you!</p>` : 
-                status === 'cancelled' ? 
-                `<p>If you have any questions about the cancellation, please contact us.</p>` : 
-                ''}
-              <p>Best regards,</p>
-              <p>Divine Braids Team</p>
-            `
-          });
-        } catch (error) {
-          console.error('Email sending failed:', error);
+      // Send appropriate email notification based on status change
+      try {
+        if (status === 'confirmed') {
+          await sendBookingConfirmationEmail(booking);
+        } else if (status === 'cancelled') {
+          await sendBookingCancellationEmail(booking);
         }
+      } catch (emailError) {
+        console.error('Failed to send status update email:', emailError);
+        // Continue with the response even if email fails
       }
       
       res.json(booking);

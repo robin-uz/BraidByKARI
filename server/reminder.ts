@@ -1,51 +1,12 @@
-import nodemailer from 'nodemailer';
 import { Booking } from '@shared/schema';
 import { storage } from './storage';
-import { addDays, parseISO, format } from 'date-fns';
-
-// Email configuration
-const gmailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER || '',
-    pass: process.env.EMAIL_PASSWORD || '',
-  },
-});
+import { sendReminderEmail } from './mailer';
 
 /**
  * Send a reminder email to a client
  */
-export async function sendReminderEmail(booking: Booking): Promise<boolean> {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-    console.log('Email credentials not configured, skipping reminder');
-    return false;
-  }
-
-  try {
-    await gmailTransporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: booking.email,
-      subject: 'Appointment Reminder - Divine Braids',
-      html: `
-        <h2>Your Appointment Reminder</h2>
-        <p>Dear ${booking.name},</p>
-        <p>This is a friendly reminder of your upcoming appointment:</p>
-        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
-          <p><strong>Service:</strong> ${booking.serviceType}</p>
-          <p><strong>Date:</strong> ${booking.date}</p>
-          <p><strong>Time:</strong> ${booking.time}</p>
-        </div>
-        <p>We're looking forward to seeing you!</p>
-        <p>If you need to reschedule, please contact us as soon as possible.</p>
-        <p>Best regards,</p>
-        <p>Divine Braids Team</p>
-      `,
-    });
-    return true;
-  } catch (error) {
-    console.error('Failed to send reminder email:', error);
-    return false;
-  }
+export async function sendBookingReminder(booking: Booking): Promise<boolean> {
+  return await sendReminderEmail(booking);
 }
 
 /**
@@ -55,35 +16,28 @@ export async function sendReminderEmail(booking: Booking): Promise<boolean> {
 export async function processReminderBatch(): Promise<number> {
   try {
     const bookings = await storage.getBookings();
+    const now = new Date();
+    let remindersSent = 0;
     
-    // Get confirmed bookings with appointments coming up soon
+    // Get bookings that are 1-2 days in the future and confirmed
     const upcomingBookings = bookings.filter(booking => {
       if (booking.status !== 'confirmed') return false;
       
-      try {
-        // Parse the date string to a Date object
-        // In a real app, this would be stored as a proper Date in the database
-        const bookingDate = parseISO(booking.date);
-        
-        // Check if the booking is tomorrow
-        const tomorrow = addDays(new Date(), 1);
-        
-        return format(bookingDate, 'yyyy-MM-dd') === format(tomorrow, 'yyyy-MM-dd');
-      } catch (error) {
-        console.error('Error parsing date for booking:', booking.id, error);
-        return false;
-      }
+      const bookingDate = new Date(`${booking.date}T${booking.time}`);
+      const diffTime = bookingDate.getTime() - now.getTime();
+      const diffDays = diffTime / (1000 * 3600 * 24);
+      
+      // Send reminders for appointments 1-2 days away
+      return diffDays >= 1 && diffDays <= 2;
     });
-
-    console.log(`Found ${upcomingBookings.length} bookings for reminder emails`);
     
     // Send reminders
-    let remindersSent = 0;
     for (const booking of upcomingBookings) {
-      const success = await sendReminderEmail(booking);
+      const success = await sendBookingReminder(booking);
       if (success) remindersSent++;
     }
     
+    console.log(`Sent ${remindersSent} reminders out of ${upcomingBookings.length} upcoming bookings`);
     return remindersSent;
   } catch (error) {
     console.error('Error processing reminder batch:', error);
@@ -91,10 +45,26 @@ export async function processReminderBatch(): Promise<number> {
   }
 }
 
-// This function would be called by a scheduled job (like a cron job)
-// For now, we'll expose it through an API endpoint that you'd call daily
+// Function to schedule reminder checks
+// This could be called by a timer or cron job
 export async function scheduleReminderCheck(): Promise<void> {
-  console.log('Starting scheduled reminder check...');
-  const remindersSent = await processReminderBatch();
-  console.log(`Reminder check complete. Sent ${remindersSent} reminders.`);
+  console.log('Scheduling reminder check');
+  
+  // In a production environment, this would be a cron job
+  // For demo purposes, we'll just run it once and then schedule it to run daily
+  await processReminderBatch();
+  
+  // Schedule to run daily at a specific time (e.g., 9 AM)
+  // This is a simplified implementation for demo purposes
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(9, 0, 0, 0);
+  
+  const timeUntilTomorrow = tomorrow.getTime() - now.getTime();
+  
+  console.log(`Next reminder check scheduled for ${tomorrow.toLocaleString()}`);
+  
+  // Schedule the next run
+  setTimeout(scheduleReminderCheck, timeUntilTomorrow);
 }
