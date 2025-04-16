@@ -5,32 +5,67 @@ import { formatBookingEmailBody, formatConfirmationEmailBody, EmailOptions } fro
 let transporter: Transporter;
 
 function setupMailer() {
-  // In development, use a test account
-  if (process.env.NODE_ENV === 'development' && !process.env.EMAIL_USER) {
-    console.log('Setting up development email service');
-    nodemailer.createTestAccount().then(testAccount => {
-      transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
-      });
-      console.log(`Development email credentials: ${testAccount.user} / ${testAccount.pass}`);
-      console.log('View emails at: https://ethereal.email/messages');
-    });
-  } else {
-    // In production, use real SMTP credentials
+  // Always use Ethereal for now due to Gmail SMTP authentication issues
+  console.log('Setting up development email service with Ethereal');
+  nodemailer.createTestAccount().then(testAccount => {
     transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE || 'gmail',
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
+    console.log(`Development email credentials: ${testAccount.user} / ${testAccount.pass}`);
+    console.log('View emails at: https://ethereal.email/messages');
+    
+    // Verify connection configuration
+    transporter.verify(function(error, success) {
+      if (error) {
+        console.error('Ethereal email service configuration error:', error);
+      } else {
+        console.log('Ethereal email server is ready to send messages');
+      }
+    });
+  });
+
+  // NOTE: For Gmail with app passwords, we'll need to enable this later
+  // For Gmail SMTP, you need to:
+  // 1. Enable 2-factor authentication in your Google account
+  // 2. Generate an "App Password" specifically for this application
+  // 3. Use that App Password instead of your regular password
+  
+  /* Commented out until Gmail SMTP issues are resolved
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+    console.log('Setting up production email service with provided credentials');
+    
+    // Convert EMAIL_SECURE from string to boolean
+    const secureConnection = process.env.EMAIL_SECURE === 'true';
+    
+    const gmailTransporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com', // We're using Gmail SMTP
+      port: parseInt(process.env.EMAIL_PORT || '587'),
+      secure: secureConnection,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
       },
+      debug: true // Enable debug output
+    });
+    
+    // Verify connection configuration
+    gmailTransporter.verify(function(error, success) {
+      if (error) {
+        console.error('Gmail service configuration error:', error);
+        console.log('Falling back to Ethereal for now.');
+      } else {
+        console.log('Gmail server is ready to send messages');
+        transporter = gmailTransporter;
+      }
     });
   }
+  */
 }
 
 // Setup mailer on import
@@ -55,10 +90,8 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 
     console.log(`Email sent: ${info.messageId}`);
     
-    // If using ethereal, log the URL where the email can be viewed
-    if (process.env.NODE_ENV === 'development' && !process.env.EMAIL_USER) {
-      console.log(`Email preview URL: ${nodemailer.getTestMessageUrl(info)}`);
-    }
+    // Always log the preview URL since we're using Ethereal
+    console.log(`Email preview URL: ${nodemailer.getTestMessageUrl(info)}`);
     
     return true;
   } catch (error) {
