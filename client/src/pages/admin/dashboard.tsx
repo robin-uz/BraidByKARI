@@ -31,6 +31,7 @@ import {
   Cell
 } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
+import AdminLayout from "@/components/admin/admin-layout";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -134,13 +135,13 @@ export default function AdminDashboard() {
   }
   
   return (
-    <>
+    <AdminLayout>
       <Helmet>
         <title>Admin Dashboard | Divine Braids</title>
         <meta name="description" content="Admin dashboard for Divine Braids salon management" />
       </Helmet>
       
-      <div className="p-6 space-y-8">
+      <div className="space-y-8">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold font-heading">Admin Dashboard</h1>
           <div className="text-sm">
@@ -458,6 +459,6 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-    </>
+    </AdminLayout>
   );
 }
