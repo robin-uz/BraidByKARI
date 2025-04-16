@@ -42,8 +42,11 @@ app.use((req, res, next) => {
   try {
     // Seed gallery data
     await seedGallery();
+    
+    // Seed services data
+    await seedServices();
   } catch (error) {
-    console.error("Error seeding gallery data:", error);
+    console.error("Error seeding data:", error);
   }
   
   const server = await registerRoutes(app);

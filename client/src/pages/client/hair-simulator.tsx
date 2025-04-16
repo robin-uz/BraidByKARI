@@ -478,10 +478,7 @@ export default function HairSimulator() {
                             <p className="text-sm text-muted-foreground text-center mb-4">
                               Book an appointment to get your {selectedBraidStyle.name} done by our expert stylists.
                             </p>
-                            <Link href={{
-                              pathname: "/booking",
-                              search: `?service=${encodeURIComponent(selectedBraidStyle.name)}`
-                            }}>
+                            <Link href={`/booking?service=${encodeURIComponent(selectedBraidStyle.name)}`}>
                               <Button className="w-full" size="lg">
                                 Book this Style
                               </Button>

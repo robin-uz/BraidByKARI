@@ -1,5 +1,8 @@
 import { Helmet } from "react-helmet";
+import { Link } from "wouter";
 import BookingForm from "@/components/booking/booking-form";
+import { Button } from "@/components/ui/button";
+import { Brush } from "lucide-react";
 
 export default function BookingPage() {
   return (
@@ -13,9 +16,15 @@ export default function BookingPage() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h1 className="font-heading text-3xl md:text-4xl font-bold mb-4">Book Your Appointment</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto mb-6">
               Schedule your next braiding session with us. We require a deposit for booking confirmation.
             </p>
+            <Link href="/client/hair-simulator">
+              <Button variant="outline" className="mx-auto flex items-center">
+                <Brush className="mr-2 h-4 w-4" />
+                Try our Hair Simulator first
+              </Button>
+            </Link>
           </div>
           
           <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-lg p-6 md:p-8 max-w-4xl mx-auto">
