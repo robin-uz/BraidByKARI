@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Password toggle eye animation */
+.eye-blink {
+  animation: blink-animation 2s ease-in-out infinite;
+}
+
+@keyframes blink-animation {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  color: var(--color-foreground);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.password-toggle-icon:hover {
+  opacity: 1;
+}
+
 @layer base {
   * {
     @apply border-border;

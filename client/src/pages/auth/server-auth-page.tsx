@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ServerAuthContext } from '@/contexts/DebugAuthContext';
 import { Helmet } from 'react-helmet';
+import { Eye, EyeOff } from 'lucide-react';
 
 import {
   Card,
@@ -50,6 +51,9 @@ export default function ServerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // Access auth context directly
   const authContext = useContext(ServerAuthContext);
@@ -178,9 +182,26 @@ export default function ServerAuthPage() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} />
-                            </FormControl>
+                            <div className="password-input-wrapper">
+                              <FormControl>
+                                <Input 
+                                  type={showLoginPassword ? "text" : "password"} 
+                                  placeholder="••••••••" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <div 
+                                className="password-toggle-icon" 
+                                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                                aria-label={showLoginPassword ? "Hide password" : "Show password"}
+                              >
+                                {showLoginPassword ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4 eye-blink" />
+                                )}
+                              </div>
+                            </div>
                             <FormMessage />
                             <div className="text-right">
                               <a 
@@ -246,9 +267,26 @@ export default function ServerAuthPage() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} />
-                            </FormControl>
+                            <div className="password-input-wrapper">
+                              <FormControl>
+                                <Input 
+                                  type={showRegisterPassword ? "text" : "password"} 
+                                  placeholder="••••••••" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <div 
+                                className="password-toggle-icon" 
+                                onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                                aria-label={showRegisterPassword ? "Hide password" : "Show password"}
+                              >
+                                {showRegisterPassword ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4 eye-blink" />
+                                )}
+                              </div>
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -259,9 +297,26 @@ export default function ServerAuthPage() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="••••••••" {...field} />
-                            </FormControl>
+                            <div className="password-input-wrapper">
+                              <FormControl>
+                                <Input 
+                                  type={showConfirmPassword ? "text" : "password"} 
+                                  placeholder="••••••••" 
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <div 
+                                className="password-toggle-icon" 
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                              >
+                                {showConfirmPassword ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4 eye-blink" />
+                                )}
+                              </div>
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -289,6 +344,17 @@ export default function ServerAuthPage() {
               <p className="text-sm text-muted-foreground text-center">
                 By continuing, you agree to our Terms of Service and Privacy Policy
               </p>
+              
+              {/* Demo credentials for testing */}
+              {process.env.NODE_ENV !== 'production' && (
+                <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded-md text-xs">
+                  <p className="font-medium mb-1">🔑 Demo Credentials:</p>
+                  <div className="grid grid-cols-2 gap-x-2">
+                    <p><span className="font-semibold">Username:</span> customer</p>
+                    <p><span className="font-semibold">Password:</span> customer123</p>
+                  </div>
+                </div>
+              )}
               
               {/* Debug info */}
               {process.env.NODE_ENV !== 'production' && (
