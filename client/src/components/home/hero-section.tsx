@@ -39,28 +39,59 @@ export default function HeroSection() {
           {/* Hero Image */}
           <div className="relative hidden lg:block">
             <img 
-              src="/images/hero-hairstyle.png" 
-              alt="Beautiful hairstyle" 
-              className="w-full h-auto object-contain rounded-lg"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80";
-              }}
+              src="/images/box-braids.jpg" 
+              alt="Beautiful box braids hairstyle" 
+              className="w-full h-auto object-cover rounded-lg shadow-lg"
             />
           </div>
         </div>
       </div>
       
-      {/* Brands Section */}
+      {/* Our Expertise Section */}
       <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-neutral-950 py-8">
         <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mb-6">Brands that we collaborated with</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">GQ</div>
-            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">ELLE</div>
-            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">COSMOPOLITAN</div>
-            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">VOGUE</div>
-            <div className="text-purple-500 dark:text-purple-400 font-bold text-xl">teespring</div>
+          <p className="text-center text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4">Our Premium Services</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-3xl mx-auto">
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                </svg>
+              </div>
+              <p className="font-medium">Box Braids</p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                  <path d="M4 22h16"></path>
+                  <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                  <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                </svg>
+              </div>
+              <p className="font-medium">Knotless Braids</p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
+                  <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1"></path>
+                  <path d="M17 21h-1a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h1"></path>
+                  <path d="M8 4a2 2 0 1 1 4 0v12a2 2 0 1 1-4 0V4Z"></path>
+                  <path d="M16 4a2 2 0 1 0-4 0v12a2 2 0 1 0 4 0V4Z"></path>
+                </svg>
+              </div>
+              <p className="font-medium">Feed-in Braids</p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-purple-600 dark:text-purple-400">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+              </div>
+              <p className="font-medium">Bob Boho Braids</p>
+            </div>
           </div>
         </div>
       </div>

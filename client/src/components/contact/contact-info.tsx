@@ -37,7 +37,7 @@ export default function ContactInfo({
       
       <div className="space-y-6">
         <div className="flex items-start">
-          <div className="text-primary mt-1">
+          <div className="text-purple-600 dark:text-purple-400 mt-1">
             <MapPin className="h-5 w-5" />
           </div>
           <div className="ml-4">
@@ -50,31 +50,31 @@ export default function ContactInfo({
         </div>
         
         <div className="flex items-start">
-          <div className="text-primary mt-1">
+          <div className="text-purple-600 dark:text-purple-400 mt-1">
             <Phone className="h-5 w-5" />
           </div>
           <div className="ml-4">
             <h4 className="font-semibold mb-1">Phone</h4>
             <p className="text-neutral-700 dark:text-neutral-300">
-              <a href={`tel:${phone.replace(/[^0-9]/g, '')}`} className="hover:text-primary transition-all">{phone}</a>
+              <a href={`tel:${phone.replace(/[^0-9]/g, '')}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-all">{phone}</a>
             </p>
           </div>
         </div>
         
         <div className="flex items-start">
-          <div className="text-primary mt-1">
+          <div className="text-purple-600 dark:text-purple-400 mt-1">
             <Mail className="h-5 w-5" />
           </div>
           <div className="ml-4">
             <h4 className="font-semibold mb-1">Email</h4>
             <p className="text-neutral-700 dark:text-neutral-300">
-              <a href={`mailto:${email}`} className="hover:text-primary transition-all">{email}</a>
+              <a href={`mailto:${email}`} className="hover:text-purple-600 dark:hover:text-purple-400 transition-all">{email}</a>
             </p>
           </div>
         </div>
         
         <div className="flex items-start">
-          <div className="text-primary mt-1">
+          <div className="text-purple-600 dark:text-purple-400 mt-1">
             <Clock className="h-5 w-5" />
           </div>
           <div className="ml-4">

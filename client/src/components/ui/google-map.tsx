@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface GoogleMapProps {
   address: string;
@@ -8,7 +10,7 @@ interface GoogleMapProps {
 
 export default function GoogleMap({
   address = "123 Braiding Avenue, Los Angeles, CA 90001",
-  apiKey = process.env.GOOGLE_MAPS_API_KEY,
+  apiKey,
   height = "400px",
 }: GoogleMapProps) {
   const [mapUrl, setMapUrl] = useState<string>("");
@@ -17,19 +19,26 @@ export default function GoogleMap({
     // Encode the address for use in the URL
     const encodedAddress = encodeURIComponent(address);
     
-    // Create map URL
-    if (apiKey) {
-      // Use Google Maps JavaScript API if we have a key
-      setMapUrl(`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodedAddress}`);
-    } else {
-      // Fallback to a static Google Maps link
-      setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`);
-    }
-  }, [address, apiKey]);
+    // Always use the embedded Google Maps without API key since it works reliably
+    setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`);
+  }, [address]);
+  
+  // Function to open Google Maps in a new tab for directions
+  const openDirections = () => {
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, '_blank');
+  };
   
   return (
-    <div className="bg-primary-50 dark:bg-neutral-950 rounded-lg shadow-lg overflow-hidden h-full">
-      {mapUrl ? (
+    <div className="bg-white dark:bg-neutral-950 rounded-lg shadow-lg overflow-hidden h-full flex flex-col">
+      <div className="p-4 bg-purple-50 dark:bg-purple-950/30 border-b border-purple-100 dark:border-purple-900/50">
+        <h3 className="font-heading text-lg font-semibold flex items-center text-purple-700 dark:text-purple-300">
+          <MapPin className="mr-2 h-5 w-5" />
+          Our Location
+        </h3>
+      </div>
+      
+      <div className="flex-grow">
         <iframe
           title="Google Map"
           src={mapUrl}
@@ -40,26 +49,21 @@ export default function GoogleMap({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
-      ) : (
-        <div className="h-full w-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center relative">
-          <div className="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-primary">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            <p className="text-neutral-700 dark:text-neutral-300">
-              Map will be displayed here when API key is provided
-            </p>
-          </div>
-          {/* Placeholder overlay to simulate map appearance */}
-          <div className="absolute inset-0 opacity-10 dark:opacity-5">
-            <div className="absolute top-1/4 left-1/4 w-24 h-24 rounded-full bg-primary/50"></div>
-            <div className="absolute top-1/2 left-1/2 w-6 h-6 rounded-full bg-primary"></div>
-            <div className="absolute top-2/3 left-1/3 w-32 h-4 rounded-full bg-white dark:bg-neutral-900"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-40 h-3 rounded-full bg-white dark:bg-neutral-900"></div>
-          </div>
-        </div>
-      )}
+      </div>
+      
+      <div className="p-4 border-t border-purple-100 dark:border-purple-900/50 bg-purple-50 dark:bg-purple-950/30 flex justify-between items-center">
+        <p className="text-sm text-purple-700 dark:text-purple-300 font-medium truncate mr-4">
+          {address}
+        </p>
+        <Button 
+          size="sm" 
+          variant="outline" 
+          onClick={openDirections}
+          className="whitespace-nowrap border-purple-300 text-purple-700 hover:text-purple-800 hover:bg-purple-100 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900"
+        >
+          Get Directions
+        </Button>
+      </div>
     </div>
   );
 }

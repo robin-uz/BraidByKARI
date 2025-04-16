@@ -80,10 +80,10 @@ export default function ServicesSection() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600 dark:text-purple-400">
-            Lorem ipsum dolor sit amet
+            Our Premium Services
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            We offer a wide range of braiding styles to match your personal style and preferences, all executed with exceptional skill and care by our experienced stylists.
           </p>
         </div>
         
@@ -91,10 +91,10 @@ export default function ServicesSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           <div className="order-2 lg:order-1">
             <h3 className="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400">
-              Our Premium Services
+              Expert Hair Braiding
             </h3>
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-              We offer a wide range of braiding styles to match your personal style and preferences, all executed with exceptional skill and care.
+              Our salon specializes in creating stunning braided hairstyles that are both beautiful and protective for your natural hair.
             </p>
             
             <div className="space-y-6">
@@ -124,8 +124,8 @@ export default function ServicesSection() {
           
           <div className="rounded-lg overflow-hidden shadow-xl order-1 lg:order-2">
             <img 
-              src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80" 
-              alt="Woman with braided hair" 
+              src="/images/afro-style.jpg" 
+              alt="Woman with beautiful braided hairstyle" 
               className="w-full h-auto object-cover"
             />
           </div>
