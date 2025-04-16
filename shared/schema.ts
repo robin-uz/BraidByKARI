@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, pgEnum, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -53,6 +53,37 @@ export const testimonials = pgTable("testimonials", {
   isActive: boolean("is_active").default(true),
 });
 
+// Business hours for each day of the week
+export const businessHours = pgTable("business_hours", {
+  id: serial("id").primaryKey(),
+  dayOfWeek: integer("day_of_week").notNull(), // 0 = Sunday, 1 = Monday, etc.
+  isOpen: boolean("is_open").default(true),
+  openTime: text("open_time").notNull().default("09:00"), // 24-hour format
+  closeTime: text("close_time").notNull().default("17:00"), // 24-hour format
+  breakStart: text("break_start"), // Optional break time
+  breakEnd: text("break_end"),
+});
+
+// Special dates (holidays, special events, etc.)
+export const specialDates = pgTable("special_dates", {
+  id: serial("id").primaryKey(),
+  date: text("date").notNull(), // YYYY-MM-DD format
+  isOpen: boolean("is_open").default(false),
+  name: text("name").notNull(), // e.g., "Christmas", "Staff Training"
+  openTime: text("open_time"), // If different from regular hours
+  closeTime: text("close_time"),
+});
+
+// Salon Stylist information
+export const stylists = pgTable("stylists", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  specialties: text("specialties").array(), // Array of service types they specialize in
+  imageUrl: text("image_url"),
+  isActive: boolean("is_active").default(true),
+  availability: jsonb("availability"), // Store custom availability if different from business hours
+});
+
 // Insert Schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -93,6 +124,31 @@ export const insertTestimonialSchema = createInsertSchema(testimonials).pick({
   imageUrl: true,
 });
 
+export const insertBusinessHoursSchema = createInsertSchema(businessHours).pick({
+  dayOfWeek: true,
+  isOpen: true,
+  openTime: true,
+  closeTime: true,
+  breakStart: true,
+  breakEnd: true,
+});
+
+export const insertSpecialDateSchema = createInsertSchema(specialDates).pick({
+  date: true,
+  isOpen: true,
+  name: true,
+  openTime: true,
+  closeTime: true,
+});
+
+export const insertStylistSchema = createInsertSchema(stylists).pick({
+  name: true,
+  specialties: true,
+  imageUrl: true,
+  isActive: true,
+  availability: true,
+});
+
 // Extend booking schema with validation
 export const bookingFormSchema = insertBookingSchema.extend({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -109,4 +165,24 @@ export type Booking = typeof bookings.$inferSelect;
 export type Gallery = typeof gallery.$inferSelect;
 export type Service = typeof services.$inferSelect;
 export type Testimonial = typeof testimonials.$inferSelect;
+export type BusinessHours = typeof businessHours.$inferSelect;
+export type SpecialDate = typeof specialDates.$inferSelect;
+export type Stylist = typeof stylists.$inferSelect;
 export type BookingFormData = z.infer<typeof bookingFormSchema>;
+
+// Custom interface for calendar events
+export interface CalendarEvent {
+  id: number | string;
+  title: string;
+  start: Date;
+  end: Date;
+  status?: 'pending' | 'confirmed' | 'cancelled';
+  resourceId?: number | string; // For stylist ID if using resources view
+  allDay?: boolean;
+}
+
+// Interface for time slot
+export interface TimeSlot {
+  time: string;
+  available: boolean;
+}

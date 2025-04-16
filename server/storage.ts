@@ -1,4 +1,11 @@
-import { users, bookings, gallery, services, testimonials, User, Booking, Gallery, Service, Testimonial, InsertUser } from "@shared/schema";
+import { 
+  users, bookings, gallery, services, testimonials, 
+  businessHours, specialDates, stylists,
+  User, Booking, Gallery, Service, Testimonial, 
+  BusinessHours, SpecialDate, Stylist, 
+  InsertUser,
+  CalendarEvent, TimeSlot
+} from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 import session from "express-session";
