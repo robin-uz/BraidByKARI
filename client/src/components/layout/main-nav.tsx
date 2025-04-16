@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useThemeContext } from "./theme-provider";
-import { Menu, X, Search, ShoppingCart } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,6 +19,10 @@ export default function MainNav() {
     setIsOpen(false);
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
   const logout = () => {
     logoutMutation.mutate();
   };
@@ -34,93 +38,89 @@ export default function MainNav() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-minerva-beige/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm shadow-sm">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/">
-            <div className="cursor-pointer">
-              <span className="text-minerva-brown font-serif text-2xl md:text-3xl font-bold tracking-wide">MINERVA</span>
+            <div className="flex items-center space-x-2 cursor-pointer">
+              <span className="text-purple-600 dark:text-purple-400 font-serif text-3xl" style={{ fontFamily: "'Great Vibes', cursive" }}>Divine</span>
+              <span className="text-neutral-900 dark:text-neutral-100 font-heading text-xl font-semibold">Braids</span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link href="/">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/") ? "text-minerva-red" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Home
               </span>
             </Link>
-            <Link href="/about">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/about") ? "text-minerva-red" : ""}`}>
-                About Us
-              </span>
-            </Link>
             <Link href="/services">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/services") ? "text-minerva-red" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Services
               </span>
             </Link>
+            <Link href="/pricing">
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400" : ""}`}>
+                Pricing
+              </span>
+            </Link>
             <Link href="/gallery">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/gallery") ? "text-minerva-red" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/gallery") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Gallery
               </span>
             </Link>
-            <Link href="/products">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/products") ? "text-minerva-red" : ""}`}>
-                Products
-              </span>
-            </Link>
             <Link href="/booking">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/booking") ? "text-minerva-red" : ""}`}>
-                Booking
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/booking") ? "text-purple-600 dark:text-purple-400" : ""}`}>
+                Book Now
               </span>
             </Link>
             <Link href="/contact">
-              <span className={`text-sm font-medium hover:text-minerva-red transition-all cursor-pointer ${isActive("/contact") ? "text-minerva-red" : ""}`}>
+              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/contact") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Contact
               </span>
             </Link>
           </nav>
 
-          {/* Action Buttons */}
+          {/* Theme Toggle & Mobile Menu Trigger */}
           <div className="flex items-center space-x-4">
-            {/* Search Button */}
+            {/* Theme Toggle */}
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-minerva-brown hover:text-minerva-red"
+              onClick={toggleTheme} 
+              className="text-neutral-900 dark:text-neutral-100 hover:text-purple-600 dark:hover:text-purple-400 transition-all"
             >
-              <Search size={18} />
+              {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </Button>
 
-            {/* Cart Button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-minerva-brown hover:text-minerva-red"
-            >
-              <ShoppingCart size={18} />
-            </Button>
+            {/* Client Portal Link (if user is logged in) */}
+            {user && (
+              <Link href="/client/dashboard">
+                <Button variant="outline" size="sm">
+                  My Portal
+                </Button>
+              </Link>
+            )}
+
+            {/* Admin Link (if user is admin) */}
+            {user?.role === "admin" && (
+              <Link href="/admin/dashboard">
+                <Button variant="outline" size="sm">
+                  Admin
+                </Button>
+              </Link>
+            )}
 
             {/* Login/Logout Button */}
             {user ? (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={logout} 
-                disabled={logoutMutation.isPending}
-                className="bg-minerva-cream border-minerva-brown text-minerva-brown hover:bg-minerva-red hover:text-white rounded-full text-xs px-4"
-              >
+              <Button variant="outline" size="sm" onClick={logout} disabled={logoutMutation.isPending}>
                 {logoutMutation.isPending ? "Logging out..." : "Logout"}
               </Button>
             ) : (
               <Link href="/auth">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="bg-minerva-cream border-minerva-brown text-minerva-brown hover:bg-minerva-red hover:text-white rounded-full text-xs px-4"
-                >
+                <Button variant="outline" size="sm">
                   Login
                 </Button>
               </Link>
@@ -130,69 +130,61 @@ export default function MainNav() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-minerva-brown"
+              className="md:hidden text-neutral-900 dark:text-neutral-100"
               onClick={toggleMobileMenu}
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </Button>
           </div>
         </div>
         
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden bg-minerva-beige py-4 border-t border-minerva-brown/20">
+          <div className="md:hidden bg-white dark:bg-neutral-900 py-4 border-t border-neutral-200 dark:border-neutral-800">
             <nav className="flex flex-col space-y-4">
               <Link href="/">
                 <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/") ? "text-minerva-red" : ""}`} 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Home
                 </span>
               </Link>
-              <Link href="/about">
-                <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/about") ? "text-minerva-red" : ""}`} 
-                  onClick={closeMobileMenu}
-                >
-                  About Us
-                </span>
-              </Link>
               <Link href="/services">
                 <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/services") ? "text-minerva-red" : ""}`} 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Services
                 </span>
               </Link>
+              <Link href="/pricing">
+                <span 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400" : ""}`} 
+                  onClick={closeMobileMenu}
+                >
+                  Pricing
+                </span>
+              </Link>
               <Link href="/gallery">
                 <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/gallery") ? "text-minerva-red" : ""}`} 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/gallery") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Gallery
                 </span>
               </Link>
-              <Link href="/products">
-                <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/products") ? "text-minerva-red" : ""}`} 
-                  onClick={closeMobileMenu}
-                >
-                  Products
-                </span>
-              </Link>
               <Link href="/booking">
                 <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/booking") ? "text-minerva-red" : ""}`} 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/booking") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
-                  Booking
+                  Book Now
                 </span>
               </Link>
               <Link href="/contact">
                 <span 
-                  className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/contact") ? "text-minerva-red" : ""}`} 
+                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/contact") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                   onClick={closeMobileMenu}
                 >
                   Contact
@@ -203,10 +195,10 @@ export default function MainNav() {
               {user && (
                 <Link href="/client/dashboard">
                   <span 
-                    className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/client/dashboard") ? "text-minerva-red" : ""}`} 
+                    className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/client/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                     onClick={closeMobileMenu}
                   >
-                    My Account
+                    My Portal
                   </span>
                 </Link>
               )}
@@ -215,10 +207,10 @@ export default function MainNav() {
               {user?.role === "admin" && (
                 <Link href="/admin/dashboard">
                   <span 
-                    className={`text-sm font-medium hover:text-minerva-red transition-all px-4 cursor-pointer ${isActive("/admin/dashboard") ? "text-minerva-red" : ""}`} 
+                    className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/admin/dashboard") ? "text-purple-600 dark:text-purple-400" : ""}`} 
                     onClick={closeMobileMenu}
                   >
-                    Admin
+                    Admin Dashboard
                   </span>
                 </Link>
               )}

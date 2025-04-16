@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import BookingForm from "@/components/booking/booking-form-fixed";
+import BookingForm from "@/components/booking/booking-form";
 
 export default function BookingPage() {
   return (
