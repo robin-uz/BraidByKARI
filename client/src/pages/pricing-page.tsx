@@ -437,22 +437,11 @@ export default function PricingPage() {
                 </svg>
                 Grid
               </Button>
-              <Button
-                variant={viewMode === "table" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setViewMode("table")}
-                className="flex items-center"
-              >
-                <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" stroke="currentColor" strokeWidth="2" />
-                  <path d="M3 10h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" strokeWidth="2" />
-                </svg>
-                Table
-              </Button>
+
             </div>
           </div>
           
-          {/* View Modes: Bento, Grid, or Table */}
+          {/* View Modes: Bento or Grid */}
           <AnimatePresence mode="wait">
             {viewMode === "bento" && (
               <motion.div 
@@ -560,7 +549,7 @@ export default function PricingPage() {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
-                          <h3 className="text-lg font-bold mb-1 group-hover:text-amber-300 transition-colors">
+                          <h3 className="text-lg font-bold mb-1 group-hover:text-purple-300 transition-colors">
                             {service.style}
                           </h3>
                           <div className="flex items-center justify-between">
@@ -568,7 +557,7 @@ export default function PricingPage() {
                               <Clock className="h-3 w-3 mr-1" />
                               {service.duration}
                             </div>
-                            <span className="font-semibold text-amber-300">${service.price}</span>
+                            <span className="font-semibold text-purple-300">${service.price}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -625,7 +614,7 @@ export default function PricingPage() {
                           <span>{service.duration}</span>
                           
                           {service.icon && (
-                            <div className="ml-auto bg-amber-100 dark:bg-amber-900 h-8 w-8 rounded-full flex items-center justify-center">
+                            <div className="ml-auto bg-purple-100 dark:bg-purple-900 h-8 w-8 rounded-full flex items-center justify-center">
                               <span className="text-lg">{service.icon}</span>
                             </div>
                           )}
@@ -654,82 +643,7 @@ export default function PricingPage() {
               </motion.div>
             )}
             
-            {viewMode === "table" && (
-              <motion.div 
-                key="table"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm"
-              >
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-full table-auto text-left">
-                    <thead className="bg-neutral-50 dark:bg-neutral-900/50 text-neutral-600 dark:text-neutral-400 text-sm font-medium">
-                      <tr>
-                        <th scope="col" className="px-6 py-4">Style</th>
-                        <th scope="col" className="px-6 py-4">Description</th>
-                        <th scope="col" className="px-6 py-4">Duration</th>
-                        <th scope="col" className="px-6 py-4">Price</th>
-                        <th scope="col" className="px-6 py-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                      {filteredServices.map((service, idx) => (
-                        <motion.tr 
-                          key={service.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: idx * 0.03 }}
-                          className="bg-white dark:bg-neutral-950 hover:bg-neutral-50 dark:hover:bg-neutral-900/50"
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div className="flex items-center gap-3">
-                              {service.icon && (
-                                <div className="bg-amber-100 dark:bg-amber-900/70 h-8 w-8 rounded-full flex items-center justify-center">
-                                  <span className="text-lg">{service.icon}</span>
-                                </div>
-                              )}
-                              {service.style}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400 max-w-xs">
-                            {service.description}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400">
-                            {service.duration}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-purple-600 dark:text-purple-400">
-                            ${service.price}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-8"
-                                onClick={() => setSelectedService(service)}
-                              >
-                                <Eye className="h-3.5 w-3.5 mr-1" />
-                                Details
-                              </Button>
-                              <Link href={`/booking?service=${service.style}`}>
-                                <Button
-                                  size="sm"
-                                  className="h-8"
-                                >
-                                  Book Now
-                                </Button>
-                              </Link>
-                            </div>
-                          </td>
-                        </motion.tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </motion.div>
-            )}
+
           </AnimatePresence>
         </motion.div>
         
