@@ -108,6 +108,73 @@ export default function GallerySlider() {
 
   return (
     <div className="relative">
+      {/* Image Preview Dialog */}
+      <Dialog open={isImageExpanded} onOpenChange={setIsImageExpanded}>
+        <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-transparent border-none shadow-none">
+          <div className="relative rounded-lg overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              className="relative"
+            >
+              <img 
+                src={displayGallery[expandedImageIndex]?.imageUrl} 
+                alt={displayGallery[expandedImageIndex]?.title}
+                className="w-full max-h-[80vh] object-contain bg-black/90 rounded-lg shadow-xl"
+              />
+              
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                <h3 className="text-white font-heading text-2xl">
+                  {displayGallery[expandedImageIndex]?.title}
+                </h3>
+                <p className="text-neutral-200 mt-1 mb-3">
+                  {displayGallery[expandedImageIndex]?.description}
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="bg-purple-600/80 text-white text-sm inline-block px-3 py-1.5 rounded-full">
+                    ${displayGallery[expandedImageIndex]?.price}
+                  </div>
+                  <a 
+                    href="/booking" 
+                    className="bg-white text-purple-700 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
+                  >
+                    Book This Style
+                  </a>
+                </div>
+              </div>
+              
+              <DialogClose className="absolute top-3 right-3 bg-black/50 text-white rounded-full p-1 hover:bg-black/70 transition-all">
+                <X className="h-5 w-5" />
+              </DialogClose>
+              
+              <div className="absolute top-1/2 -translate-y-1/2 left-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-black/30 hover:bg-black/50 text-white"
+                  onClick={() => setExpandedImageIndex(prev => prev === 0 ? displayGallery.length - 1 : prev - 1)}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              <div className="absolute top-1/2 -translate-y-1/2 right-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-black/30 hover:bg-black/50 text-white"
+                  onClick={() => setExpandedImageIndex(prev => prev === displayGallery.length - 1 ? 0 : prev + 1)}
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
       <div className="absolute -top-12 right-0 flex space-x-2">
         <Button 
           variant="outline" 
@@ -146,6 +213,13 @@ export default function GallerySlider() {
                   <div className="bg-purple-600/80 text-white text-sm inline-block px-2 py-1 rounded-full">
                     ${item.price}
                   </div>
+                  <button
+                    onClick={() => expandImage(activeIndex)}
+                    className="bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-3 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm mr-2"
+                  >
+                    <ZoomIn className="h-3.5 w-3.5 inline-block mr-1" />
+                    View Larger
+                  </button>
                   <a 
                     href="/booking" 
                     className="bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-3 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
