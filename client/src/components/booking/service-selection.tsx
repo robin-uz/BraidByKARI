@@ -33,7 +33,8 @@ export default function ServiceSelection({
       const category = service.name.split(" ")[0];
       return category;
     });
-    return ["all", ...new Set(categories)];
+    // Convert Set to Array to fix the TypeScript error
+    return ["all", ...Array.from(new Set(categories))];
   };
   
   const categories = getCategories(services);
