@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { auth } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
-import { useLocation } from 'wouter';
 
 import {
   Card,
@@ -36,7 +35,6 @@ type NewPasswordFormData = z.infer<typeof newPasswordSchema>;
 export function NewPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const [, navigate] = useLocation();
 
   // Form
   const form = useForm<NewPasswordFormData>({
@@ -59,7 +57,7 @@ export function NewPasswordForm() {
       
       // Redirect to login page
       setTimeout(() => {
-        navigate('/auth');
+        window.location.href = '/auth';
       }, 1500);
     } catch (error: any) {
       toast({
