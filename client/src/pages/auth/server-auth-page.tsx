@@ -99,8 +99,49 @@ export default function ServerAuthPage() {
       
       console.log('Submitting login data:', { username: data.username });
       
-      await login(data.username, data.password);
-      // Redirect is handled by the useEffect
+      // Direct fetch approach for better debugging
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          username: data.username, 
+          password: data.password 
+        }),
+        credentials: 'include'
+      });
+      
+      console.log('Login response status:', response.status);
+      
+      // Get raw response text
+      const responseText = await response.text();
+      console.log('Login response text:', responseText);
+      
+      // If not OK, show the error
+      if (!response.ok) {
+        let errorMessage = 'Login failed';
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          // Response wasn't JSON, use text as error
+          errorMessage = responseText || `Error ${response.status}: ${response.statusText}`;
+        }
+        
+        setError(errorMessage);
+        return;
+      }
+      
+      // If successful, try to parse the user data
+      try {
+        const userData = JSON.parse(responseText);
+        console.log('Login successful:', userData);
+        
+        // Force reload the page to ensure proper session state
+        window.location.href = redirect;
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        setError('Login was successful but there was an error loading your profile');
+      }
     } catch (error) {
       console.error('Login error:', error);
       

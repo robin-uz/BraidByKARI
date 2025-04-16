@@ -67,15 +67,38 @@ export function ServerAuthProvider({ children }: { children: ReactNode }) {
       
       console.log("Attempting login with:", { username });
       
-      const response = await apiRequest('POST', '/api/login', { username, password });
+      // Use direct fetch instead of apiRequest to avoid automatic error throwing
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include'
+      });
       
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: "Login failed" }));
-        console.error("Login API error:", response.status, errorData);
-        throw new Error(errorData.message || `Login failed: ${response.statusText}`);
+      // Log the raw response
+      console.log("Login response status:", response.status);
+      
+      // Get the response text for debugging
+      const responseText = await response.text();
+      console.log("Login response text:", responseText);
+      
+      // Parse JSON if possible
+      let userData;
+      try {
+        userData = responseText ? JSON.parse(responseText) : null;
+      } catch (e) {
+        console.error("Error parsing JSON response:", e);
+        throw new Error(`Login failed: Invalid response format`);
       }
       
-      const userData = await response.json();
+      if (!response.ok) {
+        console.error("Login API error:", response.status, userData);
+        throw new Error(
+          userData?.message || 
+          `Login failed with status ${response.status}: ${response.statusText}`
+        );
+      }
+      
       console.log("Login successful:", userData);
       
       setUser(userData);
