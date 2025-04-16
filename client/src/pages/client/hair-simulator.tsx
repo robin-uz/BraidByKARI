@@ -180,17 +180,96 @@ export default function HairSimulator() {
     });
   };
 
+  // Add function to apply a braid style
+  const applyBraidStyle = () => {
+    if (!selectedImage || !canvasRef.current || !selectedBraidStyle) return;
+    
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Save the current image to undo stack
+    setUndoStack([...undoStack, canvas.toDataURL()]);
+    
+    // Create a placeholder for braid style overlay
+    const styleOverlay = `data:image/svg+xml,${encodeURIComponent(`
+      <svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <filter id="blur">
+          <feGaussianBlur stdDeviation="2" />
+        </filter>
+        <g filter="url(#blur)">
+          ${selectedBraidStyle.category === "box" ? `
+            <path d="M100,100 Q250,50 400,100 Q350,300 250,350 Q150,300 100,100" fill="none" stroke="${hairColor}" stroke-width="8" />
+            <path d="M120,110 Q250,70 380,110 Q340,290 250,330 Q160,290 120,110" fill="none" stroke="${hairColor}" stroke-width="8" />
+            <path d="M140,120 Q250,90 360,120 Q330,280 250,310 Q170,280 140,120" fill="none" stroke="${hairColor}" stroke-width="8" />
+          ` : selectedBraidStyle.category === "goddess" ? `
+            <path d="M100,50 Q300,0 400,50 Q420,200 250,350 Q80,200 100,50" fill="none" stroke="${hairColor}" stroke-width="12" />
+            <path d="M130,70 Q300,20 370,70 Q390,190 250,320 Q110,190 130,70" fill="none" stroke="${hairColor}" stroke-width="12" />
+          ` : selectedBraidStyle.category === "knotless" ? `
+            <path d="M100,100 Q250,50 400,100 Q350,300 250,350 Q150,300 100,100" fill="none" stroke="${hairColor}" stroke-width="6" />
+            <path d="M110,110 Q250,60 390,110 Q345,290 250,340 Q155,290 110,110" fill="none" stroke="${hairColor}" stroke-width="6" />
+            <path d="M120,120 Q250,70 380,120 Q340,280 250,330 Q160,280 120,120" fill="none" stroke="${hairColor}" stroke-width="6" />
+            <path d="M130,130 Q250,80 370,130 Q335,270 250,320 Q165,270 130,130" fill="none" stroke="${hairColor}" stroke-width="6" />
+          ` : `
+            <path d="M100,80 Q250,30 400,80 Q380,250 250,350 Q120,250 100,80" fill="none" stroke="${hairColor}" stroke-width="10" />
+            <path d="M130,90 Q250,40 370,90 Q355,240 250,330 Q145,240 130,90" fill="none" stroke="${hairColor}" stroke-width="10" />
+          `}
+        </g>
+      </svg>
+    `)}`;
+    
+    // Draw the base image and then the style
+    const baseImg = new Image();
+    baseImg.onload = () => {
+      // Set canvas dimensions to match image
+      canvas.width = baseImg.width;
+      canvas.height = baseImg.height;
+      
+      // Draw original image
+      ctx.drawImage(baseImg, 0, 0);
+      
+      // Draw style overlay with some transparency to blend
+      const overlayImg = new Image();
+      overlayImg.onload = () => {
+        ctx.save();
+        
+        // Apply overlay with transparency for a more subtle effect
+        ctx.globalAlpha = 0.8; 
+        
+        // Scale and position the overlay to fit the head area
+        const scale = 0.7;
+        const overlayWidth = baseImg.width * scale;
+        const overlayHeight = baseImg.height * scale;
+        const x = (baseImg.width - overlayWidth) / 2;
+        const y = (baseImg.height - overlayHeight) / 5; // Position at top third for head area
+        
+        ctx.drawImage(overlayImg, x, y, overlayWidth, overlayHeight);
+        ctx.restore();
+        
+        toast({
+          title: "Style Applied",
+          description: `${selectedBraidStyle.name} style has been visualized. Book an appointment for the real thing!`,
+          duration: 5000,
+        });
+      };
+      
+      overlayImg.src = styleOverlay;
+    };
+    
+    baseImg.src = selectedImage;
+  };
+  
   return (
     <>
       <Helmet>
-        <title>Hair Color Simulator | Braided Beauty</title>
+        <title>Hair Simulator | Braided Beauty</title>
       </Helmet>
       <ClientLayout>
         <div className="container py-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-semibold">Hair Color Simulator</h1>
-              <p className="text-muted-foreground mt-1">Try different hair colors without the commitment</p>
+              <h1 className="text-3xl font-semibold">Hair Simulator</h1>
+              <p className="text-muted-foreground mt-1">Visualize different styles and colors before your appointment</p>
             </div>
             <div className="mt-4 md:mt-0">
               <input
@@ -204,11 +283,29 @@ export default function HairSimulator() {
                 onClick={() => fileInputRef.current?.click()} 
                 className="flex items-center"
               >
-                <Upload className="mr-2 h-4 w-4" />
+                <Camera className="mr-2 h-4 w-4" />
                 Upload Your Photo
               </Button>
             </div>
           </div>
+
+          <Tabs 
+            defaultValue="color" 
+            value={simulationMode} 
+            onValueChange={(value) => setSimulationMode(value as "color" | "style")}
+            className="mb-6"
+          >
+            <TabsList className="w-full max-w-md mx-auto">
+              <TabsTrigger value="color" className="flex-1">
+                <Brush className="mr-2 h-4 w-4" />
+                Color Simulator
+              </TabsTrigger>
+              <TabsTrigger value="style" className="flex-1">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Braid Styles
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main canvas area */}
@@ -235,10 +332,20 @@ export default function HairSimulator() {
                           <Download className="mr-2 h-4 w-4" />
                           Download
                         </Button>
-                        <Button onClick={applyColorToHair}>
-                          <Save className="mr-2 h-4 w-4" />
-                          Apply Color
-                        </Button>
+                        {simulationMode === "color" ? (
+                          <Button onClick={applyColorToHair}>
+                            <Brush className="mr-2 h-4 w-4" />
+                            Apply Color
+                          </Button>
+                        ) : (
+                          <Button 
+                            onClick={applyBraidStyle} 
+                            disabled={!selectedBraidStyle}
+                          >
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            Apply Style
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -247,7 +354,7 @@ export default function HairSimulator() {
                         <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                         <h3 className="text-lg font-medium">No Image Selected</h3>
                         <p className="mt-2 text-muted-foreground">
-                          Upload a photo to try different hair colors
+                          Upload a photo to try different {simulationMode === "color" ? "colors" : "braid styles"}
                         </p>
                         <Button 
                           variant="outline" 
@@ -263,104 +370,105 @@ export default function HairSimulator() {
               </Card>
             </div>
             
-            {/* Color picker and controls */}
+            {/* Right panel: Color picker or braid styles based on mode */}
             <div>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Color Options</CardTitle>
-                  <CardDescription>Choose a hair color to try</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Tabs defaultValue="picker">
-                    <TabsList className="w-full">
-                      <TabsTrigger value="picker" className="flex-1">Color Picker</TabsTrigger>
-                      <TabsTrigger value="presets" className="flex-1">Presets</TabsTrigger>
-                    </TabsList>
-                    
-                    <TabsContent value="picker" className="mt-4">
-                      <div className="flex justify-center mb-4">
-                        <HexColorPicker color={hairColor} onChange={handleColorChange} />
-                      </div>
-                      <div className="mt-4 p-3 border rounded-md bg-gray-50">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">Selected Color:</span>
-                          <div className="flex items-center">
-                            <div 
-                              className="w-6 h-6 rounded-md mr-2" 
-                              style={{ backgroundColor: hairColor }}
-                            />
-                            <span className="text-sm">{hairColor}</span>
+              {simulationMode === "color" ? (
+                // Color Mode Panel
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Color Options</CardTitle>
+                    <CardDescription>Choose a hair color to try</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Tabs defaultValue="picker">
+                      <TabsList className="w-full">
+                        <TabsTrigger value="picker" className="flex-1">Color Picker</TabsTrigger>
+                        <TabsTrigger value="presets" className="flex-1">Presets</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="picker" className="mt-4">
+                        <div className="flex justify-center mb-4">
+                          <HexColorPicker color={hairColor} onChange={handleColorChange} />
+                        </div>
+                        <div className="mt-4 p-3 border rounded-md bg-gray-50 dark:bg-gray-900">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium">Selected Color:</span>
+                            <div className="flex items-center">
+                              <div 
+                                className="w-6 h-6 rounded-md mr-2" 
+                                style={{ backgroundColor: hairColor }}
+                              />
+                              <span className="text-sm">{hairColor}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TabsContent>
-                    
-                    <TabsContent value="presets" className="mt-4">
-                      <div className="grid grid-cols-2 gap-2">
-                        {PRESET_COLORS.map((color, index) => (
-                          <div 
-                            key={index}
-                            onClick={() => handlePresetClick(color.hex)}
-                            className={`
-                              flex items-center p-2 border rounded-md cursor-pointer
-                              ${hairColor === color.hex ? 'ring-2 ring-primary' : 'hover:bg-gray-50'}
-                            `}
-                          >
+                      </TabsContent>
+                      
+                      <TabsContent value="presets" className="mt-4">
+                        <div className="grid grid-cols-2 gap-2">
+                          {PRESET_COLORS.map((color, index) => (
                             <div 
-                              className="w-8 h-8 rounded-md mr-3"
-                              style={{ backgroundColor: color.hex }}
-                            />
-                            <span className="text-sm">{color.name}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                  
-                  <div className="mt-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium">Color Intensity</span>
-                      <span className="text-sm text-muted-foreground">{intensity[0]}%</span>
-                    </div>
-                    <Slider
-                      value={intensity}
-                      min={0}
-                      max={100}
-                      step={1}
-                      onValueChange={setIntensity}
-                    />
-                  </div>
-                  
-                  <div className="mt-6">
-                    <p className="text-sm text-muted-foreground mb-4">
-                      For best results, use a front-facing photo with clear lighting and your hair visible.
-                    </p>
+                              key={index}
+                              onClick={() => handlePresetClick(color.hex)}
+                              className={`
+                                flex items-center p-2 border rounded-md cursor-pointer
+                                ${hairColor === color.hex ? 'ring-2 ring-primary' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}
+                              `}
+                            >
+                              <div 
+                                className="w-8 h-8 rounded-md mr-3"
+                                style={{ backgroundColor: color.hex }}
+                              />
+                              <span className="text-sm">{color.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </TabsContent>
+                    </Tabs>
                     
-                    <Button 
-                      onClick={applyColorToHair} 
-                      className="w-full"
-                      disabled={!selectedImage}
-                    >
-                      Apply Color to Hair
-                    </Button>
+                    <div className="mt-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">Color Intensity</span>
+                        <span className="text-sm text-muted-foreground">{intensity[0]}%</span>
+                      </div>
+                      <Slider
+                        value={intensity}
+                        min={0}
+                        max={100}
+                        step={1}
+                        onValueChange={setIntensity}
+                      />
+                    </div>
+                    
+                    <div className="mt-6">
+                      <p className="text-sm text-muted-foreground mb-4">
+                        For best results, use a front-facing photo with clear lighting and your hair visible.
+                      </p>
+                      
+                      <Button 
+                        onClick={applyColorToHair} 
+                        className="w-full"
+                        disabled={!selectedImage}
+                      >
+                        <Brush className="mr-2 h-4 w-4" />
+                        Apply Color to Hair
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                // Style Mode Panel - Double card stack with BraidTemplates and StylingTips
+                <>
+                  <BraidTemplates 
+                    onSelectStyle={handleBraidStyleSelect} 
+                    selectedStyleId={selectedBraidStyle?.id || null} 
+                  />
+                  
+                  <div className="mt-6">
+                    <StylingTips selectedStyle={selectedBraidStyle} />
                   </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="mt-6">
-                <CardHeader>
-                  <CardTitle className="text-base">Tips for Best Results</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="text-sm text-muted-foreground space-y-2">
-                    <li>• Use a clear, well-lit photo</li>
-                    <li>• Face should be clearly visible</li>
-                    <li>• Hair should be visible and untied</li>
-                    <li>• Adjust intensity for realistic results</li>
-                    <li>• Try multiple colors to find your perfect match</li>
-                  </ul>
-                </CardContent>
-              </Card>
+                </>
+              )}
             </div>
           </div>
         </div>
