@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Button } from "@/components/ui/button";
 import { 
   CalendarDays, 
@@ -10,14 +10,39 @@ import {
   LogOut,
   BarChart3
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useMutation } from "@tanstack/react-query";
 
 interface ClientLayoutProps {
   children: ReactNode;
 }
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
-  const { user, logoutMutation } = useAuth();
+  const { user } = useServerAuth();
   const [location] = useLocation();
+  const { toast } = useToast();
+  
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest("POST", "/api/logout");
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(["/api/user"], null);
+      window.location.href = "/";
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Logout failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const menuItems = [
     { icon: <Home className="h-5 w-5" />, label: "Dashboard", href: "/client/dashboard" },
