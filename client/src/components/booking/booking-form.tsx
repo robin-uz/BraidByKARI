@@ -23,16 +23,25 @@ export default function BookingForm() {
     queryKey: ["/api/services"],
   });
   
+  // Get service from URL query parameter if available
+  const [searchParams] = useState(() => {
+    if (typeof window !== "undefined") {
+      return new URLSearchParams(window.location.search);
+    }
+    return new URLSearchParams();
+  });
+  const preselectedService = searchParams.get("service") || "";
+  
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
       name: "",
       email: "",
       phone: "",
-      serviceType: "",
+      serviceType: preselectedService,
       date: "",
       time: "",
-      notes: "",
+      notes: preselectedService ? `Interested in ${preselectedService} style from Hair Simulator` : "",
     },
   });
   

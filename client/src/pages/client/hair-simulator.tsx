@@ -1,5 +1,6 @@
 import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { Link } from "wouter";
 import ClientLayout from "@/components/client/client-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -467,6 +468,29 @@ export default function HairSimulator() {
                   <div className="mt-6">
                     <StylingTips selectedStyle={selectedBraidStyle} />
                   </div>
+                  
+                  {selectedBraidStyle && (
+                    <div className="mt-6">
+                      <Card>
+                        <CardContent className="p-4">
+                          <div className="flex flex-col">
+                            <h3 className="text-lg font-semibold text-center mb-2">Ready to try this style?</h3>
+                            <p className="text-sm text-muted-foreground text-center mb-4">
+                              Book an appointment to get your {selectedBraidStyle.name} done by our expert stylists.
+                            </p>
+                            <Link href={{
+                              pathname: "/booking",
+                              search: `?service=${encodeURIComponent(selectedBraidStyle.name)}`
+                            }}>
+                              <Button className="w-full" size="lg">
+                                Book this Style
+                              </Button>
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
                 </>
               )}
             </div>
