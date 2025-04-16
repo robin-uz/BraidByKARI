@@ -153,6 +153,14 @@ export default function AuthPage() {
                             <Input type="password" placeholder="••••••••" {...field} />
                           </FormControl>
                           <FormMessage />
+                          <div className="text-right">
+                            <a 
+                              href="/auth/forgot-password" 
+                              className="text-xs text-primary hover:underline"
+                            >
+                              Forgot password?
+                            </a>
+                          </div>
                         </FormItem>
                       )}
                     />

@@ -94,5 +94,47 @@ export const auth = {
   // Set up auth state change listener
   onAuthStateChange(callback: (event: string, session: any) => void) {
     return supabase.auth.onAuthStateChange(callback);
+  },
+  
+  // Request a password reset email
+  async resetPassword(email: string) {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+    
+    if (error) throw error;
+    return data;
+  },
+  
+  // Update user password
+  async updatePassword(password: string) {
+    const { data, error } = await supabase.auth.updateUser({
+      password: password,
+    });
+    
+    if (error) throw error;
+    return data;
+  },
+  
+  // Update user profile data
+  async updateProfile(profile: { firstName?: string; lastName?: string; avatarUrl?: string }) {
+    const { data, error } = await supabase.auth.updateUser({
+      data: profile,
+    });
+    
+    if (error) throw error;
+    return data;
+  },
+  
+  // Verify and confirm new email address
+  async verifyOtp(email: string, token: string, type: 'email' | 'recovery' = 'email') {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type,
+    });
+    
+    if (error) throw error;
+    return data;
   }
 };
