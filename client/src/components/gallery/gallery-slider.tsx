@@ -1,17 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Gallery } from "@shared/schema";
-import { ChevronLeft, ChevronRight, Loader2, X, ZoomIn, Maximize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, X, ZoomIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-// Import braids images from assets
-import braidsAuburn from "@/assets/gallery/braids-auburn.png";
-import braidsSide from "@/assets/gallery/braids-side.png";
-import braidsBun from "@/assets/gallery/braids-bun.png";
-import braidsCurls from "@/assets/gallery/braids-curls.png";
-import braidsBob from "@/assets/gallery/braids-bob.png";
+// Import client-provided images for authentic salon styles
+import model1 from "@/assets/kari-stylez/braids-model-1.png";
+import model2 from "@/assets/kari-stylez/braids-model-2.png";
+import model3 from "@/assets/kari-stylez/braids-model-3.png";
+import model4 from "@/assets/kari-stylez/braids-model-4.jpg";
+import model5 from "@/assets/kari-stylez/braids-model-5.jpg";
+
+// New client asset imports for extended gallery
+import IMG_12 from "@assets/IMG-20250416-WA0012.jpg";
+import IMG_14 from "@assets/IMG-20250416-WA0014.jpg";
+import IMG_15 from "@assets/IMG-20250416-WA0015.jpg";
+import IMG_17 from "@assets/IMG-20250416-WA0017.jpg";
+import IMG_19 from "@assets/IMG-20250416-WA0019.jpg";
+import IMG_21 from "@assets/IMG-20250416-WA0021.jpg";
 
 export default function GallerySlider() {
   const { data: galleryItems, isLoading, error } = useQuery<Gallery[]>({
@@ -29,46 +37,88 @@ export default function GallerySlider() {
     setIsImageExpanded(true);
   };
 
-  // Our new gallery items with real braid images
+  // Gallery items with client's actual salon images
   const braidGalleryItems = [
     {
       id: 1,
-      title: "Auburn Box Braids",
-      description: "Stunning long box braids with auburn color for a rich, warm look",
-      imageUrl: braidsAuburn,
-      price: 220
+      title: "Classic Box Braids",
+      description: "Traditional square-shaped parts with clean lines and uniform size.",
+      imageUrl: model1,
+      price: 200
     },
     {
       id: 2,
       title: "Knotless Side Part",
-      description: "Beautiful knotless braids with expert side parting and sleek finish",
-      imageUrl: braidsSide,
+      description: "Beautiful knotless braids with expert side parting and sleek finish.",
+      imageUrl: model2,
       price: 190
     },
     {
       id: 3,
-      title: "Protective Bun Style",
-      description: "Elegant braided bun for a professional, protective style",
-      imageUrl: braidsBun,
-      price: 160
+      title: "Feed-In Braids",
+      description: "Sleek cornrows with extension hair fed in gradually for a natural look.",
+      imageUrl: model3,
+      price: 180
     },
     {
       id: 4,
-      title: "Spiral Curls Updo",
-      description: "Creative updo with spiral curls for special occasions",
-      imageUrl: braidsCurls,
-      price: 200
+      title: "Goddess Braids",
+      description: "Raised braids close to the scalp, often in intricate patterns.",
+      imageUrl: model4,
+      price: 220
     },
     {
       id: 5,
-      title: "Sleek Bob Braids",
-      description: "Modern shoulder-length braided bob for a chic, manageable style",
-      imageUrl: braidsBob,
-      price: 175
+      title: "Long Box Braids",
+      description: "Classic long box braids with clean parting for an elegant look.",
+      imageUrl: model5,
+      price: 210
+    },
+    {
+      id: 6,
+      title: "Bohemian Braids",
+      description: "Flowing, textured braids with a free-spirited aesthetic.",
+      imageUrl: IMG_12,
+      price: 230
+    },
+    {
+      id: 7,
+      title: "Braided Updo",
+      description: "Elegant braided style perfect for special occasions.",
+      imageUrl: IMG_14,
+      price: 195
+    },
+    {
+      id: 8,
+      title: "Tribal Pattern Braids",
+      description: "Intricate geometric patterns inspired by traditional designs.",
+      imageUrl: IMG_15,
+      price: 245
+    },
+    {
+      id: 9,
+      title: "Fulani Braids",
+      description: "Beautiful braids with decorative elements and cultural inspiration.",
+      imageUrl: IMG_17,
+      price: 235
+    },
+    {
+      id: 10,
+      title: "Creative Color Braids",
+      description: "Artistic braided style with vibrant color accents.",
+      imageUrl: IMG_19,
+      price: 260
+    },
+    {
+      id: 11,
+      title: "Protective Braids",
+      description: "Durable, low-maintenance braids that protect natural hair.",
+      imageUrl: IMG_21,
+      price: 185
     }
   ];
 
-  const displayGallery = braidGalleryItems;
+  const displayGallery = galleryItems && galleryItems.length > 0 ? galleryItems : braidGalleryItems;
   const totalSlides = displayGallery.length;
 
   const goToPrev = () => {
@@ -93,7 +143,7 @@ export default function GallerySlider() {
   if (isLoading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -133,12 +183,12 @@ export default function GallerySlider() {
                   {displayGallery[expandedImageIndex]?.description}
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="bg-purple-600/80 text-white text-sm inline-block px-3 py-1.5 rounded-full">
+                  <div className="bg-amber-600/80 text-white text-sm inline-block px-3 py-1.5 rounded-full">
                     ${displayGallery[expandedImageIndex]?.price}
                   </div>
                   <a 
                     href="/booking" 
-                    className="bg-white text-purple-700 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
+                    className="bg-white text-amber-700 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
                   >
                     Book This Style
                   </a>
@@ -180,7 +230,7 @@ export default function GallerySlider() {
           variant="outline" 
           size="icon" 
           onClick={goToPrev} 
-          className="rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all"
+          className="rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-all"
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -188,7 +238,7 @@ export default function GallerySlider() {
           variant="outline" 
           size="icon" 
           onClick={goToNext} 
-          className="rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all"
+          className="rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-all"
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
@@ -210,7 +260,7 @@ export default function GallerySlider() {
                 <h3 className="text-white font-heading text-xl">{item.title}</h3>
                 <p className="text-neutral-200 text-sm">{item.description}</p>
                 <div className="flex items-center gap-3 mt-3">
-                  <div className="bg-purple-600/80 text-white text-sm inline-block px-2 py-1 rounded-full">
+                  <div className="bg-amber-600/80 text-white text-sm inline-block px-2 py-1 rounded-full">
                     ${item.price}
                   </div>
                   <button
@@ -233,12 +283,13 @@ export default function GallerySlider() {
         </div>
       </div>
       
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mt-4">
+      {/* Thumbnail gallery grid */}
+      <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 mt-4">
         {displayGallery.map((item, index) => (
           <div key={item.id} className="relative group">
             <button 
               className={`rounded overflow-hidden border-2 transition-all w-full ${
-                index === activeIndex ? "border-purple-600" : "border-transparent hover:border-purple-400"
+                index === activeIndex ? "border-amber-600" : "border-transparent hover:border-amber-400"
               }`} 
               onClick={() => goToSlide(index)}
             >
@@ -249,7 +300,7 @@ export default function GallerySlider() {
               />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <button 
-                  className="text-white text-xs font-medium bg-purple-500/80 px-2 py-1 rounded-full"
+                  className="text-white text-xs font-medium bg-amber-500/80 px-2 py-1 rounded-full"
                   onClick={(e) => {
                     e.stopPropagation();
                     expandImage(index);
@@ -259,7 +310,7 @@ export default function GallerySlider() {
                 </button>
                 <a 
                   href="/booking" 
-                  className="text-white text-xs font-medium bg-purple-600/80 px-2 py-1 rounded-full"
+                  className="text-white text-xs font-medium bg-amber-600/80 px-2 py-1 rounded-full"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Book
