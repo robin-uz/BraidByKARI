@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { seedGallery } from "./scripts/seed-gallery";
+import { seedServices } from "./scripts/seed-services";
 
 const app = express();
 app.use(express.json());
