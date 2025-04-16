@@ -1,7 +1,6 @@
 import HeroSection from "@/components/home/hero-section";
 import ServicesSection from "@/components/home/services-section";
 import TestimonialsSection from "@/components/home/testimonials-section";
-import FeatureSection from "@/components/home/feature-section";
 import { Helmet } from "react-helmet";
 import PageTransition from "@/components/ui/page-transition";
 import { useEffect, useContext } from "react";
@@ -30,7 +29,6 @@ export default function HomePage() {
       
       <PageTransition>
         <HeroSection />
-        <FeatureSection />
         <ServicesSection />
         <TestimonialsSection />
       </PageTransition>
