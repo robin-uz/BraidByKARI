@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Gallery } from "@shared/schema";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, X, ZoomIn, Maximize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Import braids images from assets
 import braidsAuburn from "@/assets/gallery/braids-auburn.png";
@@ -17,7 +19,15 @@ export default function GallerySlider() {
   });
   
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isImageExpanded, setIsImageExpanded] = useState(false);
+  const [expandedImageIndex, setExpandedImageIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
+  
+  // Function to handle image expansion
+  const expandImage = (index: number) => {
+    setExpandedImageIndex(index);
+    setIsImageExpanded(true);
+  };
 
   // Our new gallery items with real braid images
   const braidGalleryItems = [
@@ -163,7 +173,16 @@ export default function GallerySlider() {
                 alt={`${item.title} thumbnail`}
                 className="w-full h-16 md:h-20 object-cover"
               />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <button 
+                  className="text-white text-xs font-medium bg-purple-500/80 px-2 py-1 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    expandImage(index);
+                  }}
+                >
+                  View
+                </button>
                 <a 
                   href="/booking" 
                   className="text-white text-xs font-medium bg-purple-600/80 px-2 py-1 rounded-full"
