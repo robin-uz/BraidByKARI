@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Helmet } from "react-helmet";
 import ClientLayout from "@/components/client/client-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -37,7 +37,7 @@ import { motion } from "framer-motion";
 import BookingCancellationModal from "@/components/booking/booking-cancellation-modal";
 
 export default function ClientDashboard() {
-  const { user } = useAuth();
+  const { user } = useServerAuth();
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   

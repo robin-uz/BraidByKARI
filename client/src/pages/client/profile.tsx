@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useServerAuth } from '@/contexts/DebugAuthContext';
 import { ProfileForm } from '@/components/profile/profile-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useLocation } from 'wouter';
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useServerAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const { toast } = useToast();
   
@@ -40,11 +40,11 @@ export default function ProfilePage() {
 
   // Extract user profile data
   const userProfile = {
-    firstName: user.user_metadata?.firstName || '',
-    lastName: user.user_metadata?.lastName || '',
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
     email: user.email || '',
-    phoneNumber: user.user_metadata?.phoneNumber || '',
-    avatarUrl: user.user_metadata?.avatarUrl || '',
+    phoneNumber: user.phoneNumber || '',
+    avatarUrl: user.avatarUrl || '',
   };
 
   // For demonstrating LastLogin component (temporary)
@@ -100,8 +100,8 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">User ID</span>
-                  <span className="truncate max-w-[120px]" title={user.id}>
-                    {user.id?.substring(0, 8)}...
+                  <span className="truncate max-w-[120px]" title={String(user.id)}>
+                    {String(user.id).substring(0, 8)}...
                   </span>
                 </div>
               </div>
