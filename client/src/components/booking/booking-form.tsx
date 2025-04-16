@@ -13,13 +13,10 @@ import { Loader2, AlertTriangle, Scissors, CalendarDays, Clock, User, Mail, Phon
 import { useToast } from "@/hooks/use-toast";
 import { FaPaypal } from "react-icons/fa";
 import { SiStripe } from "react-icons/si";
-import StylingTipsPopup from "./styling-tips-popup";
 import { motion } from "framer-motion";
 
 export default function BookingForm() {
   const { toast } = useToast();
-  const [showStylingTips, setShowStylingTips] = useState(false);
-  const [submittedBooking, setSubmittedBooking] = useState<BookingFormData | null>(null);
   
   // Get services for the dropdown
   const { data: services, isLoading: servicesLoading } = useQuery<Service[]>({
@@ -50,13 +47,6 @@ export default function BookingForm() {
         description: "We'll be in touch soon to confirm your appointment.",
       });
       
-      // Store the submitted data before resetting the form
-      const submittedData = form.getValues();
-      setSubmittedBooking(submittedData);
-      
-      // Show styling tips popup after successful booking
-      setShowStylingTips(true);
-      
       // Reset the form
       form.reset();
     },
@@ -71,10 +61,6 @@ export default function BookingForm() {
   
   const onSubmit = (data: BookingFormData) => {
     bookingMutation.mutate(data);
-  };
-  
-  const handleClosePopup = () => {
-    setShowStylingTips(false);
   };
   
   // Generate available times
@@ -112,12 +98,6 @@ export default function BookingForm() {
 
   return (
     <div>
-      <StylingTipsPopup 
-        isOpen={showStylingTips} 
-        onClose={handleClosePopup} 
-        bookingData={submittedBooking}
-      />
-      
       <motion.div
         initial="hidden"
         animate="visible"
