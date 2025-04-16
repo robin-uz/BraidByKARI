@@ -1,51 +1,54 @@
-import { useAuth } from "@/hooks/use-auth";
-import { Loader2 } from "lucide-react";
-import { Redirect, Route } from "wouter";
+import { Route, useLocation } from 'wouter';
+import { useAuth } from '@/contexts/AuthContext';
+import { Loader2 } from 'lucide-react';
 
-export function ProtectedRoute({
-  path,
-  component: Component,
-  adminOnly = false,
-}: {
+type ProtectedRouteProps = {
   path: string;
-  component: () => React.JSX.Element;
+  component: () => JSX.Element;
   adminOnly?: boolean;
-}) {
-  const { user, isLoading } = useAuth();
+};
 
-  if (isLoading) {
-    return (
-      <Route path={path}>
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="h-8 w-8 animate-spin text-secondary" />
-        </div>
-      </Route>
-    );
-  }
-
-  if (!user) {
-    return (
-      <Route path={path}>
-        <Redirect to="/auth" />
-      </Route>
-    );
-  }
-
-  if (adminOnly && user.role !== "admin") {
-    return (
-      <Route path={path}>
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-          <p className="text-center mb-6">You do not have permission to access this page.</p>
-          <a href="/" className="text-secondary hover:underline">Return to home page</a>
-        </div>
-      </Route>
-    );
-  }
+export function ProtectedRoute({ path, component: Component, adminOnly = false }: ProtectedRouteProps) {
+  const { user, loading } = useAuth();
+  const [location] = useLocation();
 
   return (
     <Route path={path}>
-      <Component />
+      {() => {
+        if (loading) {
+          // Show loading state while checking authentication
+          return (
+            <div className="flex items-center justify-center min-h-screen">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          );
+        }
+
+        // If not authenticated, redirect to login page
+        if (!user) {
+          window.location.href = `/auth?redirect=${encodeURIComponent(location)}`;
+          return null;
+        }
+
+        // If adminOnly is true, check if user is admin (assuming isAdmin property)
+        if (adminOnly && !(user as any).isAdmin) {
+          return (
+            <div className="flex flex-col items-center justify-center min-h-screen p-4">
+              <h1 className="text-2xl font-bold text-destructive mb-2">Access Denied</h1>
+              <p className="text-center mb-4">You don't have permission to access this page.</p>
+              <a 
+                href="/"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+              >
+                Return to Home
+              </a>
+            </div>
+          );
+        }
+
+        // If authenticated, render the protected content
+        return <Component />;
+      }}
     </Route>
   );
 }

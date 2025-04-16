@@ -1,15 +1,45 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables are automatically injected by Vite
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Check if we're in the browser or server environment
+const getSupabaseCredentials = () => {
+  // For client side (Vite injects these as import.meta.env)
+  if (typeof window !== 'undefined') {
+    return {
+      url: import.meta.env.VITE_SUPABASE_URL,
+      key: import.meta.env.VITE_SUPABASE_ANON_KEY,
+    };
+  } 
+  // For server side
+  else {
+    return {
+      url: process.env.SUPABASE_URL || '',
+      key: process.env.SUPABASE_ANON_KEY || '',
+    };
+  }
+};
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
+const { url: supabaseUrl, key: supabaseAnonKey } = getSupabaseCredentials();
 
 // Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Use placeholder values during development if not available, but display a warning
+const supabaseOptions = {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+};
+
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder-url.supabase.co',
+  supabaseAnonKey || 'placeholder-key',
+  supabaseOptions
+);
+
+// Log a warning instead of throwing an error, so the app still loads
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('⚠️ Supabase credentials missing or invalid. Authentication will not work properly.');
+}
 
 // Authentication helper functions
 export const auth = {
