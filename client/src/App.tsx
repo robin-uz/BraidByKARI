@@ -1,9 +1,4 @@
 import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/layout/theme-provider";
-import { ServerAuthProvider } from "@/contexts/DebugAuthContext";
 import { ServerProtectedRoute } from "./lib/server-protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
@@ -73,16 +68,7 @@ function Router() {
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light">
-        <ServerAuthProvider>
-          <Router />
-          <Toaster />
-        </ServerAuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
+  return <Router />;
 }
 
 export default App;

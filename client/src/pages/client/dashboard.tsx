@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Helmet } from "react-helmet";
 import ClientLayout from "@/components/client/client-layout";
@@ -21,7 +21,8 @@ import {
   Brush,
   Image,
   AlertTriangle,
-  XCircle
+  XCircle,
+  Loader2
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Booking } from "@shared/schema";
@@ -35,6 +36,9 @@ import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import BookingCancellationModal from "@/components/booking/booking-cancellation-modal";
+import PageTransition from "@/components/ui/page-transition";
+import { useLoading } from "@/contexts/LoadingContext";
+import { BookingCardSkeleton, DashboardStatsSkeleton } from "@/components/ui/skeletons";
 
 export default function ClientDashboard() {
   const { user } = useServerAuth();
@@ -109,6 +113,16 @@ export default function ClientDashboard() {
     }
   };
 
+  // Track loading state for transitions
+  const { setLoading } = useLoading();
+
+  // Set loading to false when component mounts or data is loaded
+  useEffect(() => {
+    if (!isLoading) {
+      setLoading(false);
+    }
+  }, [isLoading, setLoading]);
+
   return (
     <>
       <Helmet>
@@ -116,7 +130,8 @@ export default function ClientDashboard() {
         <meta name="description" content="Client dashboard for Divine Braids salon" />
       </Helmet>
       <ClientLayout>
-        <div className="container py-10">
+        <PageTransition>
+          <div className="container py-10">
           <div className="mb-8">
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
@@ -602,6 +617,7 @@ export default function ClientDashboard() {
             </TabsContent>
           </Tabs>
         </div>
+        </PageTransition>
       </ClientLayout>
       
       {/* Cancellation Modal */}

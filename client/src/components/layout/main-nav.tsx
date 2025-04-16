@@ -1,15 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { useThemeContext } from "./theme-provider";
 import { Sun, Moon, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useLocation } from "wouter";
-import { useServerAuth } from "@/contexts/DebugAuthContext";
+import { ServerAuthContext } from "@/contexts/DebugAuthContext";
 
 export default function MainNav() {
   const { theme, setTheme } = useThemeContext();
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
-  const { user, logout, loading } = useServerAuth();
+
+  // Access context directly with fallback for when context isn't available yet
+  const authContext = useContext(ServerAuthContext);
+  const user = authContext?.user ?? null;
+  const logout = authContext?.logout ?? (() => Promise.resolve());
+  const loading = authContext?.loading ?? false;
+  
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const toggleMobileMenu = () => {

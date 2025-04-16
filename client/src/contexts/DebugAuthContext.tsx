@@ -20,7 +20,7 @@ type AuthContextType = {
   logout: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const ServerAuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function ServerAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -191,11 +191,11 @@ export function ServerAuthProvider({ children }: { children: ReactNode }) {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <ServerAuthContext.Provider value={value}>{children}</ServerAuthContext.Provider>;
 }
 
 export function useServerAuth() {
-  const context = useContext(AuthContext);
+  const context = useContext(ServerAuthContext);
   if (context === undefined) {
     throw new Error('useServerAuth must be used within a ServerAuthProvider');
   }
