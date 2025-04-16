@@ -635,83 +635,186 @@ export default function StylingTipsPopup({ isOpen, onClose, bookingData }: Styli
                   exit="exit"
                   variants={pageTransition}
                   className="flex flex-col h-full"
+                  onMouseMove={handleMouseMove}
                 >
-                  <Tabs defaultValue="care" value={currentTab} onValueChange={setCurrentTab} className="w-full">
-                    <div className="px-4 pt-4">
-                      <TabsList className="w-full bg-purple-100 dark:bg-purple-900/20">
-                        <TabsTrigger value="care" className="flex-1 data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                  <div className="px-6 pt-6 pb-3">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="max-w-lg mx-auto text-center mb-4"
+                    >
+                      <Badge 
+                        className="mb-2 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white py-1 px-3 rounded-full"
+                      >
+                        {getCategoryIcon(currentTab)}
+                        <span className="ml-1.5">{currentTab.charAt(0).toUpperCase() + currentTab.slice(1)}</span>
+                      </Badge>
+                      <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                        Expert {currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Guide
+                      </h3>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                        Swipe through our styling tips to get the most out of your new {serviceType}.
+                      </p>
+                    </motion.div>
+                    
+                    <Tabs defaultValue={currentTab} value={currentTab} onValueChange={setCurrentTab} className="w-full">
+                      <TabsList className="w-full max-w-md mx-auto rounded-full p-1 bg-purple-100/50 dark:bg-purple-900/20 mb-6">
+                        <TabsTrigger 
+                          value="care" 
+                          className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white transition-all duration-300"
+                        >
+                          <ShowerHead className="h-4 w-4 mr-1.5" />
                           Care
                         </TabsTrigger>
-                        <TabsTrigger value="maintenance" className="flex-1 data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                        <TabsTrigger 
+                          value="maintenance" 
+                          className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white transition-all duration-300"
+                        >
+                          <Scissors className="h-4 w-4 mr-1.5" />
                           Maintenance
                         </TabsTrigger>
-                        <TabsTrigger value="styling" className="flex-1 data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                        <TabsTrigger 
+                          value="styling" 
+                          className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white transition-all duration-300"
+                        >
+                          <Palette className="h-4 w-4 mr-1.5" />
                           Styling
                         </TabsTrigger>
                       </TabsList>
-                    </div>
-                    
-                    <TabsContent value={currentTab} className="m-0 outline-none">
-                      <AnimatePresence mode="wait">
-                        {filteredTips.length > 0 && (
-                          <motion.div 
-                            key={`${currentTab}-${currentTipIndex}`}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-4 pb-6 pt-4"
-                          >
-                            <div className="aspect-video w-full overflow-hidden rounded-xl mb-4 bg-neutral-100 dark:bg-neutral-800 relative">
-                              <img 
-                                src={filteredTips[currentTipIndex].imageUrl} 
-                                alt={filteredTips[currentTipIndex].title} 
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                                <Badge className="mb-2 bg-purple-500 hover:bg-purple-600">
-                                  {currentTab.charAt(0).toUpperCase() + currentTab.slice(1)}
-                                </Badge>
-                                <h3 className="text-xl font-semibold text-white">{filteredTips[currentTipIndex].title}</h3>
+                    </Tabs>
+                  </div>
+                  
+                  <div className="px-6 pb-6">
+                    <AnimatePresence mode="wait">
+                      {filteredTips.length > 0 && (
+                        <motion.div 
+                          key={`${currentTab}-${currentTipIndex}`}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.4 }}
+                          className="max-w-4xl mx-auto"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <motion.div 
+                                className="rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 aspect-square relative mb-4 shadow-md"
+                                style={{ perspective: 1000 }}
+                              >
+                                <motion.img 
+                                  src={filteredTips[currentTipIndex].imageUrl} 
+                                  alt={filteredTips[currentTipIndex].title} 
+                                  className="w-full h-full object-cover"
+                                  style={{
+                                    scale: 1.1,
+                                    rotateY: useTransform(smoothX, [-10, 10], [2, -2]),
+                                    rotateX: useTransform(smoothY, [-10, 10], [-2, 2]),
+                                  }}
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                
+                                {/* Navigation controls - absolute positioned over image */}
+                                <div className="absolute inset-x-0 bottom-0 p-4 flex justify-between items-center">
+                                  <Button 
+                                    variant="outline" 
+                                    size="icon" 
+                                    onClick={handlePrevTip}
+                                    disabled={currentTipIndex === 0}
+                                    className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm border-white/40 text-white hover:bg-white/30 disabled:opacity-40"
+                                  >
+                                    <ChevronLeft className="h-4 w-4" />
+                                  </Button>
+                                  
+                                  <span className="text-sm text-white font-medium px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm">
+                                    {currentTipIndex + 1} / {filteredTips.length}
+                                  </span>
+                                  
+                                  <Button 
+                                    variant="outline" 
+                                    size="icon" 
+                                    onClick={handleNextTip}
+                                    disabled={currentTipIndex === filteredTips.length - 1}
+                                    className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-sm border-white/40 text-white hover:bg-white/30 disabled:opacity-40"
+                                  >
+                                    <ChevronRight className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </motion.div>
+                              
+                              {/* Mini thumbnail navigation */}
+                              <div className="flex justify-center space-x-2 mb-4 md:mb-0">
+                                {filteredTips.map((_, idx) => (
+                                  <button
+                                    key={idx}
+                                    onClick={() => setCurrentTipIndex(idx)}
+                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                      currentTipIndex === idx 
+                                        ? 'bg-purple-600 w-6' 
+                                        : 'bg-purple-200 dark:bg-purple-800'
+                                    }`}
+                                    aria-label={`View tip ${idx + 1}`}
+                                  />
+                                ))}
                               </div>
                             </div>
                             
-                            <p className="text-neutral-700 dark:text-neutral-300 mb-6">
-                              {filteredTips[currentTipIndex].description}
-                            </p>
-                            
-                            <div className="flex justify-between items-center">
-                              <Button 
-                                variant="outline" 
-                                size="icon" 
-                                onClick={handlePrevTip}
-                                disabled={currentTipIndex === 0}
-                                className="border-purple-300 text-purple-700 hover:bg-purple-100 
-                                           dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/40"
-                              >
-                                <ChevronLeft className="h-4 w-4" />
-                              </Button>
-                              
-                              <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                                {currentTipIndex + 1} / {filteredTips.length}
-                              </span>
-                              
-                              <Button 
-                                variant="outline" 
-                                size="icon" 
-                                onClick={handleNextTip}
-                                disabled={currentTipIndex === filteredTips.length - 1}
-                                className="border-purple-300 text-purple-700 hover:bg-purple-100 
-                                           dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/40"
-                              >
-                                <ChevronRight className="h-4 w-4" />
-                              </Button>
+                            <div className="flex flex-col">
+                              <div className="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700 h-full">
+                                <motion.div 
+                                  initial={{ opacity: 0, y: 10 }} 
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className="flex items-start mb-4"
+                                >
+                                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center mr-4 flex-shrink-0">
+                                    {getCategoryIcon(currentTab)}
+                                  </div>
+                                  
+                                  <div>
+                                    <Badge className="mb-2 bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                                      Tip {currentTipIndex + 1}
+                                    </Badge>
+                                    <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-1">
+                                      {filteredTips[currentTipIndex].title}
+                                    </h3>
+                                  </div>
+                                </motion.div>
+                                
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.2 }}
+                                  className="space-y-4"
+                                >
+                                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                                    {filteredTips[currentTipIndex].description}
+                                  </p>
+                                  
+                                  <div className="pt-4 mt-auto border-t border-neutral-100 dark:border-neutral-800">
+                                    <div className="flex justify-between items-center">
+                                      <div className="flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium">
+                                        <Lightbulb className="h-4 w-4 mr-1.5" />
+                                        <span>Stylist Recommended</span>
+                                      </div>
+                                      
+                                      <Button 
+                                        variant="outline" 
+                                        size="sm"
+                                        onClick={() => setCurrentPage("products")}
+                                        className="text-xs border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-300"
+                                      >
+                                        <ShoppingBag className="h-3 w-3 mr-1.5" />
+                                        View Products
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              </div>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </TabsContent>
-                  </Tabs>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </motion.div>
               )}
               
