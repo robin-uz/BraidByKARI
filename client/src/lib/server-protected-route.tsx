@@ -1,6 +1,7 @@
 import { Route, useLocation } from 'wouter';
-import { useServerAuth } from '@/contexts/DebugAuthContext';
 import { Loader2 } from 'lucide-react';
+import { useContext } from 'react';
+import { ServerAuthContext } from '@/contexts/DebugAuthContext';
 
 type ServerProtectedRouteProps = {
   path: string;
@@ -9,7 +10,10 @@ type ServerProtectedRouteProps = {
 };
 
 export function ServerProtectedRoute({ path, component: Component, adminOnly = false }: ServerProtectedRouteProps) {
-  const { user, loading } = useServerAuth();
+  // Access auth context directly with fallbacks
+  const authContext = useContext(ServerAuthContext);
+  const user = authContext?.user || null;
+  const loading = authContext?.loading || false;
   const [location] = useLocation();
 
   return (

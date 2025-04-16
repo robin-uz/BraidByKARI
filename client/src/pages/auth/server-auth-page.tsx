@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation, useSearch } from 'wouter';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useServerAuth } from '@/contexts/DebugAuthContext';
+import { ServerAuthContext } from '@/contexts/DebugAuthContext';
 import { Helmet } from 'react-helmet';
 
 import {
@@ -50,7 +50,12 @@ export default function ServerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login, register, user } = useServerAuth();
+  
+  // Access auth context directly
+  const authContext = useContext(ServerAuthContext);
+  const user = authContext?.user || null;
+  const login = authContext?.login || (() => Promise.reject(new Error('Auth not initialized')));
+  const register = authContext?.register || (() => Promise.reject(new Error('Auth not initialized')));
   const [, navigate] = useLocation();
   const search = useSearch();
   const params = new URLSearchParams(search);
