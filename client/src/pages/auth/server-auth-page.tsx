@@ -63,7 +63,8 @@ export default function ServerAuthPage() {
   const [, navigate] = useLocation();
   const search = useSearch();
   const params = new URLSearchParams(search);
-  const redirect = params.get('redirect') || '/';
+  // Change default redirect to dashboard for logged in users
+  const redirect = params.get('redirect') || '/client/dashboard';
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -174,14 +175,14 @@ export default function ServerAuthPage() {
   return (
     <>
       <Helmet>
-        <title>{isLogin ? 'Login' : 'Sign Up'} | Divine Braids</title>
+        <title>{isLogin ? 'Login' : 'Sign Up'} | KARI STYLEZ</title>
       </Helmet>
       <div className="flex min-h-screen">
         {/* Auth Form Column */}
         <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <CardTitle className="text-2xl text-center">Divine Braids</CardTitle>
+              <CardTitle className="text-2xl text-center font-heading">KARI STYLEZ</CardTitle>
               <CardDescription className="text-center">
                 {isLogin ? "Sign in to your account" : "Create a new account"}
               </CardDescription>

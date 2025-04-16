@@ -1,8 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* KARI STYLEZ Custom Styling */
+:root {
+  --kari-gold: #d89a3e;
+  --kari-bronze: #cd7f32;
+  --kari-brown: #5e4531;
+  --kari-cream: #f9f3e5;
+  --kari-black: #232323;
+}
+
+.font-heading {
+  font-family: 'Cormorant Garamond', serif;
+}
 
 /* Password toggle eye animation */
 .eye-blink {
@@ -45,8 +58,19 @@
 
 .luxury-card {
   @apply rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
-  background: linear-gradient(135deg, #f6f2ff 0%, #fdf8ff 100%);
-  border: 1px solid rgba(195, 162, 255, 0.2);
+  background: linear-gradient(135deg, var(--kari-cream) 0%, #ffffff 100%);
+  border: 1px solid rgba(216, 154, 62, 0.2);
+}
+
+.kari-card {
+  @apply rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl;
+  background-color: #ffffff;
+  border: 1px solid rgba(216, 154, 62, 0.3);
+}
+
+.kari-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(216, 154, 62, 0.2);
 }
 
 .floating-icon {
@@ -60,13 +84,45 @@
 }
 
 .glow-button {
-  @apply relative overflow-hidden bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-full px-6 py-3 transition-all duration-300;
-  box-shadow: 0 0 15px rgba(149, 76, 233, 0.5);
+  @apply relative overflow-hidden bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-full px-6 py-3 transition-all duration-300;
+  box-shadow: 0 0 15px rgba(216, 154, 62, 0.5);
 }
 
 .glow-button:hover {
   @apply transform scale-105;
-  box-shadow: 0 0 25px rgba(149, 76, 233, 0.7);
+  box-shadow: 0 0 25px rgba(216, 154, 62, 0.7);
+}
+
+.kari-button {
+  @apply relative overflow-hidden bg-gradient-to-r from-amber-500 to-amber-700 text-white rounded-lg px-6 py-3 transition-all duration-300 font-medium;
+  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
+}
+
+.kari-button:hover {
+  @apply transform scale-105;
+  box-shadow: 0 6px 15px rgba(205, 127, 50, 0.4);
+}
+
+.art-stroke {
+  position: relative;
+}
+
+.art-stroke::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--kari-gold);
+  border-radius: 4px;
+  transform: scaleX(0.8);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.art-stroke:hover::after {
+  transform: scaleX(1);
 }
 
 .glow-button::after {
