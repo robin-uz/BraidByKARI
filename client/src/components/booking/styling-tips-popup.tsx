@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronLeft, ChevronRight, Lightbulb, Sparkles, Star, Timer, X } from "lucide-react";
+import { 
+  Check, 
+  ChevronLeft, 
+  ChevronRight, 
+  Lightbulb, 
+  Sparkles, 
+  Star, 
+  Timer, 
+  X, 
+  Scissors, 
+  ShowerHead, 
+  Palette, 
+  Heart,
+  Sprout,
+  ShoppingBag,
+  Calendar,
+  InfoIcon,
+  Plus,
+  ImageIcon
+} from "lucide-react";
 import { BookingFormData } from "@shared/schema";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionValue, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface StylingTipsPopupProps {
   isOpen: boolean;
@@ -277,102 +297,177 @@ export default function StylingTipsPopup({ isOpen, onClose, bookingData }: Styli
     exit: { x: -20, opacity: 0, transition: { duration: 0.3 } }
   };
 
+  // Mouse parallax effect setup
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = (e.clientX - rect.left - rect.width / 2) / 20;
+    const offsetY = (e.clientY - rect.top - rect.height / 2) / 20;
+    
+    mouseX.set(offsetX);
+    mouseY.set(offsetY);
+  };
+  
+  // Smoothed values for better animation
+  const smoothX = useSpring(mouseX, { damping: 50, stiffness: 300 });
+  const smoothY = useSpring(mouseY, { damping: 50, stiffness: 300 });
+
+  // Get icon by category
+  const getCategoryIcon = (category: string) => {
+    switch(category) {
+      case "care": return <ShowerHead className="h-5 w-5" />;
+      case "maintenance": return <Scissors className="h-5 w-5" />;
+      case "styling": return <Palette className="h-5 w-5" />;
+      default: return <InfoIcon className="h-5 w-5" />;
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md sm:max-w-xl md:max-w-2xl p-0 overflow-hidden bg-white dark:bg-neutral-900 rounded-lg border-0 shadow-2xl">
+      <DialogContent className="max-w-md sm:max-w-2xl md:max-w-4xl p-0 overflow-hidden bg-white dark:bg-neutral-900 rounded-xl border-0 shadow-2xl">
         {/* Loading State */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-16 px-6">
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1, transition: { duration: 0.5 } }}
-              className="w-24 h-24 relative mb-8"
+              className="w-28 h-28 relative mb-8"
             >
               <motion.div 
                 className="absolute inset-0 rounded-full bg-purple-200 dark:bg-purple-900/30"
-                animate={{ scale: [1, 1.1, 1], opacity: [0.7, 0.9, 0.7] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ 
+                  scale: [1, 1.2, 1], 
+                  opacity: [0.7, 0.9, 0.7],
+                  rotate: [0, 5, 0, -5, 0]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
               />
-              <div className="absolute inset-3 rounded-full bg-purple-100 dark:bg-purple-800/30 flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-purple-600 dark:text-purple-300" />
+              <motion.div 
+                className="absolute inset-2 rounded-full bg-purple-100 dark:bg-purple-800/30"
+                animate={{ 
+                  scale: [1, 1.1, 1], 
+                  opacity: [0.8, 1, 0.8],
+                  rotate: [0, -5, 0, 5, 0]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 0.2
+                }}
+              />
+              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center">
+                <Sparkles className="h-10 w-10 text-white" />
               </div>
             </motion.div>
             <motion.h3 
-              className="text-xl font-semibold text-purple-700 dark:text-purple-300"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.3 } }}
+              className="text-2xl font-semibold text-purple-700 dark:text-purple-300"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
             >
               Creating Your Personal Style Guide
             </motion.h3>
             <motion.p 
-              className="text-neutral-600 dark:text-neutral-400 text-center mt-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.5 } }}
+              className="text-neutral-600 dark:text-neutral-400 text-center mt-2 max-w-sm"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.5 } }}
             >
-              Our experts are personalizing care tips for your new {serviceType}...
+              Our stylists are customizing care tips and styling recommendations for your new {serviceType} style...
             </motion.p>
+            
+            <motion.div
+              className="mt-6 flex space-x-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0, 
+                transition: { delay: 0.8 } 
+              }}
+            >
+              {["Care", "Maintenance", "Styling"].map((item, i) => (
+                <motion.div 
+                  key={item} 
+                  className="h-2 w-2 rounded-full bg-purple-400 dark:bg-purple-600"
+                  animate={{ 
+                    opacity: [0.5, 1, 0.5], 
+                    scale: [0.8, 1, 0.8] 
+                  }}
+                  transition={{ 
+                    duration: 1.2,
+                    repeat: Infinity,
+                    delay: i * 0.2
+                  }}
+                />
+              ))}
+            </motion.div>
           </div>
         ) : (
           <div className="flex flex-col">
             {/* Top Navbar */}
-            <div className="sticky top-0 z-10 flex justify-between items-center bg-gradient-to-r from-purple-600 to-fuchsia-600 px-4 py-3">
+            <div className="sticky top-0 z-10 flex justify-between items-center bg-gradient-to-r from-purple-600 to-fuchsia-600 px-6 py-4">
               <div className="flex items-center">
-                <Lightbulb className="w-5 h-5 text-white mr-2" />
-                <h2 className="text-lg font-medium text-white">Style Guide: {serviceType}</h2>
+                <motion.div 
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center mr-3"
+                >
+                  <Sparkles className="h-4 w-4 text-white" />
+                </motion.div>
+                <div>
+                  <h2 className="text-xl font-medium text-white">Divine Braids Style Guide</h2>
+                  <p className="text-xs text-white/80">Personalized for your {serviceType}</p>
+                </div>
               </div>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={onClose}
-                className="h-8 w-8 rounded-full p-0 text-white hover:bg-white/20"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              <DialogClose asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-9 w-9 rounded-full p-0 text-white hover:bg-white/20"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </DialogClose>
             </div>
             
             {/* Navigation Tabs */}
-            <div className="flex justify-between px-4 py-2 bg-purple-50 dark:bg-purple-900/10">
-              <div className="flex space-x-1 overflow-x-auto">
-                <Button
-                  variant={currentPage === "overview" ? "secondary" : "ghost"}
-                  size="sm"
-                  onClick={() => setCurrentPage("overview")}
-                  className={
-                    currentPage === "overview" 
-                      ? "bg-purple-200 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200" 
-                      : "text-purple-700 dark:text-purple-300"
-                  }
-                >
-                  Quick Tips
-                </Button>
-                <Button
-                  variant={currentPage === "detailed" ? "secondary" : "ghost"}
-                  size="sm"
-                  onClick={() => {
-                    setCurrentPage("detailed");
-                    setCurrentTipIndex(0);
-                  }}
-                  className={
-                    currentPage === "detailed" 
-                      ? "bg-purple-200 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200" 
-                      : "text-purple-700 dark:text-purple-300"
-                  }
-                >
-                  Styling Guide
-                </Button>
-                <Button
-                  variant={currentPage === "products" ? "secondary" : "ghost"}
-                  size="sm"
-                  onClick={() => setCurrentPage("products")}
-                  className={
-                    currentPage === "products" 
-                      ? "bg-purple-200 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200" 
-                      : "text-purple-700 dark:text-purple-300"
-                  }
-                >
-                  Recommended Products
-                </Button>
-              </div>
+            <div className="flex justify-center items-center px-4 py-3 bg-purple-50 dark:bg-purple-950/30 border-b border-purple-100 dark:border-purple-950">
+              <Tabs 
+                defaultValue="overview" 
+                value={currentPage}
+                onValueChange={(val) => setCurrentPage(val as "overview" | "detailed" | "products")}
+                className="w-full max-w-lg"
+              >
+                <TabsList className="grid grid-cols-3 bg-purple-100/50 dark:bg-purple-900/20">
+                  <TabsTrigger 
+                    value="overview" 
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-purple-900/50 data-[state=active]:text-purple-700 dark:data-[state=active]:text-purple-200 flex items-center justify-center"
+                  >
+                    <Check className="h-4 w-4 mr-1.5" /> 
+                    <span>Quick Tips</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="detailed"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-purple-900/50 data-[state=active]:text-purple-700 dark:data-[state=active]:text-purple-200 flex items-center justify-center"
+                  >
+                    <ImageIcon className="h-4 w-4 mr-1.5" />
+                    <span>Style Guide</span>
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="products"
+                    className="data-[state=active]:bg-white dark:data-[state=active]:bg-purple-900/50 data-[state=active]:text-purple-700 dark:data-[state=active]:text-purple-200 flex items-center justify-center"
+                  >
+                    <ShoppingBag className="h-4 w-4 mr-1.5" />
+                    <span>Products</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
             
             {/* Content Pages */}
@@ -384,54 +479,139 @@ export default function StylingTipsPopup({ isOpen, onClose, bookingData }: Styli
                   animate="visible"
                   exit="exit"
                   variants={containerVariants}
-                  className="px-4 py-6"
+                  className="px-6 py-6"
+                  onMouseMove={handleMouseMove}
                 >
-                  <div className="mb-6">
+                  <motion.div className="text-center max-w-lg mx-auto mb-6">
+                    <motion.div 
+                      variants={itemVariants}
+                      className="inline-flex items-center justify-center p-1 px-3 rounded-full bg-gradient-to-r from-purple-100 to-fuchsia-100 dark:from-purple-900/30 dark:to-fuchsia-900/30 text-xs font-medium text-purple-700 dark:text-purple-300 mb-3"
+                    >
+                      <Calendar className="w-3.5 h-3.5 mr-1.5" /> 
+                      <span>Your appointment is confirmed</span>
+                    </motion.div>
+                    
                     <motion.h3 
                       variants={itemVariants}
-                      className="text-xl font-semibold mb-2 text-purple-700 dark:text-purple-300"
+                      className="text-2xl font-semibold mb-2 text-purple-700 dark:text-purple-300"
                     >
                       Care Tips for Your {serviceType}
                     </motion.h3>
+                    
                     <motion.p 
                       variants={itemVariants}
                       className="text-neutral-600 dark:text-neutral-400"
                     >
                       Thank you for booking with Divine Braids! Here are personalized tips to help your style last longer between appointments.
                     </motion.p>
-                  </div>
+                  </motion.div>
                   
+                  {/* Bento Box Grid for Quick Tips */}
                   <motion.div 
                     variants={containerVariants}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 max-w-4xl mx-auto"
                   >
-                    {quickTips.map((tip, idx) => (
+                    {/* Featured Tip */}
+                    <motion.div 
+                      variants={itemVariants}
+                      className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-purple-50 to-fuchsia-50 dark:from-purple-900/20 dark:to-fuchsia-900/10 rounded-xl overflow-hidden shadow-sm border border-purple-100 dark:border-purple-800/30"
+                    >
+                      <div className="p-5 h-full flex flex-col">
+                        <div className="flex items-center mb-3">
+                          <div className="h-10 w-10 rounded-full bg-purple-200 dark:bg-purple-700/40 flex items-center justify-center mr-3">
+                            <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-300" />
+                          </div>
+                          <h4 className="font-semibold text-lg text-purple-700 dark:text-purple-300">Essential Care Guide</h4>
+                        </div>
+                        
+                        <div className="flex-grow space-y-4">
+                          {quickTips.slice(0, 3).map((tip, idx) => (
+                            <motion.div 
+                              key={idx}
+                              className="flex items-start"
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ 
+                                opacity: 1, 
+                                x: 0,
+                                transition: { delay: 0.3 + (idx * 0.1) }
+                              }}
+                            >
+                              <div className="h-5 w-5 rounded-full bg-purple-100 dark:bg-purple-800/40 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                                <Check className="h-3 w-3 text-purple-600 dark:text-purple-300" />
+                              </div>
+                              <span className="text-neutral-700 dark:text-neutral-300">{tip}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                        
+                        <div className="mt-4 pt-4 border-t border-purple-100 dark:border-purple-800/20">
+                          <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                            Follow these essential tips for the first few days after your appointment.
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                    
+                    {/* Additional Tips in Smaller Cards */}
+                    {quickTips.slice(3).map((tip, idx) => (
                       <motion.div 
                         key={idx}
                         variants={itemVariants}
-                        className="bg-purple-50 dark:bg-purple-900/10 rounded-xl p-4 flex items-start"
+                        className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden"
                         whileHover={{ y: -5, transition: { duration: 0.2 } }}
                       >
-                        <Check className="mr-3 h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">{tip}</span>
+                        <div className="p-4 h-full flex flex-col">
+                          <div className="flex items-center mb-3">
+                            <div className="h-7 w-7 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mr-2.5">
+                              {idx === 0 ? (
+                                <ShowerHead className="h-3.5 w-3.5 text-purple-600 dark:text-purple-300" />
+                              ) : idx === 1 ? (
+                                <Sprout className="h-3.5 w-3.5 text-purple-600 dark:text-purple-300" />
+                              ) : (
+                                <Scissors className="h-3.5 w-3.5 text-purple-600 dark:text-purple-300" />
+                              )}
+                            </div>
+                            <p className="text-xs font-medium text-purple-600 dark:text-purple-400">Tip #{idx + 4}</p>
+                          </div>
+                          <p className="text-sm text-neutral-700 dark:text-neutral-300">{tip}</p>
+                        </div>
                       </motion.div>
                     ))}
+                    
+                    {/* Duration Card */}
+                    <motion.div 
+                      variants={itemVariants}
+                      className="md:col-span-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-xl p-5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
+                            <Timer className="h-5 w-5 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-lg">Style Duration & Maintenance</h4>
+                            <p className="text-white/80 text-sm">
+                              With proper care, your {serviceType} should last 6-8 weeks. Schedule your next appointment 1-2 weeks before your style's expected end date.
+                            </p>
+                          </div>
+                        </div>
+                        <Button 
+                          onClick={() => {
+                            setCurrentPage("detailed");
+                            setCurrentTipIndex(0);
+                            setCurrentTab("care");
+                          }}
+                          variant="secondary"
+                          className="bg-white text-purple-700 hover:bg-white/90 whitespace-nowrap ml-4 hidden md:flex"
+                        >
+                          <ImageIcon className="mr-2 h-4 w-4" />
+                          View Style Guide
+                        </Button>
+                      </div>
+                    </motion.div>
                   </motion.div>
                   
-                  <motion.div 
-                    variants={itemVariants}
-                    className="bg-gradient-to-r from-purple-100 to-fuchsia-100 dark:from-purple-900/20 dark:to-fuchsia-900/20 rounded-xl p-4 mb-4"
-                  >
-                    <div className="flex items-center mb-2">
-                      <Timer className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400" />
-                      <h4 className="font-semibold text-purple-700 dark:text-purple-300">Style Duration</h4>
-                    </div>
-                    <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                      With proper care, your {serviceType} should last 6-8 weeks. Schedule your next appointment 1-2 weeks before your style's expected end date.
-                    </p>
-                  </motion.div>
-                  
-                  <motion.div variants={itemVariants} className="flex justify-center mt-6">
+                  <motion.div variants={itemVariants} className="flex justify-center mt-6 md:hidden">
                     <Button 
                       onClick={() => {
                         setCurrentPage("detailed");
@@ -440,6 +620,7 @@ export default function StylingTipsPopup({ isOpen, onClose, bookingData }: Styli
                       }}
                       className="bg-purple-600 hover:bg-purple-700 text-white"
                     >
+                      <ImageIcon className="mr-2 h-4 w-4" />
                       View Detailed Styling Guide
                     </Button>
                   </motion.div>
@@ -541,52 +722,138 @@ export default function StylingTipsPopup({ isOpen, onClose, bookingData }: Styli
                   animate="visible"
                   exit="exit"
                   variants={containerVariants}
-                  className="px-4 py-6"
+                  className="px-6 py-6"
+                  onMouseMove={handleMouseMove}
                 >
-                  <motion.h3 
-                    variants={itemVariants}
-                    className="text-xl font-semibold mb-2 text-purple-700 dark:text-purple-300"
-                  >
-                    Recommended Products
-                  </motion.h3>
-                  <motion.p 
-                    variants={itemVariants}
-                    className="text-neutral-600 dark:text-neutral-400 mb-6"
-                  >
-                    These specially selected products will help you maintain your {serviceType} between salon visits.
-                  </motion.p>
-                  
                   <motion.div 
-                    variants={containerVariants}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                    className="mb-8 max-w-lg mx-auto text-center"
+                    variants={itemVariants}
                   >
-                    {products.map((product, idx) => (
-                      <motion.div 
-                        key={idx}
+                    <Badge 
+                      className="mb-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white py-1.5 px-3 rounded-full"
+                    >
+                      <Heart className="w-3.5 h-3.5 mr-1.5" /> Stylist Picks
+                    </Badge>
+                    
+                    <h3 className="text-2xl font-semibold mb-2 text-purple-700 dark:text-purple-300">
+                      Recommended Products
+                    </h3>
+                    
+                    <p className="text-neutral-600 dark:text-neutral-400">
+                      Our stylists have hand-selected these quality products to help you maintain your {serviceType} between salon visits.
+                    </p>
+                  </motion.div>
+                  
+                  {/* Bento Box Grid for Products */}
+                  <div className="max-w-4xl mx-auto">
+                    <motion.div 
+                      variants={containerVariants}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
+                    >
+                      {/* Featured product */}
+                      <motion.div
                         variants={itemVariants}
-                        className="bg-white dark:bg-neutral-800 rounded-xl overflow-hidden shadow-md"
-                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                        style={{
+                          perspective: 2000,
+                        }}
+                        className="md:row-span-2 relative"
                       >
-                        <div className="aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-700">
-                          <img 
-                            src={product.imageUrl} 
-                            alt={product.name} 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-purple-700 dark:text-purple-300">{product.name}</h4>
-                            <div className="flex items-center">
-                              <Star className="w-3 h-3 text-yellow-500 mr-1 fill-yellow-500" />
-                              <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{product.rating}</span>
+                        <motion.div
+                          style={{
+                            rotateY: useTransform(smoothX, [-5, 5], [5, -5]),
+                            rotateX: useTransform(smoothY, [-5, 5], [-5, 5]),
+                          }}
+                          className="bg-gradient-to-br from-purple-100 to-fuchsia-50 dark:from-purple-900/30 dark:to-fuchsia-900/20 rounded-2xl overflow-hidden h-full shadow-lg border border-purple-200/50 dark:border-purple-800/30"
+                        >
+                          <div className="p-6 flex flex-col h-full">
+                            <div className="bg-white dark:bg-neutral-800 rounded-xl overflow-hidden mb-5 aspect-square">
+                              <motion.img 
+                                src={products[0]?.imageUrl} 
+                                alt={products[0]?.name} 
+                                className="w-full h-full object-cover"
+                                style={{
+                                  scale: 1.05,
+                                  translateX: useTransform(smoothX, [-5, 5], [-3, 3]),
+                                  translateY: useTransform(smoothY, [-5, 5], [-3, 3]),
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="flex items-start justify-between mb-3">
+                              <div>
+                                <h4 className="text-xl font-semibold text-purple-700 dark:text-purple-300">{products[0]?.name}</h4>
+                                <div className="flex items-center mt-1">
+                                  {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(products[0]?.rating || 0) ? 'text-yellow-500 fill-yellow-500' : 'text-neutral-300 dark:text-neutral-600'} mr-0.5`} />
+                                  ))}
+                                  <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 ml-1">
+                                    {products[0]?.rating}
+                                  </span>
+                                </div>
+                              </div>
+                              <Badge className="bg-purple-500/10 text-purple-700 dark:bg-purple-300/10 dark:text-purple-300 hover:bg-purple-500/20">
+                                Best Seller
+                              </Badge>
+                            </div>
+                            
+                            <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-4 flex-grow">
+                              {products[0]?.description}
+                            </p>
+                            
+                            <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                              <ShoppingBag className="mr-2 h-4 w-4" /> Shop Now
+                            </Button>
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                      
+                      {/* Other products in grid */}
+                      {products.slice(1).map((product, idx) => (
+                        <motion.div
+                          key={idx}
+                          variants={itemVariants}
+                          whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                          className={`overflow-hidden rounded-xl shadow-md ${idx === 0 ? 'md:col-span-2' : ''}`}
+                        >
+                          <div className="bg-white dark:bg-neutral-800 h-full flex flex-col">
+                            <div className="relative aspect-video overflow-hidden">
+                              <img 
+                                src={product.imageUrl} 
+                                alt={product.name} 
+                                className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
+                              />
+                              <div className="absolute top-2 right-2">
+                                <Badge className="bg-white/80 dark:bg-black/50 backdrop-blur-sm shadow-sm">
+                                  {product.rating} <Star className="w-3 h-3 text-yellow-500 fill-yellow-500 ml-1" />
+                                </Badge>
+                              </div>
+                            </div>
+                            
+                            <div className="p-4 flex flex-col flex-grow">
+                              <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">{product.name}</h4>
+                              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3 flex-grow">{product.description}</p>
+                              <Button variant="outline" size="sm" className="mt-auto text-purple-600 dark:text-purple-300 border-purple-300 dark:border-purple-700 hover:bg-purple-50 dark:hover:bg-purple-900/30">
+                                View Details
+                              </Button>
                             </div>
                           </div>
-                          <p className="text-sm text-neutral-600 dark:text-neutral-400">{product.description}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                    
+                    <motion.div
+                      variants={itemVariants}
+                      className="mt-8 text-center"
+                    >
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+                        Available at Divine Braids Salon or from our recommended online partners
+                      </p>
+                      <Button variant="outline" className="border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/30">
+                        <ShoppingBag className="mr-2 h-4 w-4" /> 
+                        Browse All Products
+                      </Button>
+                    </motion.div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
