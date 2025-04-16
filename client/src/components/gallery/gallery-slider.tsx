@@ -132,8 +132,16 @@ export default function GallerySlider() {
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                 <h3 className="text-white font-heading text-xl">{item.title}</h3>
                 <p className="text-neutral-200 text-sm">{item.description}</p>
-                <div className="mt-2 bg-purple-600/80 text-white text-sm inline-block px-2 py-1 rounded-full">
-                  ${item.price}
+                <div className="flex items-center gap-3 mt-3">
+                  <div className="bg-purple-600/80 text-white text-sm inline-block px-2 py-1 rounded-full">
+                    ${item.price}
+                  </div>
+                  <a 
+                    href="/booking" 
+                    className="bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-3 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
+                  >
+                    Book This Style
+                  </a>
                 </div>
               </div>
             </div>
@@ -143,19 +151,29 @@ export default function GallerySlider() {
       
       <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mt-4">
         {displayGallery.map((item, index) => (
-          <button 
-            key={item.id} 
-            className={`rounded overflow-hidden border-2 transition-all ${
-              index === activeIndex ? "border-purple-600" : "border-transparent hover:border-purple-400"
-            }`} 
-            onClick={() => goToSlide(index)}
-          >
-            <img 
-              src={item.imageUrl} 
-              alt={`${item.title} thumbnail`}
-              className="w-full h-16 md:h-20 object-cover"
-            />
-          </button>
+          <div key={item.id} className="relative group">
+            <button 
+              className={`rounded overflow-hidden border-2 transition-all w-full ${
+                index === activeIndex ? "border-purple-600" : "border-transparent hover:border-purple-400"
+              }`} 
+              onClick={() => goToSlide(index)}
+            >
+              <img 
+                src={item.imageUrl} 
+                alt={`${item.title} thumbnail`}
+                className="w-full h-16 md:h-20 object-cover"
+              />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <a 
+                  href="/booking" 
+                  className="text-white text-xs font-medium bg-purple-600/80 px-2 py-1 rounded-full"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Book
+                </a>
+              </div>
+            </button>
+          </div>
         ))}
       </div>
     </div>

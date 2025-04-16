@@ -23,40 +23,47 @@ import {
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// Interesting premium hairstyles for our showcase
+// Import our new braid images
+import braidsAuburn from "@/assets/gallery/braids-auburn.png";
+import braidsSide from "@/assets/gallery/braids-side.png";
+import braidsBun from "@/assets/gallery/braids-bun.png";
+import braidsCurls from "@/assets/gallery/braids-curls.png";
+import braidsBob from "@/assets/gallery/braids-bob.png";
+
+// Premium hairstyles with our new images
 const PREMIUM_STYLES = [
   {
     id: "premium-1",
-    name: "Goddess Box Braids",
-    description: "Ethereal box braids with decorative accessories and curled ends for an elegant look",
-    duration: "6-8 hours",
-    price: 280,
-    image: "https://images.unsplash.com/photo-1602525506539-cdc38e2b3b75?q=80&w=2067&auto=format&fit=crop",
+    name: "Auburn Box Braids",
+    description: "Stunning long box braids with auburn color for a rich, warm look",
+    duration: "4-5 hours",
+    price: 220,
+    image: braidsAuburn,
     popular: true,
-    features: ["Luxury hair extensions", "Gold accessories included", "Styling cream", "Aftercare kit"],
-    tags: ["luxury", "trending"]
+    features: ["Premium colored extensions", "Heat-sealed ends", "Styling cream", "Aftercare kit"],
+    tags: ["box-braids", "auburn"]
   },
   {
     id: "premium-2",
-    name: "Ombré Knotless Braids",
-    description: "Stunning color gradient knotless braids with seamless transition",
-    duration: "5-7 hours",
-    price: 260,
-    image: "https://images.unsplash.com/photo-1595211665244-119bc411fdb6?q=80&w=1887&auto=format&fit=crop",
+    name: "Knotless Side Part",
+    description: "Beautiful knotless braids with expert side parting and sleek finish",
+    duration: "3-4 hours",
+    price: 190,
+    image: braidsSide,
     popular: false,
-    features: ["Premium color-treated hair", "Heat styling", "Custom color matching", "Scalp treatment"],
-    tags: ["colorful", "custom"]
+    features: ["Premium hair", "Natural hairline", "Edge control", "Scalp treatment"],
+    tags: ["knotless", "side-part"]
   },
   {
     id: "premium-3",
-    name: "Butterfly Locs",
-    description: "Elegant distressed locs with butterfly-like texture and movement",
-    duration: "4-6 hours",
-    price: 230,
-    image: "https://images.unsplash.com/photo-1503762687835-129cc7a277e5?q=80&w=1887&auto=format&fit=crop",
+    name: "Spiral Curls Updo",
+    description: "Creative updo with spiral curls for special occasions",
+    duration: "3-4 hours",
+    price: 200,
+    image: braidsCurls,
     popular: false,
-    features: ["Lightweight installation", "Custom curled ends", "Natural movement", "Low maintenance"],
-    tags: ["trending", "natural"]
+    features: ["Professional curling", "Long-lasting hold", "Special occasion styling", "Decorative elements"],
+    tags: ["curls", "updo"]
   }
 ];
 
@@ -66,9 +73,9 @@ const STANDARD_SERVICES = [
     id: 1,
     style: "Box Braids (Small)",
     description: "Thin box braids with detailed parting",
-    duration: "5-7 hours",
+    duration: "5-6 hours",
     price: 200,
-    image: "https://images.unsplash.com/photo-1594076803361-fbbe24594338?q=80&w=1887&auto=format&fit=crop",
+    image: braidsAuburn,
     icon: "📦",
     category: "box"
   },
@@ -76,81 +83,51 @@ const STANDARD_SERVICES = [
     id: 2,
     style: "Box Braids (Medium)",
     description: "Standard size box braids",
-    duration: "4-6 hours",
+    duration: "4-5 hours",
     price: 180,
-    image: "https://images.unsplash.com/photo-1605980625600-88c7831c17ab?q=80&w=1887&auto=format&fit=crop",
+    image: braidsAuburn,
     icon: "📦",
     category: "box"
   },
   {
     id: 3,
-    style: "Box Braids (Large)",
-    description: "Chunky box braids with less installation time",
-    duration: "3-5 hours",
-    price: 150,
-    image: "https://images.unsplash.com/photo-1607242792481-37f27e1901b3?q=80&w=1887&auto=format&fit=crop",
-    icon: "📦",
-    category: "box"
-  },
-  {
-    id: 4,
     style: "Knotless Braids",
     description: "Tension-free braids with a natural look",
-    duration: "5-8 hours",
+    duration: "5-6 hours",
     price: 220,
-    image: "https://images.unsplash.com/photo-1599647903472-f41f344fa73b?q=80&w=1887&auto=format&fit=crop",
+    image: braidsSide,
     icon: "🪢",
     category: "knotless"
   },
   {
+    id: 4,
+    style: "Sleek Bob Braids",
+    description: "Modern shoulder-length braided bob for a chic, manageable style",
+    duration: "3-4 hours",
+    price: 175,
+    image: braidsBob,
+    icon: "✂️",
+    category: "bob"
+  },
+  {
     id: 5,
-    style: "Feed-in Braids",
-    description: "Sleek braids with a natural transition",
-    duration: "4-6 hours",
-    price: 180,
-    image: "https://images.unsplash.com/photo-1587403335779-4ce461ea7b2e?q=80&w=1887&auto=format&fit=crop",
-    icon: "🔄",
-    category: "feed-in"
+    style: "Protective Bun Style",
+    description: "Elegant braided bun for a professional, protective style",
+    duration: "2-3 hours",
+    price: 160,
+    image: braidsBun,
+    icon: "👑",
+    category: "protective"
   },
   {
     id: 6,
-    style: "Bob Boho Braids",
-    description: "Stylish bob-length braids with elegant curls",
-    duration: "4-6 hours",
-    price: 250,
-    image: "https://images.unsplash.com/photo-1627248235652-334c2b43f0a2?q=80&w=1887&auto=format&fit=crop",
-    icon: "🌀",
-    category: "twists"
-  },
-  {
-    id: 7,
-    style: "Curly Top Braids",
-    description: "Natural curly top with beautifully styled braids",
-    duration: "3-5 hours",
+    style: "Spiral Curls Updo",
+    description: "Creative updo with spiral curls for special occasions",
+    duration: "3-4 hours",
     price: 200,
-    image: "https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1887&auto=format&fit=crop",
+    image: braidsCurls,
     icon: "🌀",
-    category: "twists"
-  },
-  {
-    id: 8,
-    style: "Goddess Braids",
-    description: "Elegant raised braids with sophisticated pattern",
-    duration: "4-7 hours",
-    price: 240,
-    image: "https://images.unsplash.com/photo-1620122830785-a18b43585b44?q=80&w=1887&auto=format&fit=crop",
-    icon: "👑",
-    category: "box"
-  },
-  {
-    id: 9,
-    style: "Faux Locs",
-    description: "Natural-looking temporary locs",
-    duration: "5-7 hours",
-    price: 230,
-    image: "https://images.unsplash.com/photo-1562041343-fae9e0668516?q=80&w=1887&auto=format&fit=crop",
-    icon: "🧶",
-    category: "locs"
+    category: "specialty"
   }
 ];
 
@@ -203,7 +180,7 @@ export default function PricingPage() {
                 </Link>
                 <Link href="/gallery">
                   <Button variant="outline" size="lg" className="rounded-full px-8 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
-                    Get Started
+                    View Gallery
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
@@ -243,7 +220,7 @@ export default function PricingPage() {
                 >
                   <h3 className="text-xl font-bold mb-2">Premium Packages</h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4">
-                    Experience luxury with our exclusive styling packages starting at $230
+                    Experience luxury with our exclusive styling packages starting at $160
                   </p>
                   <div className="flex space-x-2">
                     {PREMIUM_STYLES.map(style => (
@@ -262,9 +239,9 @@ export default function PricingPage() {
                   <Star className="h-10 w-10 mx-auto mb-3 text-purple-600 dark:text-purple-400" />
                   <h3 className="text-lg font-bold mb-2">Client Favorite</h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                    Goddess Box Braids with premium accessories
+                    Auburn Box Braids with premium colored extensions
                   </p>
-                  <span className="mt-3 text-xl font-bold text-purple-600 dark:text-purple-400">$280</span>
+                  <span className="mt-3 text-xl font-bold text-purple-600 dark:text-purple-400">$220</span>
                 </motion.div>
               </div>
             </motion.div>
@@ -385,498 +362,302 @@ export default function PricingPage() {
           {/* View Controls */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
             {/* Category Filters */}
-            <div className="flex overflow-x-auto p-1 space-x-2 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-              {[
-                { id: "all", name: "All Styles", icon: "✨" },
-                { id: "box", name: "Box Braids", icon: "📦" },
-                { id: "feed-in", name: "Feed-In Braids", icon: "🔄" },
-                { id: "knotless", name: "Knotless Braids", icon: "🪢" },
-                { id: "twists", name: "Twists", icon: "🌀" },
-                { id: "locs", name: "Locs", icon: "🧶" }
-              ].map(category => (
-                <Button
-                  key={category.id}
-                  variant={activeCategory === category.id ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setActiveCategory(category.id)}
-                  className="whitespace-nowrap"
+            <div className="flex flex-wrap gap-2">
+              <Button 
+                variant={activeCategory === "all" ? "default" : "outline"} 
+                size="sm" 
+                onClick={() => setActiveCategory("all")}
+                className="rounded-full"
+              >
+                All Styles
+              </Button>
+              
+              {["box", "knotless", "protective", "bob", "specialty"].map((category) => (
+                <Button 
+                  key={category}
+                  variant={activeCategory === category ? "default" : "outline"} 
+                  size="sm" 
+                  onClick={() => setActiveCategory(category)}
+                  className="rounded-full"
                 >
-                  <span className="mr-2">{category.icon}</span>
-                  {category.name}
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
                 </Button>
               ))}
             </div>
             
-            {/* View Mode Toggles */}
-            <div className="flex gap-2">
-              <Button
-                variant={viewMode === "bento" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setViewMode("bento")}
-                className="flex items-center"
-              >
-                <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor" />
-                  <rect x="13" y="2" width="9" height="5" rx="2" fill="currentColor" />
-                  <rect x="13" y="9" width="9" height="13" rx="2" fill="currentColor" />
-                  <rect x="2" y="13" width="9" height="9" rx="2" fill="currentColor" />
-                </svg>
-                Bento
-              </Button>
-              <Button
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="sm"
+            {/* View Toggle */}
+            <div className="flex items-center border rounded-lg overflow-hidden">
+              <Button 
+                variant="ghost" 
+                size="sm" 
                 onClick={() => setViewMode("grid")}
-                className="flex items-center"
+                className={viewMode === "grid" ? "bg-muted" : ""}
               >
-                <svg className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor" />
-                  <rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor" />
-                  <rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor" />
-                  <rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor" />
-                </svg>
+                <Eye className="h-4 w-4 mr-1" />
                 Grid
               </Button>
-
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setViewMode("bento")}
+                className={viewMode === "bento" ? "bg-muted" : ""}
+              >
+                <Camera className="h-4 w-4 mr-1" />
+                Bento
+              </Button>
             </div>
           </div>
           
-          {/* View Modes: Bento or Grid */}
-          <AnimatePresence mode="wait">
-            {viewMode === "bento" && (
-              <motion.div 
-                key="bento"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="mb-8"
-              >
-                <div className="grid grid-cols-12 grid-rows-2 gap-4 h-[800px]">
-                  {filteredServices.slice(0, 5).map((service, idx) => {
-                    // Create a dynamic layout for the bento grid
-                    const getGridClass = (idx: number) => {
-                      const layouts = [
-                        "col-span-6 row-span-1 md:col-span-4 md:row-span-2", // First item
-                        "col-span-6 row-span-1 md:col-span-3 md:row-span-1", // Second item
-                        "col-span-6 row-span-1 md:col-span-5 md:row-span-1", // Third item
-                        "col-span-6 row-span-1 md:col-span-4 md:row-span-1", // Fourth item
-                        "col-span-6 row-span-1 md:col-span-4 md:row-span-1", // Fifth item
-                      ];
-                      return layouts[idx % layouts.length];
-                    };
-                    
-                    return (
-                      <motion.div
-                        key={service.id}
-                        className={cn(
-                          "relative overflow-hidden rounded-xl group cursor-pointer",
-                          getGridClass(idx)
-                        )}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={() => setSelectedService(service)}
+          {/* Individual Services Cards */}
+          <div className={viewMode === "grid" 
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" 
+            : "space-y-4"
+          }>
+            <AnimatePresence mode="wait">
+              {viewMode === "grid" ? (
+                <>
+                  {filteredServices.map((service, index) => (
+                    <motion.div 
+                      key={service.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ 
+                        duration: 0.4, 
+                        delay: index * 0.05,
+                        ease: "easeOut"  
+                      }}
+                      className="group"
+                    >
+                      <Card 
+                        className="h-full transition-all border-neutral-200 dark:border-neutral-800 hover:shadow-md overflow-hidden"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-                        <img 
-                          src={service.image} 
-                          alt={service.style} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
-                          <div className="flex justify-between items-end">
-                            <div>
-                              <h3 className="text-lg md:text-xl font-bold mb-1 group-hover:text-purple-300 transition-colors">
-                                {service.style}
-                              </h3>
-                              <p className="text-sm text-white/80 mb-2 line-clamp-1">
-                                {service.description}
-                              </p>
-                              <div className="flex items-center text-xs text-white/70">
-                                <Clock className="h-3 w-3 mr-1" />
-                                {service.duration}
-                                <span className="mx-2">•</span>
-                                <span className="font-semibold text-purple-300">${service.price}</span>
-                              </div>
+                        <div className="relative h-56 overflow-hidden">
+                          <img 
+                            src={service.image} 
+                            alt={service.style}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                            <div className="flex justify-end space-x-2 mb-4">
+                              <a href="/booking">
+                                <button className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-md">
+                                  Book Now
+                                </button>
+                              </a>
                             </div>
-                            <motion.div 
-                              whileHover={{ scale: 1.1 }}
-                              className="bg-white/20 backdrop-blur-sm p-2 rounded-full"
-                            >
-                              <Eye className="h-5 w-5 text-white" />
-                            </motion.div>
                           </div>
                         </div>
+                        
+                        <CardHeader className="pb-2">
+                          <div className="flex justify-between items-center">
+                            <CardTitle className="text-base font-medium">
+                              {service.style}
+                            </CardTitle>
+                            <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                              ${service.price}
+                            </span>
+                          </div>
+                        </CardHeader>
+                        
+                        <CardContent className="pt-0">
+                          <p className="text-sm text-muted-foreground mb-1 line-clamp-2">
+                            {service.description}
+                          </p>
+                          <div className="flex items-center text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {service.duration}
+                          </div>
+                        </CardContent>
+                        
+                        <CardFooter className="pt-0">
+                          <Link href={`/booking?service=${service.id}`} className="w-full">
+                            <Button variant="ghost" size="sm" className="w-full text-xs justify-start text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300">
+                              <ArrowRight className="h-3 w-3 mr-1" />
+                              View Details
+                            </Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </>
+              ) : (
+                // Bento View
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="grid grid-cols-12 gap-4 auto-rows-auto"
+                >
+                  {filteredServices.map((service, idx) => {
+                    // Determine the layout for each card
+                    let cols = idx % 5 === 0 ? "col-span-12 sm:col-span-8" : 
+                              idx % 3 === 0 ? "col-span-12 sm:col-span-6" : 
+                              "col-span-12 sm:col-span-4";
+                    let rows = idx % 5 === 0 ? "row-span-1 sm:row-span-2" : "row-span-1";
+                    
+                    return (
+                      <motion.div 
+                        key={service.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                        viewport={{ once: true }}
+                        whileHover={{ y: -5 }}
+                        className={`${cols} ${rows} group`}
+                      >
+                        <Card className="h-full border-neutral-200 dark:border-neutral-800 overflow-hidden">
+                          <div className="relative h-full w-full overflow-hidden group cursor-pointer">
+                            <div className="absolute inset-0 z-10 transition-opacity duration-300 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                            <img 
+                              src={service.image} 
+                              alt={service.style}
+                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            
+                            <div className="absolute inset-0 z-20 flex flex-col justify-end p-6">
+                              <h3 className="text-xl md:text-2xl font-bold text-white mb-1">{service.style}</h3>
+                              <p className="text-sm text-neutral-200 mb-2 max-w-2xl">{service.description}</p>
+                              
+                              <div className="flex items-center justify-between mt-3">
+                                <div className="flex items-center space-x-4">
+                                  <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-white">
+                                    <span className="font-semibold">${service.price}</span>
+                                  </div>
+                                  <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-white flex items-center">
+                                    <Clock className="h-3 w-3 mr-1" />
+                                    <span>{service.duration}</span>
+                                  </div>
+                                </div>
+                                
+                                <Link href={`/booking?service=${service.id}`}>
+                                  <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                                    Book Now
+                                  </Button>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
                       </motion.div>
                     );
                   })}
-                  
-                  {/* Service collection card */}
-                  <motion.div 
-                    className="col-span-12 md:col-span-4 row-span-1 bg-gradient-to-r from-purple-100 to-purple-50 dark:from-purple-900/50 dark:to-purple-800/30 rounded-xl p-6 flex flex-col justify-center"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h3 className="text-xl font-bold mb-3">All Services</h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4">
-                      Browse our full catalog of {STANDARD_SERVICES.length} premium braiding services
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {['Box Braids', 'Knotless', 'Feed-in', 'Locs', 'Twists'].map(category => (
-                        <Badge key={category} variant="outline">
-                          {category}
-                        </Badge>
-                      ))}
-                    </div>
-                  </motion.div>
-                </div>
-                
-                {/* Remaining services in a grid */}
-                {filteredServices.length > 5 && (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-                    {filteredServices.slice(5).map((service) => (
-                      <motion.div
-                        key={service.id}
-                        className="relative overflow-hidden rounded-xl group cursor-pointer h-48"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={() => setSelectedService(service)}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10"></div>
-                        <img 
-                          src={service.image} 
-                          alt={service.style} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
-                          <h3 className="text-lg font-bold mb-1 group-hover:text-purple-300 transition-colors">
-                            {service.style}
-                          </h3>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center text-xs text-white/70">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {service.duration}
-                            </div>
-                            <span className="font-semibold text-purple-300">${service.price}</span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            )}
-            
-            {viewMode === "grid" && (
-              <motion.div 
-                key="grid"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {filteredServices.map((service, idx) => (
-                  <motion.div 
-                    key={service.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: idx * 0.05 }}
-                    whileHover={{ y: -8 }}
-                  >
-                    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
-                      <div className="relative h-48 overflow-hidden">
-                        <img 
-                          src={service.image} 
-                          alt={service.style}
-                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                        />
-                        <div className="absolute top-2 left-2">
-                          <div className="bg-black/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md">
-                            {service.category}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <CardHeader className="pt-5 pb-2">
-                        <div className="flex justify-between items-center">
-                          <CardTitle className="text-lg">{service.style}</CardTitle>
-                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">${service.price}</div>
-                        </div>
-                      </CardHeader>
-                      
-                      <CardContent className="pb-2">
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          {service.description}
-                        </p>
-                        <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
-                          <Clock className="h-4 w-4 mr-1.5" />
-                          <span>{service.duration}</span>
-                          
-                          {service.icon && (
-                            <div className="ml-auto bg-purple-100 dark:bg-purple-900 h-8 w-8 rounded-full flex items-center justify-center">
-                              <span className="text-lg">{service.icon}</span>
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                      
-                      <CardFooter className="pt-0 flex gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="flex-1"
-                          onClick={() => setSelectedService(service)}
-                        >
-                          <Eye className="h-4 w-4 mr-1.5" />
-                          Details
-                        </Button>
-                        <Link href={`/booking?service=${service.style}`} className="flex-1">
-                          <Button size="sm" className="w-full">
-                            Book Now
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-            
-
-          </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
         
-        {/* Pricing Information Section */}
+        {/* FAQ Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/20 rounded-xl p-8 shadow-sm"
+          className="mt-20"
         >
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-3">Additional Pricing Information</h2>
-            <p className="text-muted-foreground">Factors that may affect the final price of your service</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold font-heading mb-3">Frequently Asked Questions</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to know about our braiding services
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="space-y-3"
-            >
-              <div className="flex items-center">
-                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <ShoppingBag className="h-5 w-5 text-purple-800 dark:text-purple-200" />
-                </div>
-                <h3 className="text-lg font-medium">Hair Extensions</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Extensions are not included in the base price. You can either bring your own 
-                or purchase from our selection of premium quality hair.
-              </p>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">How long do braids typically last?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    With proper care, our professional braids can last between 6-8 weeks depending on the style and your natural hair growth rate. We recommend a touch-up appointment after 4 weeks for the most polished look.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">What's included in the price?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    All our prices include the consultation, installation, styling, and basic hair extensions. Premium hair options and accessories may have additional costs. We'll always discuss any potential add-ons before proceeding.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">How should I prepare for my appointment?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Come with freshly washed and thoroughly dried hair. Avoid heavy oils or products before your appointment. Wear comfortable clothing as some styles may take several hours to complete.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
             
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="space-y-3"
-            >
-              <div className="flex items-center">
-                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <Clock className="h-5 w-5 text-purple-800 dark:text-purple-200" />
-                </div>
-                <h3 className="text-lg font-medium">Length & Thickness</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Longer and thicker styles require more time and material, which may increase the final price.
-                Consult with your stylist for a precise quote.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="space-y-3"
-            >
-              <div className="flex items-center">
-                <div className="bg-purple-100 dark:bg-purple-900 h-10 w-10 rounded-full flex items-center justify-center mr-3">
-                  <Star className="h-5 w-5 text-purple-800 dark:text-purple-200" />
-                </div>
-                <h3 className="text-lg font-medium">Custom Designs</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Complex patterns, color treatments, and custom designs may incur additional charges
-                based on complexity and time requirements.
-              </p>
-            </motion.div>
+            <div className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Can I bring my own hair extensions?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Yes, you're welcome to bring your own extensions. Please ensure they are high-quality and prepared properly for installation. We also offer premium extension options if you prefer to use ours.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">What is your cancellation policy?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We require 24 hours notice for cancellations or rescheduling. Late cancellations may incur a 25% fee of the service cost, and no-shows will be charged 50% of the service.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Do you offer aftercare products?</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Yes, we offer a range of professional-grade aftercare products specifically formulated for braided styles. Our stylists will recommend the best products for your specific style and hair type.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </motion.div>
         
-        {/* Call to Action */}
+        {/* Final CTA */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="mt-20 text-center max-w-4xl mx-auto"
+          className="mt-20 text-center"
         >
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Look?</h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Book your appointment today and experience our premium braiding services.
-            We're committed to helping you achieve the perfect style that suits your personality.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="py-12 px-4 sm:px-8 rounded-xl bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/50 dark:to-pink-900/30">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to transform your look?</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto mb-8">
+              Book your appointment today and experience the artistry and expertise of our styling professionals.
+            </p>
             <Link href="/booking">
-              <Button size="lg" className="px-8 rounded-full">
-                Book Your Appointment
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/gallery">
-              <Button variant="outline" size="lg" className="px-8 rounded-full">
-                Explore Our Gallery
-                <Camera className="ml-2 h-4 w-4" />
+              <Button size="lg" className="rounded-full px-8">
+                Schedule Your Appointment
               </Button>
             </Link>
           </div>
         </motion.div>
       </div>
-      
-      {/* Service Detail Modal */}
-      <AnimatePresence>
-        {selectedService && (
-          <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ 
-                type: prefersReducedMotion ? "tween" : "spring",
-                duration: prefersReducedMotion ? 0.2 : 0.5
-              }}
-              className="relative w-full max-w-3xl mx-4 md:mx-auto"
-            >
-              <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-xl overflow-hidden">
-                <div className="relative">
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setSelectedService(null)}
-                    className="absolute top-4 right-4 z-10 bg-black/20 hover:bg-black/40 dark:bg-white/20 dark:hover:bg-white/40 text-white rounded-full p-2 transition-colors"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                  
-                  {/* Service Image */}
-                  <div className="h-56 md:h-72 relative">
-                    <img
-                      src={selectedService.image}
-                      alt={selectedService.style}
-                      className="h-full w-full object-cover object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <div className="inline-block px-2 py-1 bg-black/30 backdrop-blur-sm rounded-md text-xs font-medium mb-2">
-                        {selectedService.category}
-                      </div>
-                      <h2 className="text-2xl md:text-3xl font-bold">{selectedService.style}</h2>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-6 md:p-8">
-                  <div className="flex justify-between items-start gap-4 mb-6">
-                    <div className="space-y-2">
-                      <p className="text-neutral-600 dark:text-neutral-300">{selectedService.description}</p>
-                      <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
-                        <Clock className="h-4 w-4 mr-1.5" />
-                        <span>{selectedService.duration}</span>
-                      </div>
-                    </div>
-                    <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                      ${selectedService.price}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <h4 className="text-lg font-medium">What's Included</h4>
-                        <ul className="space-y-2">
-                          <li className="flex items-start">
-                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Professional consultation</span>
-                          </li>
-                          <li className="flex items-start">
-                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Styling and finishing</span>
-                          </li>
-                          <li className="flex items-start">
-                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Aftercare instructions</span>
-                          </li>
-                          <li className="flex items-start">
-                            <CheckCircle className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Edge control application</span>
-                          </li>
-                        </ul>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h4 className="text-lg font-medium">Additional Notes</h4>
-                        <ul className="space-y-3 text-sm text-neutral-600 dark:text-neutral-400">
-                          <li className="flex items-start">
-                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Hair extensions not included in price</span>
-                          </li>
-                          <li className="flex items-start">
-                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Pricing may vary with hair length and thickness</span>
-                          </li>
-                          <li className="flex items-start">
-                            <Info className="h-4 w-4 text-purple-500 mr-2 shrink-0 mt-0.5" />
-                            <span>Additional fee for complex patterns or color work</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-lg">
-                      <h4 className="text-lg font-medium mb-2">Special Care Instructions</h4>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                        For this style, we recommend washing every 2-3 weeks and using our specially formulated braid spray for moisture. Sleep with a satin bonnet to protect your style and extend its life.
-                      </p>
-                    </div>
-                    
-                    <div className="pt-4 flex gap-4">
-                      <Button
-                        onClick={() => setSelectedService(null)}
-                        variant="outline"
-                        className="flex-1"
-                      >
-                        Close
-                      </Button>
-                      <Link href={`/booking?service=${selectedService.style}`} className="flex-1">
-                        <Button className="w-full">
-                          Book Appointment
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

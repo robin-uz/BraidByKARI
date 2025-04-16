@@ -56,11 +56,6 @@ export default function MainNav() {
                 Home
               </span>
             </Link>
-            <Link href="/services">
-              <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`}>
-                Services
-              </span>
-            </Link>
             <Link href="/pricing">
               <span className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all cursor-pointer ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400" : ""}`}>
                 Pricing
@@ -148,14 +143,6 @@ export default function MainNav() {
                   onClick={closeMobileMenu}
                 >
                   Home
-                </span>
-              </Link>
-              <Link href="/services">
-                <span 
-                  className={`font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-all px-4 cursor-pointer ${isActive("/services") ? "text-purple-600 dark:text-purple-400" : ""}`} 
-                  onClick={closeMobileMenu}
-                >
-                  Services
                 </span>
               </Link>
               <Link href="/pricing">
