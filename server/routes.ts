@@ -49,6 +49,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       next(error);
     }
   });
+  
+  // Cancel a booking (client-side)
+  app.post("/api/client/bookings/:id/cancel", async (req, res, next) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      
+      const bookingId = parseInt(req.params.id);
+      
+      // Verify this booking belongs to the authenticated user
+      const booking = await storage.getBooking(bookingId);
+      
+      if (!booking) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      if (booking.email !== req.user.email) {
+        return res.status(403).json({ message: 'Not authorized to cancel this booking' });
+      }
+      
+      // Check if booking is in the future
+      const bookingDate = new Date(`${booking.date}T${booking.time}`);
+      const now = new Date();
+      
+      if (bookingDate < now) {
+        return res.status(400).json({ message: 'Cannot cancel past appointments' });
+      }
+      
+      // Cancel the booking
+      const updatedBooking = await storage.updateBookingStatus(bookingId, 'cancelled');
+      
+      if (!updatedBooking) {
+        return res.status(500).json({ message: 'Failed to cancel booking' });
+      }
+      
+      res.json(updatedBooking);
+    } catch (error) {
+      next(error);
+    }
+  });
 
   // Booking routes
   app.post("/api/bookings", async (req, res, next) => {

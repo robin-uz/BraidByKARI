@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Helmet } from "react-helmet";
 import ClientLayout from "@/components/client/client-layout";
@@ -18,19 +19,22 @@ import {
   Settings,
   CreditCard,
   Brush,
-  Image
+  Image,
+  AlertTriangle,
+  XCircle
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Booking } from "@shared/schema";
 import { getQueryFn } from "@/lib/queryClient";
 import { Separator } from "@/components/ui/separator";
-import { formatDistanceToNow, format, parseISO } from "date-fns";
+import { formatDistanceToNow, format, parseISO, addDays, isAfter } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import BookingCancellationModal from "@/components/booking/booking-cancellation-modal";
 
 export default function ClientDashboard() {
   const { user } = useAuth();
