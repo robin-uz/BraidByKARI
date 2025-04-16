@@ -331,6 +331,221 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Business Hours routes
+  app.get("/api/business-hours", async (req, res, next) => {
+    try {
+      const hours = await storage.getBusinessHours();
+      res.json(hours);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/business-hours/:day", async (req, res, next) => {
+    try {
+      const dayOfWeek = parseInt(req.params.day);
+      if (isNaN(dayOfWeek) || dayOfWeek < 0 || dayOfWeek > 6) {
+        return res.status(400).json({ message: 'Invalid day of week (0-6)' });
+      }
+      
+      const hours = await storage.getBusinessHoursByDay(dayOfWeek);
+      if (!hours) {
+        return res.status(404).json({ message: 'Business hours not found for this day' });
+      }
+      
+      res.json(hours);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/business-hours", isAdmin, async (req, res, next) => {
+    try {
+      const hours = await storage.createBusinessHours(req.body);
+      res.status(201).json(hours);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.patch("/api/business-hours/:id", isAdmin, async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      const hours = await storage.updateBusinessHours(id, req.body);
+      
+      if (!hours) {
+        return res.status(404).json({ message: 'Business hours not found' });
+      }
+      
+      res.json(hours);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Special dates routes (holidays, special hours, etc)
+  app.get("/api/special-dates", async (req, res, next) => {
+    try {
+      const specialDates = await storage.getSpecialDates();
+      res.json(specialDates);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/special-dates/:date", async (req, res, next) => {
+    try {
+      const date = req.params.date;
+      const specialDate = await storage.getSpecialDate(date);
+      
+      if (!specialDate) {
+        return res.status(404).json({ message: 'Special date not found' });
+      }
+      
+      res.json(specialDate);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/special-dates", isAdmin, async (req, res, next) => {
+    try {
+      const specialDate = await storage.createSpecialDate(req.body);
+      res.status(201).json(specialDate);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.patch("/api/special-dates/:id", isAdmin, async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      const specialDate = await storage.updateSpecialDate(id, req.body);
+      
+      if (!specialDate) {
+        return res.status(404).json({ message: 'Special date not found' });
+      }
+      
+      res.json(specialDate);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/special-dates/:id", isAdmin, async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSpecialDate(id);
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Stylist routes
+  app.get("/api/stylists", async (req, res, next) => {
+    try {
+      const stylists = req.query.active === 'true'
+        ? await storage.getActiveStylists()
+        : await storage.getStylists();
+      
+      res.json(stylists);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/stylists/:id", async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      const stylist = await storage.getStylist(id);
+      
+      if (!stylist) {
+        return res.status(404).json({ message: 'Stylist not found' });
+      }
+      
+      res.json(stylist);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/stylists", isAdmin, async (req, res, next) => {
+    try {
+      const stylist = await storage.createStylist(req.body);
+      res.status(201).json(stylist);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.patch("/api/stylists/:id", isAdmin, async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      const stylist = await storage.updateStylist(id, req.body);
+      
+      if (!stylist) {
+        return res.status(404).json({ message: 'Stylist not found' });
+      }
+      
+      res.json(stylist);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/stylists/:id", isAdmin, async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteStylist(id);
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Calendar related routes
+  app.get("/api/calendar/events", async (req, res, next) => {
+    try {
+      const events = await storage.getBookingsAsCalendarEvents();
+      res.json(events);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/bookings/date-range", async (req, res, next) => {
+    try {
+      const { startDate, endDate } = req.query;
+      
+      if (!startDate || !endDate || typeof startDate !== 'string' || typeof endDate !== 'string') {
+        return res.status(400).json({ message: 'startDate and endDate query parameters are required' });
+      }
+      
+      const bookings = await storage.getBookingsByDateRange(startDate, endDate);
+      res.json(bookings);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/available-slots", async (req, res, next) => {
+    try {
+      const { date, serviceId } = req.query;
+      
+      if (!date || !serviceId || typeof date !== 'string' || isNaN(Number(serviceId))) {
+        return res.status(400).json({ 
+          message: 'date and serviceId query parameters are required' 
+        });
+      }
+      
+      const timeSlots = await storage.getAvailableTimeSlots(date, Number(serviceId));
+      res.json(timeSlots);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   // Appointment reminder routes
   app.post("/api/admin/reminders/send", isAdmin, async (req, res, next) => {
     try {

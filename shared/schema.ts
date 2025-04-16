@@ -78,6 +78,7 @@ export const specialDates = pgTable("special_dates", {
 export const stylists = pgTable("stylists", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  bio: text("bio"),
   specialties: text("specialties").array(), // Array of service types they specialize in
   imageUrl: text("image_url"),
   isActive: boolean("is_active").default(true),
@@ -143,6 +144,7 @@ export const insertSpecialDateSchema = createInsertSchema(specialDates).pick({
 
 export const insertStylistSchema = createInsertSchema(stylists).pick({
   name: true,
+  bio: true,
   specialties: true,
   imageUrl: true,
   isActive: true,

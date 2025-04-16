@@ -10,10 +10,10 @@ import { db } from "./db";
 import { eq, desc, and, gte, lte, sql, between } from "drizzle-orm";
 import { format, addMinutes, parse, isEqual } from "date-fns";
 import expressSession from "express-session";
-import connectPg from "connect-pg-simple";
+import pgConnect from "connect-pg-simple";
 import { pool } from "./db";
 
-const PostgresSessionStore = connectPg(expressSession);
+const PostgresSessionStore = pgConnect(expressSession);
 
 export interface IStorage {
   // User operations
@@ -162,7 +162,7 @@ export class DatabaseStorage implements IStorage {
     
     const calendarEvents: CalendarEvent[] = bookingsList.map(booking => {
       // Get the service to determine duration
-      const service = servicesList.find(s => s.name === booking.serviceType);
+      const service = servicesList.find((s: Service) => s.name === booking.serviceType);
       // Default to 1 hour if service not found or duration not specified
       const durationInMinutes = service ? 
         parseInt(service.duration.split(' ')[0]) || 60 : 60;

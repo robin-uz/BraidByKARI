@@ -3,6 +3,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { seedGallery } from "./scripts/seed-gallery";
 import { seedServices } from "./scripts/seed-services";
+import { seedBusinessHours } from "./scripts/seed-business-hours";
+import { seedStylists } from "./scripts/seed-stylists";
 
 const app = express();
 app.use(express.json());
@@ -45,6 +47,12 @@ app.use((req, res, next) => {
     
     // Seed services data
     await seedServices();
+    
+    // Seed business hours data
+    await seedBusinessHours();
+    
+    // Seed stylists data
+    await seedStylists();
   } catch (error) {
     console.error("Error seeding data:", error);
   }
