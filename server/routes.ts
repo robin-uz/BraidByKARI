@@ -10,6 +10,16 @@ import {
   sendBookingNotificationEmail,
   sendBookingCancellationEmail
 } from "./mailer";
+import Stripe from "stripe";
+
+// Initialize Stripe
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("Missing required Stripe API key: STRIPE_SECRET_KEY");
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16" as any,
+});
 
 // Check if user is authenticated and is admin
 const isAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -576,6 +586,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Start the reminder check process
       scheduleReminderCheck();
       res.json({ success: true, message: "Reminder check scheduled" });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // ==================== STRIPE PAYMENT ENDPOINTS ====================
+  
+  // Create payment intent for booking deposit
+  app.post("/api/create-payment-intent", async (req, res, next) => {
+    try {
+      const { amount, serviceType, customerEmail, bookingId } = req.body;
+      
+      if (!amount || !serviceType) {
+        return res.status(400).json({ message: 'Amount and service type are required' });
+      }
+      
+      // Create a PaymentIntent with the order amount and currency
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: 'usd',
+        receipt_email: customerEmail,
+        metadata: {
+          serviceType,
+          bookingId: bookingId ? bookingId.toString() : '',
+          paymentType: 'deposit'
+        }
+      });
+      
+      res.json({
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error: any) {
+      console.error('Stripe payment intent error:', error);
+      next(error);
+    }
+  });
+  
+  // Webhook handler for Stripe events
+  app.post("/api/webhook/stripe", async (req, res, next) => {
+    const sig = req.headers['stripe-signature'] as string;
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    
+    let event;
+    
+    try {
+      if (endpointSecret) {
+        // Verify webhook signature and extract the event
+        event = stripe.webhooks.constructEvent(
+          req.body, 
+          sig, 
+          endpointSecret
+        );
+      } else {
+        // If no signature verification is needed (e.g. for testing)
+        event = req.body;
+      }
+    } catch (error: any) {
+      console.error('Webhook signature verification failed:', error.message);
+      return res.status(400).send(`Webhook Error: ${error.message}`);
+    }
+    
+    // Handle the checkout.session.completed event
+    if (event.type === 'payment_intent.succeeded') {
+      const paymentIntent = event.data.object;
+      
+      // Extract metadata
+      const { bookingId } = paymentIntent.metadata;
+      
+      if (bookingId) {
+        try {
+          // Update booking to reflect the paid deposit
+          await storage.updateBookingDeposit(parseInt(bookingId), true);
+          
+          // Get the updated booking
+          const booking = await storage.getBooking(parseInt(bookingId));
+          
+          // Send confirmation emails
+          if (booking) {
+            await sendBookingConfirmationEmail(booking);
+            await sendBookingNotificationEmail(booking);
+          }
+        } catch (error) {
+          console.error('Error updating booking after payment:', error);
+        }
+      }
+    }
+    
+    // Return a 200 response to acknowledge receipt of the event
+    res.json({ received: true });
+  });
+  
+  app.post("/api/update-booking-payment", async (req, res, next) => {
+    try {
+      const { bookingId, depositPaid } = req.body;
+      
+      if (!bookingId) {
+        return res.status(400).json({ message: 'Booking ID is required' });
+      }
+      
+      const booking = await storage.updateBookingDeposit(parseInt(bookingId), depositPaid);
+      if (!booking) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      res.json(booking);
     } catch (error) {
       next(error);
     }

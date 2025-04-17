@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ServiceSelection from "@/components/booking/service-selection";
 import BookingCalendar from "@/components/booking/booking-calendar";
+import { PaymentModal } from "@/components/payment";
 import { format } from "date-fns";
 
 export default function UpdatedBookingForm() {
