@@ -27,14 +27,14 @@ export function ProtectedRoute({ path, component: Component, adminOnly = false }
           );
         }
 
-        // If not authenticated, redirect to login page
+        // If not authenticated, redirect to home page
         if (!user) {
-          const currentPath = location || path;
-          window.location.href = `/auth?redirect=${encodeURIComponent(currentPath)}`;
+          console.log('Not authenticated, redirecting to home');
+          window.location.href = '/';
           return (
             <div className="flex items-center justify-center min-h-screen">
               <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
-              <span className="ml-2">Redirecting to login...</span>
+              <span className="ml-2">Not logged in. Redirecting to home...</span>
             </div>
           );
         }

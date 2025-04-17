@@ -138,16 +138,8 @@ export default function ServerAuthPage() {
         console.log('Login successful:', userData);
         
         // Force reload the page to ensure proper session state
-        if (redirect.startsWith('/client/') || redirect.startsWith('/admin/')) {
-          console.log('Redirecting to protected route:', redirect);
-          setTimeout(() => {
-            window.location.href = redirect;
-          }, 100);
-        } else {
-          console.log('Redirecting to public route:', redirect);
-          // For non-protected routes, use navigate for a smoother transition
-          navigate(redirect);
-        }
+        console.log('Login successful, redirecting to:', redirect);
+        window.location.href = '/';
       } catch (e) {
         console.error('Error parsing user data:', e);
         setError('Login was successful but there was an error loading your profile');
@@ -212,16 +204,9 @@ export default function ServerAuthPage() {
         const userData = JSON.parse(responseText);
         console.log('Registration successful:', userData);
         
-        // Handle redirect
-        if (redirect.startsWith('/client/') || redirect.startsWith('/admin/')) {
-          console.log('Redirecting to protected route:', redirect);
-          setTimeout(() => {
-            window.location.href = redirect;
-          }, 100);
-        } else {
-          console.log('Redirecting to public route:', redirect);
-          navigate(redirect);
-        }
+        // Always redirect to home
+        console.log('Registration successful, redirecting to home');
+        window.location.href = '/';
       } catch (e) {
         console.error('Error parsing user data:', e);
         setError('Registration was successful but there was an error loading your profile');
