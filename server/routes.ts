@@ -11,6 +11,7 @@ import {
   sendBookingCancellationEmail
 } from "./mailer";
 import Stripe from "stripe";
+import { verifySupabaseSession, getUserBySupabaseId } from "./supabase";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
