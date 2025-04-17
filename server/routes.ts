@@ -35,6 +35,58 @@ const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   setupAuth(app);
+  
+  // Payment routes
+  app.post("/api/create-payment-intent", async (req, res, next) => {
+    try {
+      const { amount, serviceType, customerEmail, bookingId } = req.body;
+      
+      if (!amount || typeof amount !== 'number' || amount <= 0) {
+        return res.status(400).json({ message: 'Invalid amount' });
+      }
+      
+      // Create a PaymentIntent with the order amount and currency
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: "usd",
+        description: `Deposit for ${serviceType || 'hair service'}`,
+        receipt_email: customerEmail,
+        metadata: {
+          bookingId: bookingId ? bookingId.toString() : '',
+          serviceType: serviceType || '',
+        },
+      });
+      
+      res.status(200).json({
+        clientSecret: paymentIntent.client_secret,
+      });
+    } catch (error: any) {
+      console.error('Error creating payment intent:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Update booking payment status
+  app.post("/api/update-booking-payment", async (req, res, next) => {
+    try {
+      const { bookingId, depositPaid } = req.body;
+      
+      if (!bookingId || typeof depositPaid !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid request data' });
+      }
+      
+      const booking = await storage.updateBookingDeposit(bookingId, depositPaid);
+      
+      if (!booking) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      res.status(200).json(booking);
+    } catch (error: any) {
+      console.error('Error updating booking payment status:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
 
   // Client routes
   app.get("/api/client/bookings", async (req, res, next) => {

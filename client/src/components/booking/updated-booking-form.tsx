@@ -432,15 +432,26 @@ export default function UpdatedBookingForm() {
                       <Button 
                         type="button" 
                         className="bg-[#0070BA] hover:bg-[#005ea6] text-white"
+                        disabled
                       >
                         <FaPaypal className="mr-2" /> Pay with PayPal
+                        <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">Coming Soon</span>
                       </Button>
-                      <Button 
-                        type="button" 
-                        className="bg-[#635BFF] hover:bg-[#4b44d3] text-white"
-                      >
-                        <SiStripe className="mr-2" /> Pay with Stripe
-                      </Button>
+                      <PaymentModal 
+                        amount={50}
+                        serviceType={selectedService?.name || "Hair Service"}
+                        customerEmail={form.getValues("email")}
+                        buttonText="Pay with Stripe"
+                        buttonVariant="default"
+                        onPaymentSuccess={() => {
+                          toast({
+                            title: "Payment Successful",
+                            description: "Your deposit has been processed successfully.",
+                          });
+                        }}
+                        isButtonBlock={false}
+                        isDisabled={!isContactFormComplete()}
+                      />
                     </div>
                   </div>
                 </div>

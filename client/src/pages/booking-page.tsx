@@ -8,8 +8,8 @@ export default function BookingPage() {
   return (
     <>
       <Helmet>
-        <title>Book an Appointment | Divine Braids</title>
-        <meta name="description" content="Schedule your braiding appointment at Divine Braids. Choose from our premium services and select your preferred date and time." />
+        <title>Book an Appointment | KARI STYLEZ</title>
+        <meta name="description" content="Schedule your braiding appointment at KARI STYLEZ. Choose from our premium services and select your preferred date and time." />
       </Helmet>
       
       <section className="py-20 bg-gradient-to-b from-purple-50 to-white dark:from-purple-950/20 dark:to-neutral-950">
