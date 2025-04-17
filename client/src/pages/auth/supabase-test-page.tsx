@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Helmet } from 'react-helmet';
-import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
+import { useSupabaseAuth, SupabaseAuthProvider } from '@/contexts/SupabaseAuthContext';
 
 // Login form schema
 const loginSchema = z.object({

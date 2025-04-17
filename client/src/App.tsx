@@ -2,7 +2,7 @@ import { Switch, Route } from "wouter";
 import { ServerProtectedRoute } from "./lib/server-protected-route";
 import { ProtectedRoute } from "./lib/protected-route";
 import { SupabaseProtectedRoute } from "./lib/supabase-protected-route";
-import { SupabaseAuthProvider } from "./contexts/SupabaseAuthContext";
+// import { SupabaseAuthProvider } from "./contexts/SupabaseAuthContext";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -24,12 +24,12 @@ import TestPage from "@/pages/test-page";
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
 import ClientDashboardPage from "@/pages/client/dashboard-page";
-import SupabaseDashboardPage from "@/pages/client/supabase-dashboard-page";
+import SupabaseDashboardWrapper from "@/pages/client/supabase-dashboard-wrapper";
 import HairSimulator from "@/pages/client/hair-simulator";
 import ProfilePage from "@/pages/client/profile";
 
 // Supabase Auth pages
-import SupabaseTestPage from "@/pages/auth/supabase-test-page";
+import SupabaseAuthPage from "@/pages/auth/supabase-auth-page";
 
 // Legal Pages
 import PrivacyPolicy from "@/pages/legal/privacy-policy";
@@ -59,21 +59,9 @@ function Router() {
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         <Route path="/test-page" component={TestPage} />
         
-        {/* Supabase Auth Test Routes - standalone components with their own providers */}
-        <Route path="/auth/supabase-test">
-          {() => (
-            <SupabaseAuthProvider>
-              <SupabaseTestPage />
-            </SupabaseAuthProvider>
-          )}
-        </Route>
-        <Route path="/client/supabase-dashboard">
-          {() => (
-            <SupabaseAuthProvider>
-              <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboardPage} />
-            </SupabaseAuthProvider>
-          )}
-        </Route>
+        {/* Supabase Auth Test Routes */}
+        <Route path="/auth/supabase-test" component={SupabaseAuthPage} />
+        <Route path="/client/supabase-dashboard" component={SupabaseDashboardWrapper} />
         
         {/* Client routes - protected with server auth */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
