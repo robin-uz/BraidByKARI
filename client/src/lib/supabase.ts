@@ -1,40 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Check if we're in the browser or server environment
-const getSupabaseCredentials = () => {
-  // For client side (Vite injects these as import.meta.env)
-  if (typeof window !== 'undefined') {
-    // Try to get from VITE_ prefixed variables first, if not available use non-prefixed versions
-    return {
-      url: import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL,
-      key: import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY,
-    };
-  } 
-  // For server side
-  else {
-    return {
-      url: process.env.SUPABASE_URL || '',
-      key: process.env.SUPABASE_ANON_KEY || '',
-    };
-  }
-};
+// Explicitly extract environment variables from Vite
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY || '';
 
-const { url: supabaseUrl, key: supabaseAnonKey } = getSupabaseCredentials();
+// Log available keys for debugging (remove in production)
+console.log('Supabase URL available:', !!supabaseUrl);
+console.log('Supabase Anon Key available:', !!supabaseAnonKey);
 
 // Create a single supabase client for interacting with your database
-// Use placeholder values during development if not available, but display a warning
-const supabaseOptions = {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-};
-
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co',
-  supabaseAnonKey || 'placeholder-key',
-  supabaseOptions
+  supabaseUrl,
+  supabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  }
 );
 
 // Log a warning instead of throwing an error, so the app still loads

@@ -1,6 +1,5 @@
 import { Switch, Route } from "wouter";
-import { ServerProtectedRoute } from "./lib/server-protected-route";
-import { ProtectedRoute } from "./lib/protected-route";
+import { SupabaseProtectedRoute } from "./lib/supabase-protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -54,17 +53,17 @@ function Router() {
         <Route path="/test-page" component={TestPage} />
         
         {/* Client routes - protected */}
-        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
-        <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
-        <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
-        <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
-        <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
+        <SupabaseProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
+        <SupabaseProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
+        <SupabaseProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
+        <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+        <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
 
         {/* Admin routes - protected */}
-        <ServerProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
