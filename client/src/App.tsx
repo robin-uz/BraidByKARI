@@ -1,6 +1,7 @@
 import { Switch, Route } from "wouter";
 import { ServerProtectedRoute } from "./lib/server-protected-route";
 import { ProtectedRoute } from "./lib/protected-route";
+import { SupabaseProtectedRoute } from "./lib/supabase-protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -22,8 +23,12 @@ import TestPage from "@/pages/test-page";
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
 import ClientDashboardPage from "@/pages/client/dashboard-page";
+import SupabaseDashboardPage from "@/pages/client/supabase-dashboard-page";
 import HairSimulator from "@/pages/client/hair-simulator";
 import ProfilePage from "@/pages/client/profile";
+
+// Supabase Auth pages
+import SupabaseTestPage from "@/pages/auth/supabase-test-page";
 
 // Legal Pages
 import PrivacyPolicy from "@/pages/legal/privacy-policy";
@@ -53,14 +58,18 @@ function Router() {
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         <Route path="/test-page" component={TestPage} />
         
-        {/* Client routes - protected */}
+        {/* Supabase Auth Test Routes */}
+        <Route path="/auth/supabase-test" component={SupabaseTestPage} />
+        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboardPage} />
+        
+        {/* Client routes - protected with server auth */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
         <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
         <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
         <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
         <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
 
-        {/* Admin routes - protected */}
+        {/* Admin routes - protected with server auth */}
         <ServerProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
         <ServerProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
         <ServerProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
