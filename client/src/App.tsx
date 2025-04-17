@@ -51,7 +51,7 @@ function Router() {
         <Route path="/legal/privacy-policy" component={PrivacyPolicy} />
         <Route path="/legal/terms" component={TermsAndConditions} />
         <Route path="/legal/refund-policy" component={RefundPolicy} />
-        <Route path="/test-page" component={() => import("./pages/test-page").then(module => <module.default />)} />
+        <Route path="/test-page" component={TestPage} />
         
         {/* Client routes - protected */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />

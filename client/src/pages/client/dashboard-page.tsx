@@ -186,7 +186,7 @@ export default function ClientDashboardPage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
               <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2 text-amber-800 dark:text-amber-300">
-                Hello, {user.fullName || user.username}
+                Hello, {(user as any).fullName || user.username}
               </h1>
               <p className="text-neutral-600 dark:text-neutral-400">
                 Welcome to your personal dashboard at KARI STYLEZ
@@ -409,7 +409,7 @@ export default function ClientDashboardPage() {
                             <User className="h-4 w-4 mr-2 text-amber-600" />
                             Full Name
                           </p>
-                          <p className="font-medium">{user.fullName || 'Not provided'}</p>
+                          <p className="font-medium">{(user as any).fullName || 'Not provided'}</p>
                         </div>
                       </div>
                     </CardContent>
