@@ -138,7 +138,16 @@ export default function ServerAuthPage() {
         console.log('Login successful:', userData);
         
         // Force reload the page to ensure proper session state
-        window.location.href = redirect;
+        if (redirect.startsWith('/client/') || redirect.startsWith('/admin/')) {
+          console.log('Redirecting to protected route:', redirect);
+          setTimeout(() => {
+            window.location.href = redirect;
+          }, 100);
+        } else {
+          console.log('Redirecting to public route:', redirect);
+          // For non-protected routes, use navigate for a smoother transition
+          navigate(redirect);
+        }
       } catch (e) {
         console.error('Error parsing user data:', e);
         setError('Login was successful but there was an error loading your profile');
@@ -162,11 +171,71 @@ export default function ServerAuthPage() {
     try {
       setIsLoading(true);
       setError(null);
-      await register(data.username, data.email, data.password);
-      // Redirect is handled by the useEffect
+      
+      console.log('Registering user:', data.username);
+      
+      // Use direct fetch for better debugging
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          fullName: '', // Optional field
+          role: 'customer' // Default role
+        }),
+        credentials: 'include'
+      });
+      
+      console.log('Registration response status:', response.status);
+      
+      // Get raw response text
+      const responseText = await response.text();
+      console.log('Registration response text:', responseText);
+      
+      if (!response.ok) {
+        let errorMessage = 'Registration failed';
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          errorMessage = responseText || `Error ${response.status}: ${response.statusText}`;
+        }
+        
+        setError(errorMessage);
+        return;
+      }
+      
+      // If successful, try to parse the user data
+      try {
+        const userData = JSON.parse(responseText);
+        console.log('Registration successful:', userData);
+        
+        // Handle redirect
+        if (redirect.startsWith('/client/') || redirect.startsWith('/admin/')) {
+          console.log('Redirecting to protected route:', redirect);
+          setTimeout(() => {
+            window.location.href = redirect;
+          }, 100);
+        } else {
+          console.log('Redirecting to public route:', redirect);
+          navigate(redirect);
+        }
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        setError('Registration was successful but there was an error loading your profile');
+      }
     } catch (error) {
       console.error('Registration error:', error);
-      setError(error instanceof Error ? error.message : 'An error occurred during registration');
+      
+      if (error instanceof Error) {
+        setError(error.message);
+      } else if (typeof error === 'string') {
+        setError(error);
+      } else {
+        setError('An unknown error occurred during registration');
+      }
     } finally {
       setIsLoading(false);
     }
