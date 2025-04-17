@@ -30,13 +30,14 @@ async function comparePasswords(supplied: string, stored: string) {
 
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || 'divine-braids-salon-secret',
+    secret: process.env.SESSION_SECRET || 'kari-stylez-salon-secret',
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      maxAge: 1000 * 60 * 60 * 24 * 14, // 2 weeks
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
     }
   };
 
@@ -118,7 +119,7 @@ export function setupAuth(app: Express) {
       });
     }
     
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (err: any, user: SelectUser | false, info: { message?: string }) => {
       if (err) {
         console.error("Login error:", err);
         return next(err);
