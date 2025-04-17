@@ -1,5 +1,6 @@
 import { Switch, Route } from "wouter";
-import { SupabaseProtectedRoute } from "./lib/supabase-protected-route";
+import { ServerProtectedRoute } from "./lib/server-protected-route";
+import { ProtectedRoute } from "./lib/protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -8,7 +9,7 @@ import GalleryPage from "@/pages/gallery-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
-import SupabaseAuthPage from "@/pages/auth/supabase-auth-page";
+import ServerAuthPage from "@/pages/auth/server-auth-page";
 import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ResetPasswordPage from "@/pages/auth/reset-password";
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -38,7 +39,7 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
-        <Route path="/auth" component={SupabaseAuthPage} />
+        <Route path="/auth" component={ServerAuthPage} />
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
         
@@ -53,17 +54,17 @@ function Router() {
         <Route path="/test-page" component={TestPage} />
         
         {/* Client routes - protected */}
-        <SupabaseProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
-        <SupabaseProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
-        <SupabaseProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
-        <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
-        <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
+        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
+        <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
+        <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
+        <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+        <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
 
         {/* Admin routes - protected */}
-        <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
-        <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
-        <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
-        <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
+        <ServerProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
