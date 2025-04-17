@@ -1,5 +1,6 @@
 import { Switch, Route } from "wouter";
 import { ServerProtectedRoute } from "./lib/server-protected-route";
+import { ProtectedRoute } from "./lib/protected-route";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -19,6 +20,7 @@ import NotFound from "@/pages/not-found";
 
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
+import ClientDashboardPage from "@/pages/client/dashboard-page";
 import HairSimulator from "@/pages/client/hair-simulator";
 import ProfilePage from "@/pages/client/profile";
 
@@ -50,7 +52,9 @@ function Router() {
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         
         {/* Client routes - protected */}
-        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboard} />
+        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
+        <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
+        <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
         <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
         <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
 

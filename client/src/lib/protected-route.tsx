@@ -1,6 +1,6 @@
 import { Route, useLocation } from 'wouter';
-import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 type ProtectedRouteProps = {
   path: string;
@@ -9,17 +9,17 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ path, component: Component, adminOnly = false }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const [location] = useLocation();
 
   return (
     <Route path={path}>
       {() => {
-        if (loading) {
+        if (isLoading) {
           // Show loading state while checking authentication
           return (
             <div className="flex items-center justify-center min-h-screen">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
             </div>
           );
         }
@@ -30,15 +30,15 @@ export function ProtectedRoute({ path, component: Component, adminOnly = false }
           return null;
         }
 
-        // If adminOnly is true, check if user is admin (assuming isAdmin property)
-        if (adminOnly && !(user as any).isAdmin) {
+        // If adminOnly is true, check if user has admin role
+        if (adminOnly && user.role !== 'admin') {
           return (
             <div className="flex flex-col items-center justify-center min-h-screen p-4">
-              <h1 className="text-2xl font-bold text-destructive mb-2">Access Denied</h1>
+              <h1 className="text-2xl font-bold text-red-600 mb-2">Access Denied</h1>
               <p className="text-center mb-4">You don't have permission to access this page.</p>
               <a 
                 href="/"
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
               >
                 Return to Home
               </a>
