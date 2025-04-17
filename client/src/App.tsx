@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { ServerProtectedRoute } from "./lib/server-protected-route";
 import { ProtectedRoute } from "./lib/protected-route";
 import { SupabaseProtectedRoute } from "./lib/supabase-protected-route";
+import { SupabaseAuthProvider } from "./contexts/SupabaseAuthContext";
 import MainLayout from "@/components/layout/main-layout";
 
 // Pages
@@ -58,9 +59,21 @@ function Router() {
         <Route path="/legal/refund-policy" component={RefundPolicy} />
         <Route path="/test-page" component={TestPage} />
         
-        {/* Supabase Auth Test Routes */}
-        <Route path="/auth/supabase-test" component={SupabaseTestPage} />
-        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboardPage} />
+        {/* Supabase Auth Test Routes - standalone components with their own providers */}
+        <Route path="/auth/supabase-test">
+          {() => (
+            <SupabaseAuthProvider>
+              <SupabaseTestPage />
+            </SupabaseAuthProvider>
+          )}
+        </Route>
+        <Route path="/client/supabase-dashboard">
+          {() => (
+            <SupabaseAuthProvider>
+              <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboardPage} />
+            </SupabaseAuthProvider>
+          )}
+        </Route>
         
         {/* Client routes - protected with server auth */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
