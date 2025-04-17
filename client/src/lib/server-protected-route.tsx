@@ -30,8 +30,14 @@ export function ServerProtectedRoute({ path, component: Component, adminOnly = f
 
         // If not authenticated, redirect to login page
         if (!user) {
-          window.location.href = `/auth?redirect=${encodeURIComponent(location)}`;
-          return null;
+          const currentPath = location || path;
+          window.location.href = `/auth?redirect=${encodeURIComponent(currentPath)}`;
+          return (
+            <div className="flex items-center justify-center min-h-screen">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <span className="ml-2">Redirecting to login...</span>
+            </div>
+          );
         }
 
         // If adminOnly is true, check if user has admin role
