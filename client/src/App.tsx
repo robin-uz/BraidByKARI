@@ -9,7 +9,7 @@ import GalleryPage from "@/pages/gallery-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
-import ServerAuthPage from "@/pages/auth/server-auth-page";
+import SupabaseAuthPage from "@/pages/auth/supabase-auth-page";
 import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ResetPasswordPage from "@/pages/auth/reset-password";
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -39,7 +39,7 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
-        <Route path="/auth" component={ServerAuthPage} />
+        <Route path="/auth" component={SupabaseAuthPage} />
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
         
