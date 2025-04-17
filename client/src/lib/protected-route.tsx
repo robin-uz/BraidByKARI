@@ -1,6 +1,7 @@
 import { Route, useLocation } from 'wouter';
 import { Loader2 } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
+import { useContext } from 'react';
+import { ServerAuthContext } from '@/contexts/DebugAuthContext';
 
 type ProtectedRouteProps = {
   path: string;
@@ -9,13 +10,15 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ path, component: Component, adminOnly = false }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
+  const authContext = useContext(ServerAuthContext);
+  const user = authContext?.user || null;
+  const loading = authContext?.loading || false;
   const [location] = useLocation();
 
   return (
     <Route path={path}>
       {() => {
-        if (isLoading) {
+        if (loading) {
           // Show loading state while checking authentication
           return (
             <div className="flex items-center justify-center min-h-screen">

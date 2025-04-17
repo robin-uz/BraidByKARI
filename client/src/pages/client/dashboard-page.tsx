@@ -124,10 +124,23 @@ export default function ClientDashboardPage() {
 
   const handleLogout = async () => {
     try {
-      await logoutMutation.mutateAsync();
-      navigate('/');
+      if (logout) {
+        await logout();
+        navigate('/');
+      } else {
+        toast({
+          title: "Logout Failed",
+          description: "Unable to access logout function",
+          variant: "destructive"
+        });
+      }
     } catch (error) {
       console.error('Logout failed:', error);
+      toast({
+        title: "Logout Failed",
+        description: "There was an error during logout",
+        variant: "destructive"
+      });
     }
   };
 
