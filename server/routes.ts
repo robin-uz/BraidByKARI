@@ -36,6 +36,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   setupAuth(app);
   
+  // Schedule the email reminder system to run automatically
+  console.log('Starting email reminder service for KARI STYLEZ...');
+  scheduleReminderCheck();
+  
   // Payment routes
   app.post("/api/create-payment-intent", async (req, res, next) => {
     try {
