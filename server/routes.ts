@@ -754,6 +754,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Supabase Auth Routes
+  // Verify a Supabase JWT token and return user information
+  app.get("/api/supabase/auth", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'No valid authorization token provided' });
+      }
+      
+      const token = authHeader.split(' ')[1];
+      const user = await verifySupabaseSession(token);
+      
+      if (!user) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
+      }
+      
+      // Return the user data
+      res.json({ user });
+    } catch (error) {
+      console.error('Error verifying Supabase token:', error);
+      res.status(500).json({ message: 'Authentication error' });
+    }
+  });
+
+  // Get user profile by Supabase ID
+  app.get("/api/supabase/profile", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'No valid authorization token provided' });
+      }
+      
+      const token = authHeader.split(' ')[1];
+      const user = await verifySupabaseSession(token);
+      
+      if (!user) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
+      }
+      
+      // Get additional profile data if needed
+      const profile = await getUserBySupabaseId(user.id);
+      
+      // Combine auth user and profile data
+      res.json({
+        id: user.id,
+        email: user.email,
+        role: user.user_metadata?.role || 'customer',
+        ...profile
+      });
+    } catch (error) {
+      console.error('Error fetching Supabase profile:', error);
+      res.status(500).json({ message: 'Profile fetch error' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
