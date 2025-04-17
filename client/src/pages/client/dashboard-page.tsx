@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, apiRequest } from '@/lib/queryClient';
-import { useAuth } from '@/hooks/use-auth';
+import { useContext } from 'react';
+import { ServerAuthContext } from '@/contexts/DebugAuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Link, useLocation } from 'wouter';
 import {
@@ -53,7 +54,12 @@ import { Badge } from '@/components/ui/badge';
 import { Booking } from '@shared/schema';
 
 export default function ClientDashboardPage() {
-  const { user, loginMutation, logoutMutation } = useAuth();
+  // Access auth context directly
+  const authContext = useContext(ServerAuthContext);
+  const user = authContext?.user || null;
+  const loading = authContext?.loading || false;
+  const login = authContext?.login;
+  const logout = authContext?.logout;
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [cancelId, setCancelId] = useState<number | null>(null);
