@@ -17,6 +17,7 @@ import AdminBookings from "@/pages/admin/bookings";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminReminders from "@/pages/admin/reminders";
 import NotFound from "@/pages/not-found";
+import TestPage from "@/pages/test-page";
 
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
@@ -50,6 +51,7 @@ function Router() {
         <Route path="/legal/privacy-policy" component={PrivacyPolicy} />
         <Route path="/legal/terms" component={TermsAndConditions} />
         <Route path="/legal/refund-policy" component={RefundPolicy} />
+        <Route path="/test-page" component={() => import("./pages/test-page").then(module => <module.default />)} />
         
         {/* Client routes - protected */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
