@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { auth } from '@/lib/supabase';
+import { updatePassword } from '@/lib/supabase-client';
 import { useToast } from '@/hooks/use-toast';
 
 import {
@@ -48,7 +48,7 @@ export function NewPasswordForm() {
   const onSubmit = async (data: NewPasswordFormData) => {
     try {
       setIsLoading(true);
-      await auth.updatePassword(data.password);
+      await updatePassword(data.password);
       
       toast({
         title: "Password updated",

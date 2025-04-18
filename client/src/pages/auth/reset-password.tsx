@@ -1,7 +1,7 @@
 import { NewPasswordForm } from '@/components/auth/new-password-form';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
-import { auth } from '@/lib/supabase';
+import { supabase, getSession } from '@/lib/supabase-client';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ResetPasswordPage() {
@@ -23,7 +23,7 @@ export default function ResetPasswordPage() {
         }
         
         // Verification is automatic, just check if we have a valid session
-        const session = await auth.getSession();
+        const session = await getSession();
         setIsValidToken(!!session);
       } catch (error) {
         console.error('Error verifying token:', error);

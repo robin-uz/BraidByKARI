@@ -1,6 +1,15 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabaseClient, supabaseAuth } from '@/lib/supabase-client';
+import { 
+  supabase, 
+  signIn as supabaseSignIn, 
+  signUp as supabaseSignUp, 
+  signOut as supabaseSignOut,
+  resetPassword as supabaseResetPassword,
+  updatePassword as supabaseUpdatePassword,
+  getSession as supabaseGetSession,
+  getUser as supabaseGetUser
+} from '@/lib/supabase-client';
 import { useToast } from '@/hooks/use-toast';
 
 // Define the shape of our auth context
@@ -9,11 +18,10 @@ type SupabaseAuthContextType = {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, userData?: Record<string, any>) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
-  updateProfile: (profile: Record<string, any>) => Promise<void>;
 };
 
 // Create the context with default values
@@ -28,18 +36,19 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
 
   // Initialize auth state
   useEffect(() => {
+    // Get the current session
     const initializeAuth = async () => {
       try {
         console.log('Initializing Supabase auth...');
-        // Get the current session
-        const session = await supabaseAuth.getSession();
         
-        setSession(session);
+        // Get current session
+        const currentSession = await supabaseGetSession();
+        setSession(currentSession);
         
-        if (session) {
-          const user = await supabaseAuth.getUser();
-          setUser(user);
-          console.log('Supabase user authenticated:', user?.email);
+        if (currentSession) {
+          const currentUser = await supabaseGetUser();
+          setUser(currentUser);
+          console.log('Supabase user authenticated:', currentUser?.email);
         } else {
           console.log('No Supabase session found');
         }
@@ -53,12 +62,34 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
-      async (event, currentSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
         console.log('Supabase auth state changed:', event);
         setSession(currentSession);
         setUser(currentSession?.user || null);
-        setLoading(false);
+        
+        // Show appropriate toast notifications based on the auth event
+        if (event === 'SIGNED_IN' && currentSession?.user) {
+          toast({
+            title: "Signed in successfully",
+            description: `Welcome, ${currentSession.user.email}!`,
+          });
+        } else if (event === 'SIGNED_OUT') {
+          toast({
+            title: "Signed out",
+            description: "You have been signed out successfully",
+          });
+        } else if (event === 'PASSWORD_RECOVERY') {
+          toast({
+            title: "Password recovery",
+            description: "Password recovery process started",
+          });
+        } else if (event === 'USER_UPDATED') {
+          toast({
+            title: "Account updated",
+            description: "Your account has been updated successfully",
+          });
+        }
       }
     );
 
@@ -66,19 +97,15 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [toast]);
 
   // Sign in with email and password
   const signIn = async (email: string, password: string) => {
     try {
       setLoading(true);
-      const { user, session } = await supabaseAuth.signIn(email, password);
-      setUser(user);
-      setSession(session);
-      toast({
-        title: "Signed in successfully",
-        description: `Welcome back, ${user?.email}!`,
-      });
+      await supabaseSignIn(email, password);
+      // Note: We don't need to manually update user/session here
+      // The onAuthStateChange listener above will handle that
     } catch (error: any) {
       toast({
         title: "Sign in failed",
@@ -92,20 +119,14 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Sign up with email and password
-  const signUp = async (email: string, password: string, userData?: Record<string, any>) => {
+  const signUp = async (email: string, password: string) => {
     try {
       setLoading(true);
-      const { user, session } = await supabaseAuth.signUp(email, password, userData);
+      await supabaseSignUp(email, password);
       toast({
         title: "Account created",
         description: "Please check your email for a confirmation link",
       });
-      
-      // If auto-confirmed (based on Supabase settings)
-      if (session) {
-        setUser(user);
-        setSession(session);
-      }
     } catch (error: any) {
       toast({
         title: "Sign up failed",
@@ -122,13 +143,9 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     try {
       setLoading(true);
-      await supabaseAuth.signOut();
-      setUser(null);
-      setSession(null);
-      toast({
-        title: "Signed out",
-        description: "You have been signed out successfully",
-      });
+      await supabaseSignOut();
+      // Note: We don't need to manually clear user/session here
+      // The onAuthStateChange listener above will handle that
     } catch (error: any) {
       toast({
         title: "Sign out failed",
@@ -145,7 +162,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const resetPassword = async (email: string) => {
     try {
       setLoading(true);
-      await supabaseAuth.resetPassword(email);
+      await supabaseResetPassword(email);
       toast({
         title: "Password reset email sent",
         description: "Please check your email for a password reset link",
@@ -166,7 +183,7 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const updatePassword = async (password: string) => {
     try {
       setLoading(true);
-      await supabaseAuth.updatePassword(password);
+      await supabaseUpdatePassword(password);
       toast({
         title: "Password updated",
         description: "Your password has been successfully updated",
@@ -175,30 +192,6 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
       toast({
         title: "Password update failed",
         description: error.message || "An error occurred while updating password",
-        variant: "destructive",
-      });
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Update profile
-  const updateProfile = async (profile: Record<string, any>) => {
-    try {
-      setLoading(true);
-      await supabaseAuth.updateProfile(profile);
-      // Refresh user data
-      const updatedUser = await supabaseAuth.getUser();
-      setUser(updatedUser);
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been successfully updated",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Profile update failed",
-        description: error.message || "An error occurred while updating profile",
         variant: "destructive",
       });
       throw error;
@@ -217,7 +210,6 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     signOut,
     resetPassword,
     updatePassword,
-    updateProfile,
   };
 
   return (
