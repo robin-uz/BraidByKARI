@@ -13,6 +13,7 @@ import PricingPage from "@/pages/pricing-page";
 import ServerAuthPage from "@/pages/auth/server-auth-page";
 import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ResetPasswordPage from "@/pages/auth/reset-password";
+import SupabaseAuth from "@/pages/auth/supabase-auth";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
 import AdminAnalytics from "@/pages/admin/analytics";
@@ -55,10 +56,17 @@ function Router() {
         <Route path="/test-page" component={TestPage} />
         
         {/* Supabase Auth Routes */}
-        <Route path="/auth/supabase" component={ServerAuthPage} />
+        <Route path="/auth/supabase" component={SupabaseAuth} />
         
         {/* Client routes - protected with server auth */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
+        
+        {/* Client routes - protected with Supabase auth */}
+        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={ClientDashboardPage} />
+        <SupabaseProtectedRoute path="/client/supabase-profile" component={ProfilePage} />
+        <SupabaseProtectedRoute path="/client/supabase-simulator" component={HairSimulator} />
+        
+        {/* Legacy routes - will be migrated */}
         <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
         <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
         <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />

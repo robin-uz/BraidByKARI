@@ -32,15 +32,15 @@ export function SupabaseProtectedRoute({
     );
   }
 
-  // If not authenticated, redirect to Supabase auth test page
+  // If not authenticated, redirect to Supabase auth page
   if (!user) {
-    console.log('Not authenticated with Supabase, redirecting to test page');
+    console.log('Not authenticated with Supabase, redirecting to auth page');
     return (
       <Route path={path}>
         {() => {
           // Use effect to navigate after render
           useEffect(() => {
-            navigate('/auth/supabase-test');
+            navigate('/auth/supabase');
           }, []);
           
           return (
@@ -63,10 +63,10 @@ export function SupabaseProtectedRoute({
             <h1 className="text-2xl font-bold text-red-600 mb-2">Access Denied</h1>
             <p className="text-center mb-4">You don't have admin permissions in Supabase.</p>
             <button 
-              onClick={() => navigate('/auth/supabase-test')}
+              onClick={() => navigate('/auth/supabase')}
               className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
             >
-              Return to Supabase Test Page
+              Return to Sign In
             </button>
           </div>
         )}
