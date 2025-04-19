@@ -25,18 +25,25 @@ export default function SupabaseAuth() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log("Checking for existing session...");
         const user = await getUser();
+        console.log("checkAuth got user:", user);
         if (user) {
           // Check if user is admin and redirect accordingly
+          console.log("User found, checking if admin:", user.id);
           const userIsAdmin = await isAdmin(user.id);
+          console.log("Is admin check result:", userIsAdmin);
           if (userIsAdmin) {
+            console.log("User is admin, redirecting to admin dashboard");
             navigate('/admin/dashboard');
           } else {
+            console.log("User is client, redirecting to client dashboard");
             navigate('/client/dashboard');
           }
         }
       } catch (err) {
         // Not authenticated, stay on auth page
+        console.error('Auth check error:', err);
         console.log('No active session found');
       }
     };
@@ -50,7 +57,9 @@ export default function SupabaseAuth() {
     setError(null);
 
     try {
+      console.log("Attempting login with email:", email);
       const result = await signIn(email, password);
+      console.log("Login successful:", result);
       toast({
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
@@ -58,16 +67,22 @@ export default function SupabaseAuth() {
       
       // Check if user is admin
       if (result && result.user) {
+        console.log("User object:", result.user);
         const userIsAdmin = await isAdmin(result.user.id);
+        console.log("Is admin?", userIsAdmin);
         if (userIsAdmin) {
+          console.log("Redirecting to admin dashboard");
           navigate('/admin/dashboard');
         } else {
+          console.log("Redirecting to client dashboard");
           navigate('/client/dashboard');
         }
       } else {
+        console.log("No user in result, redirecting to client dashboard");
         navigate('/client/dashboard');
       }
     } catch (err: any) {
+      console.error("Login error:", err);
       setError(err.message);
       toast({
         variant: 'destructive',
