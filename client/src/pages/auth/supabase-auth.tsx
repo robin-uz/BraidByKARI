@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { signIn, signUp, resetPassword } from '@/lib/supabase-client';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { useLocation } from 'wouter';
 
 // Login form schema
@@ -69,19 +69,26 @@ export default function SupabaseAuthPage() {
     },
   });
 
+  // Get Supabase auth methods from context
+  const { signIn, signUp, resetPassword, user } = useSupabaseAuth();
+  
+  // Check if user is already logged in, redirect if needed
+  useEffect(() => {
+    if (user) {
+      // User is already logged in, redirect to dashboard
+      navigate('/client/supabase-dashboard');
+    }
+  }, [user, navigate]);
+  
   const onLogin = async (values: z.infer<typeof loginSchema>) => {
     setLoading(true);
     setAuthError(null);
     
     try {
       await signIn(values.email, values.password);
-      toast({
-        title: "Welcome back!",
-        description: "You've successfully signed in.",
-      });
-      
-      // Navigate to dashboard after successful login
-      navigate('/client/dashboard');
+      // No need for toast or manual navigation here
+      // The auth state listener in SupabaseAuthContext will show the toast
+      // and the useEffect above will handle the redirection
     } catch (error: any) {
       setAuthError(error.message || 'Failed to sign in');
       toast({
