@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Button } from "@/components/ui/button";
 import { 
+  Award,
   Calendar, 
   User, 
   Users,
@@ -63,7 +64,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { icon: <Bell className="h-5 w-5" />, label: "Reminders", href: "/admin/reminders" },
     { icon: <Image className="h-5 w-5" />, label: "Gallery", href: "/admin/gallery" },
     { icon: <Users className="h-5 w-5" />, label: "Services", href: "/admin/services" },
-    { icon: <MessageSquare className="h-5 w-5" />, label: "Testimonials", href: "/admin/testimonials" }
+    { icon: <MessageSquare className="h-5 w-5" />, label: "Testimonials", href: "/admin/testimonials" },
+    { icon: <Award className="h-5 w-5" />, label: "Loyalty Program", href: "/admin/loyalty-dashboard" }
   ];
 
   const isActive = (path: string) => {

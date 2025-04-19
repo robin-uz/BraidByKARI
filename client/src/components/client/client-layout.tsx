@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useServerAuth } from "@/contexts/DebugAuthContext";
 import { Button } from "@/components/ui/button";
 import { 
+  Award,
   CalendarDays, 
   User, 
   Home, 
@@ -47,7 +48,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const menuItems = [
     { icon: <Home className="h-5 w-5" />, label: "Dashboard", href: "/client/dashboard" },
     { icon: <CalendarDays className="h-5 w-5" />, label: "My Bookings", href: "/client/bookings" },
-    { icon: <BarChart3 className="h-5 w-5" />, label: "Hair Simulator", href: "/client/hair-simulator" }
+    { icon: <BarChart3 className="h-5 w-5" />, label: "Hair Simulator", href: "/client/hair-simulator" },
+    { icon: <Award className="h-5 w-5" />, label: "Loyalty Rewards", href: "/client/loyalty" }
   ];
 
   const isActive = (path: string) => {
