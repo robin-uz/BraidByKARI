@@ -12,7 +12,7 @@ import {
 } from "./mailer";
 import Stripe from "stripe";
 import { verifySupabaseSession, getUserBySupabaseId } from "./supabase";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db, pool } from "./db";
 import loyaltyRouter from "./loyalty-routes";
 
@@ -877,6 +877,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Profile fetch error' });
     }
   });
+
+  // Loyalty system routes
+  app.use("/api/loyalty", loyaltyRouter);
+  console.log('Loyalty system routes registered');
+
+  // Run initial loyalty database schema setup
+  try {
+    // Create loyalty tiers table
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS loyalty_tiers (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        threshold INTEGER NOT NULL,
+        multiplier NUMERIC NOT NULL DEFAULT 1,
+        icon TEXT,
+        color TEXT,
+        perks TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    
+    // Create loyalty rewards table
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS loyalty_rewards (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT,
+        points_cost INTEGER NOT NULL,
+        type TEXT NOT NULL,
+        value TEXT,
+        active BOOLEAN DEFAULT TRUE,
+        image_url TEXT,
+        tier_requirement INTEGER REFERENCES loyalty_tiers(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP
+      );
+    `);
+
+    // Add loyalty fields to users table
+    await db.execute(sql`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS loyalty_points INTEGER DEFAULT 0;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS loyalty_tier_id INTEGER REFERENCES loyalty_tiers(id);
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS loyalty_join_date TIMESTAMP;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS total_points_earned INTEGER DEFAULT 0;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS last_activity_at TIMESTAMP;
+    `);
+
+    // Create loyalty transactions table
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS loyalty_transactions (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        amount INTEGER NOT NULL,
+        type TEXT NOT NULL,
+        reason TEXT NOT NULL,
+        reference TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP
+      );
+    `);
+
+    // Create loyalty achievements tables
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS loyalty_achievements (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT,
+        type TEXT NOT NULL,
+        threshold INTEGER NOT NULL,
+        points_reward INTEGER DEFAULT 0,
+        icon TEXT,
+        active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await db.execute(sql`
+      CREATE TABLE IF NOT EXISTS user_achievements (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        achievement_id INTEGER NOT NULL REFERENCES loyalty_achievements(id),
+        awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        progress INTEGER DEFAULT 0
+      );
+    `);
+
+    // Add loyalty fields to bookings table
+    await db.execute(sql`
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id);
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS points_earned INTEGER DEFAULT 0;
+      ALTER TABLE bookings ADD COLUMN IF NOT EXISTS loyalty_transaction_id INTEGER REFERENCES loyalty_transactions(id);
+    `);
+
+    console.log('Loyalty system database schema updated successfully');
+  } catch (error) {
+    console.error('Error setting up loyalty system database schema:', error);
+  }
 
   const httpServer = createServer(app);
   return httpServer;
