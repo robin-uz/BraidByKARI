@@ -2,6 +2,7 @@ import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { LoyaltyTier, LoyaltyReward, LoyaltyTransaction } from "@shared/schema";
 import { Loader2, Award, Crown, Diamond, Gift, Clock } from "lucide-react";
+import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -113,8 +114,8 @@ export default function LoyaltyPage() {
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-2xl font-semibold mb-4">Login Required</h1>
         <p className="text-gray-500 mb-4">Please log in to access the loyalty program.</p>
-        <Button href="/auth" asChild>
-          <a>Login or Register</a>
+        <Button asChild>
+          <Link href="/auth">Login or Register</Link>
         </Button>
       </div>
     );

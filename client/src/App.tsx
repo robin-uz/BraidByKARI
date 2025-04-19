@@ -20,6 +20,7 @@ import AdminBookings from "@/pages/admin/bookings";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminReminders from "@/pages/admin/reminders";
 import AdminSetup from "@/pages/admin/setup";
+import LoyaltyDashboard from "@/pages/admin/loyalty-dashboard";
 import NotFound from "@/pages/not-found";
 import TestPage from "@/pages/test-page";
 
@@ -29,6 +30,7 @@ import ClientDashboardPage from "@/pages/client/dashboard-page";
 import SupabaseDashboard from "@/pages/client/supabase-dashboard";
 import HairSimulator from "@/pages/client/hair-simulator";
 import ProfilePage from "@/pages/client/profile";
+import LoyaltyPage from "@/pages/client/loyalty";
 
 // Legal Pages
 import PrivacyPolicy from "@/pages/legal/privacy-policy";
@@ -65,6 +67,7 @@ function Router() {
         <SupabaseProtectedRoute path="/client/dashboard" component={SupabaseDashboard} />
         <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
         <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
+        <SupabaseProtectedRoute path="/client/loyalty" component={LoyaltyPage} />
 
         {/* Admin setup page - public but requires authentication to create admin */}
         <Route path="/admin/setup" component={AdminSetup} />
@@ -74,6 +77,7 @@ function Router() {
         <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
         <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
         <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/loyalty-dashboard" component={LoyaltyDashboard} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
