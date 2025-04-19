@@ -123,6 +123,18 @@ export default function SupabaseAuth() {
     setMagicLinkLoading(true);
     setError(null);
 
+    // Magic link requires a valid email address
+    if (!email || !email.includes('@')) {
+      setError("Please enter a valid email address for magic link login");
+      toast({
+        variant: 'destructive',
+        title: 'Invalid email',
+        description: 'Please enter a valid email address for magic link login.',
+      });
+      setMagicLinkLoading(false);
+      return;
+    }
+
     try {
       await signInWithMagicLink(email);
       setMagicLinkSent(true);
@@ -188,11 +200,11 @@ export default function SupabaseAuth() {
                 <TabsContent value="login">
                   <form onSubmit={handleSignIn} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">Email or Username</Label>
                       <Input
                         id="email"
-                        type="email"
-                        placeholder="your.email@example.com"
+                        type="text"
+                        placeholder="Username or email@example.com"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -241,7 +253,8 @@ export default function SupabaseAuth() {
                       variant="outline" 
                       className="w-full"
                       onClick={handleMagicLink}
-                      disabled={!email || magicLinkLoading}
+                      disabled={!email || !email.includes('@') || magicLinkLoading}
+                      title={!email.includes('@') ? "Please enter a valid email for magic link" : ""}
                     >
                       {magicLinkLoading ? (
                         <>

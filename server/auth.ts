@@ -51,7 +51,16 @@ export function setupAuth(app: Express) {
       try {
         console.log(`Attempting login for user: ${username}`);
         
-        const user = await storage.getUserByUsername(username);
+        // Check if input is an email (contains @)
+        let user;
+        if (username.includes('@')) {
+          console.log('Login attempt using email');
+          user = await storage.getUserByEmail(username);
+        } else {
+          console.log('Login attempt using username');
+          user = await storage.getUserByUsername(username);
+        }
+        
         if (!user) {
           console.log(`User not found: ${username}`);
           return done(null, false, { message: "User not found" });
