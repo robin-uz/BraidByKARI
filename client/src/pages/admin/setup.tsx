@@ -119,9 +119,15 @@ export default function AdminSetup() {
                 <p className="text-gray-500 dark:text-gray-400 mb-4">
                   The account with email <strong>{email}</strong> now has admin privileges.
                 </p>
+                <p className="text-amber-600 dark:text-amber-400 text-sm mb-4">
+                  <strong>Important:</strong> You need to login with this email to access admin features.
+                </p>
                 <div className="space-y-2">
                   <Link href="/admin/dashboard">
-                    <Button className="w-full">Go to Admin Dashboard</Button>
+                    <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white">Go to Admin Dashboard</Button>
+                  </Link>
+                  <Link href="/auth">
+                    <Button className="w-full">Sign In as Admin</Button>
                   </Link>
                   <Link href="/">
                     <Button variant="outline" className="w-full">Back to Home</Button>
