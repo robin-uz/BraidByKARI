@@ -14,6 +14,7 @@ import ServerAuthPage from "@/pages/auth/server-auth-page";
 import ForgotPasswordPage from "@/pages/auth/forgot-password";
 import ResetPasswordPage from "@/pages/auth/reset-password";
 import SupabaseAuth from "@/pages/auth/supabase-auth";
+import AuthCallback from "@/pages/auth/callback";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
 import AdminAnalytics from "@/pages/admin/analytics";
@@ -46,6 +47,7 @@ function Router() {
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
         <Route path="/auth/supabase" component={SupabaseAuth} />
+        <Route path="/auth/callback" component={AuthCallback} />
         
         {/* Booking - protection optional as guests can book too, 
             but if logged in we'll use their profile info */}

@@ -1,180 +1,82 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useLocation, Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { useLocation } from 'wouter';
-import { 
-  supabase, 
-  signIn, 
-  signUp, 
-  resetPassword,
-  getSession
-} from '@/lib/supabase-client';
+import { Loader2 } from 'lucide-react';
+import { signIn, signUp, getUser } from '@/lib/supabase-client';
 
-// Login form schema
-const loginSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
-});
-
-// Registration form schema
-const registerSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
-  confirmPassword: z.string(),
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
-
-// Reset password schema
-const resetSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-});
-
-export default function SupabaseAuthPage() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function SupabaseAuth() {
   const [loading, setLoading] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('login');
   const [, navigate] = useLocation();
   const { toast } = useToast();
 
-  // Login form
-  const loginForm = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  // Register form
-  const registerForm = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
-  });
-
-  // Reset password form
-  const resetForm = useForm<z.infer<typeof resetSchema>>({
-    resolver: zodResolver(resetSchema),
-    defaultValues: {
-      email: '',
-    },
-  });
-  
-  // Check for existing session on page load
   useEffect(() => {
-    async function checkSession() {
+    const checkAuth = async () => {
       try {
-        const session = await getSession();
-        if (session) {
-          toast({
-            title: "Already signed in",
-            description: "You're already logged in with Supabase"
-          });
+        const user = await getUser();
+        if (user) {
           navigate('/client/supabase-dashboard');
         }
-      } catch (error) {
-        console.error("Error checking session:", error);
+      } catch (err) {
+        // Not authenticated, stay on auth page
+        console.log('No active session found');
       }
-    }
-    
-    checkSession();
-    
-    // Set up auth state change listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          toast({
-            title: "Signed in successfully",
-            description: `Welcome back!`,
-          });
-          navigate('/client/supabase-dashboard');
-        }
-      }
-    );
-    
-    return () => {
-      subscription.unsubscribe();
     };
-  }, [navigate, toast]);
-  
-  const onLogin = async (values: z.infer<typeof loginSchema>) => {
+
+    checkAuth();
+  }, [navigate]);
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-    setAuthError(null);
-    
+    setError(null);
+
     try {
-      await signIn(values.email, values.password);
-      // Auth state listener handles redirect
-    } catch (error: any) {
-      setAuthError(error.message || 'Failed to sign in');
+      await signIn(email, password);
       toast({
-        variant: "destructive",
-        title: "Login failed",
-        description: error.message || 'An error occurred during sign in',
+        title: 'Welcome back!',
+        description: 'You have successfully logged in.',
+      });
+      navigate('/client/supabase-dashboard');
+    } catch (err: any) {
+      setError(err.message);
+      toast({
+        variant: 'destructive',
+        title: 'Login failed',
+        description: err.message,
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const onRegister = async (values: z.infer<typeof registerSchema>) => {
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-    setAuthError(null);
-    
-    try {
-      await signUp(values.email, values.password);
-      toast({
-        title: "Account created",
-        description: "Please check your email to confirm your registration.",
-      });
-      
-      // Switch to login tab after successful registration
-      setActiveTab('login');
-    } catch (error: any) {
-      setAuthError(error.message || 'Failed to create account');
-      toast({
-        variant: "destructive",
-        title: "Registration failed",
-        description: error.message || 'An error occurred during registration',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    setError(null);
 
-  const onReset = async (values: z.infer<typeof resetSchema>) => {
-    setLoading(true);
-    setAuthError(null);
-    
     try {
-      await resetPassword(values.email);
+      await signUp(email, password);
       toast({
-        title: "Password reset email sent",
-        description: "Please check your email for the password reset link.",
+        title: 'Registration successful',
+        description: 'Please check your email to confirm your account.',
       });
-      
-      // Switch to login tab after successful password reset request
       setActiveTab('login');
-    } catch (error: any) {
-      setAuthError(error.message || 'Failed to send password reset email');
+    } catch (err: any) {
+      setError(err.message);
       toast({
-        variant: "destructive",
-        title: "Password reset failed",
-        description: error.message || 'An error occurred while sending the password reset email',
+        variant: 'destructive',
+        title: 'Registration failed',
+        description: err.message,
       });
     } finally {
       setLoading(false);
@@ -182,237 +84,135 @@ export default function SupabaseAuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Form Column */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <Card className="w-full max-w-md">
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-amber-600 mb-2">KARI STYLEZ</h1>
+          <p className="text-gray-500 dark:text-gray-400 mb-8">Premium Braiding Salon</p>
+        </div>
+
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl text-center font-bold">KARI STYLEZ</CardTitle>
-            <CardDescription className="text-center">
-              Sign in to your account or create a new one
-            </CardDescription>
+            <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+            <CardDescription>Sign in to your account or create a new one</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-4">
+            <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
-              
-              {authError && (
+
+              {error && (
                 <Alert variant="destructive" className="mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>{authError}</AlertDescription>
+                  <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              
+
               <TabsContent value="login">
-                <Form {...loginForm}>
-                  <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                    <FormField
-                      control={loginForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="email@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="your.email@example.com"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
-                    <FormField
-                      control={loginForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                type={showPassword ? "text" : "password"} 
-                                placeholder="••••••••" 
-                                {...field} 
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="password">Password</Label>
+                      <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button 
-                      type="button" 
-                      variant="link" 
-                      className="p-0 h-auto font-normal text-sm text-muted-foreground hover:text-primary"
-                      onClick={() => setActiveTab('reset')}
-                    >
-                      Forgot password?
-                    </Button>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Please wait
-                        </>
-                      ) : (
-                        "Sign In"
-                      )}
-                    </Button>
-                  </form>
-                </Form>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      'Sign In'
+                    )}
+                  </Button>
+                </form>
               </TabsContent>
-              
+
               <TabsContent value="register">
-                <Form {...registerForm}>
-                  <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
-                    <FormField
-                      control={registerForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="email@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email">Email</Label>
+                    <Input
+                      id="register-email"
+                      type="email"
+                      placeholder="your.email@example.com"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
-                    <FormField
-                      control={registerForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                type={showPassword ? "text" : "password"} 
-                                placeholder="••••••••" 
-                                {...field} 
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3"
-                                onClick={() => setShowPassword(!showPassword)}
-                              >
-                                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                              </Button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-password">Password</Label>
+                    <Input
+                      id="register-password"
+                      type="password"
+                      placeholder="Create a strong password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
-                    <FormField
-                      control={registerForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
-                          <FormControl>
-                            <Input 
-                              type={showPassword ? "text" : "password"} 
-                              placeholder="••••••••" 
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Please wait
-                        </>
-                      ) : (
-                        "Sign Up"
-                      )}
-                    </Button>
-                  </form>
-                </Form>
-              </TabsContent>
-              
-              <TabsContent value="reset">
-                <Form {...resetForm}>
-                  <form onSubmit={resetForm.handleSubmit(onReset)} className="space-y-4">
-                    <FormField
-                      control={resetForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="email@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Please wait
-                        </>
-                      ) : (
-                        "Send Reset Link"
-                      )}
-                    </Button>
-                    <Button 
-                      type="button" 
-                      variant="link" 
-                      className="p-0 h-auto font-normal text-sm text-muted-foreground hover:text-primary w-full justify-center"
-                      onClick={() => setActiveTab('login')}
-                    >
-                      Back to Login
-                    </Button>
-                  </form>
-                </Form>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </>
+                    ) : (
+                      'Create Account'
+                    )}
+                  </Button>
+                </form>
               </TabsContent>
             </Tabs>
           </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            <div className="text-center text-sm text-muted-foreground">
-              By continuing, you agree to KARI STYLEZ's
-              <a href="/legal/terms" className="font-medium text-primary hover:underline ml-1">Terms of Service</a>
-              <span className="mx-1">and</span>
-              <a href="/legal/privacy-policy" className="font-medium text-primary hover:underline">Privacy Policy</a>.
+          <CardFooter className="flex flex-col space-y-4">
+            <div className="text-center w-full">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {activeTab === 'login'
+                  ? "Don't have an account? "
+                  : 'Already have an account? '}
+                <Button
+                  variant="link"
+                  className="p-0 h-auto"
+                  onClick={() => setActiveTab(activeTab === 'login' ? 'register' : 'login')}
+                >
+                  {activeTab === 'login' ? 'Sign up' : 'Sign in'}
+                </Button>
+              </p>
+            </div>
+            <div className="w-full">
+              <Link href="/">
+                <Button variant="outline" className="w-full">
+                  Back to Home
+                </Button>
+              </Link>
             </div>
           </CardFooter>
         </Card>
-      </div>
-      
-      {/* Hero Column */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-b from-[#F6B856] to-amber-800 items-center justify-center">
-        <div className="max-w-md text-white p-8">
-          <h2 className="text-4xl font-bold mb-6">Welcome to KARI STYLEZ</h2>
-          <p className="text-lg mb-6">
-            Experience the best in hair braiding and styling. Create an account to book appointments, 
-            manage your profile, and keep track of your favorite styles.
-          </p>
-          <div className="bg-white/10 p-4 rounded-lg">
-            <p>
-              "KARI STYLEZ provides exceptional braiding services with attention to detail and 
-              customer satisfaction. Join our community of satisfied clients today!"
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -1,83 +1,46 @@
-import { useState, useEffect } from 'react';
-import { Route, useLocation } from 'wouter';
-import { Loader2 } from 'lucide-react';
-import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
+import { Route, Redirect } from "wouter";
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { getUser } from "./supabase-client";
 
-interface SupabaseProtectedRouteProps {
+type SupabaseProtectedRouteProps = {
   path: string;
-  component: () => JSX.Element;
-  adminOnly?: boolean;
-}
+  component: React.ComponentType;
+};
 
-export function SupabaseProtectedRoute({ 
-  path, 
-  component: Component, 
-  adminOnly = false 
-}: SupabaseProtectedRouteProps) {
-  const { user, loading } = useSupabaseAuth();
-  const [, navigate] = useLocation();
-  const [location] = useLocation();
+export function SupabaseProtectedRoute({ path, component: Component }: SupabaseProtectedRouteProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Handle initial loading state
-  if (loading) {
-    return (
-      <Route path={path}>
-        {() => (
-          <div className="flex items-center justify-center min-h-screen">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
-            <span className="ml-2">Checking Supabase authentication...</span>
-          </div>
-        )}
-      </Route>
-    );
-  }
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const user = await getUser();
+        setIsAuthenticated(!!user);
+      } catch (error) {
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-  // If not authenticated, redirect to Supabase auth page
-  if (!user) {
-    console.log('Not authenticated with Supabase, redirecting to auth page');
-    return (
-      <Route path={path}>
-        {() => {
-          // Use effect to navigate after render
-          useEffect(() => {
-            navigate('/auth/supabase');
-          }, []);
-          
-          return (
-            <div className="flex items-center justify-center min-h-screen">
-              <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
-              <span className="ml-2">Not logged in with Supabase. Redirecting...</span>
-            </div>
-          );
-        }}
-      </Route>
-    );
-  }
+    checkAuth();
+  }, []);
 
-  // If adminOnly is true, check if user has admin role
-  if (adminOnly && user.user_metadata?.role !== 'admin') {
-    return (
-      <Route path={path}>
-        {() => (
-          <div className="flex flex-col items-center justify-center min-h-screen p-4">
-            <h1 className="text-2xl font-bold text-red-600 mb-2">Access Denied</h1>
-            <p className="text-center mb-4">You don't have admin permissions in Supabase.</p>
-            <button 
-              onClick={() => navigate('/auth/supabase')}
-              className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700"
-            >
-              Return to Sign In
-            </button>
-          </div>
-        )}
-      </Route>
-    );
-  }
-
-  // If authenticated, render the protected content
   return (
     <Route path={path}>
-      {() => <Component />}
+      {() => {
+        if (isLoading) {
+          return (
+            <div className="flex items-center justify-center min-h-screen">
+              <Loader2 className="h-8 w-8 animate-spin text-amber-600" />
+              <span className="ml-2">Verifying authentication...</span>
+            </div>
+          );
+        }
+
+        return isAuthenticated ? <Component /> : <Redirect to="/auth/supabase" />;
+      }}
     </Route>
   );
 }
