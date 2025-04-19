@@ -28,28 +28,50 @@ export default function AdminSetup() {
       const token = session?.access_token;
 
       // Make request to the admin setup endpoint
-      const response = await apiRequest("POST", "/api/admin/setup", { 
-        email,
-        supabaseToken: token
+      const response = await fetch('/api/admin/setup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          supabaseToken: token
+        })
       });
-
-      const result = await response.json();
       
-      if (response.ok) {
-        setSuccess(true);
-        toast({
-          title: "Success!",
-          description: result.message || "Admin account set up successfully",
-        });
+      // Check if content type is JSON
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
+        const result = await response.json();
+        
+        if (response.ok) {
+          setSuccess(true);
+          toast({
+            title: "Success!",
+            description: result.message || "Admin account set up successfully",
+          });
+        } else {
+          setError(result.message || "Failed to set up admin account");
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.message || "Failed to set up admin account",
+          });
+        }
       } else {
-        setError(result.message || "Failed to set up admin account");
+        // Handle non-JSON response
+        const textResponse = await response.text();
+        console.error("Non-JSON response:", textResponse);
+        setError("Server returned an invalid response format. Check console for details.");
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.message || "Failed to set up admin account",
+          description: "Server returned an invalid response format",
         });
       }
     } catch (err: any) {
+      console.error("Admin setup error:", err);
       setError(err.message || "An error occurred");
       toast({
         variant: "destructive",
