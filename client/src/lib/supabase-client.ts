@@ -129,6 +129,30 @@ export async function getUser() {
   }
 }
 
+// Check if user is an admin
+export async function isAdmin(userId: string): Promise<boolean> {
+  if (!userId) return false;
+  
+  try {
+    // Query the users table for admin status
+    const { data, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+    
+    return data && data.role === 'admin';
+  } catch (error) {
+    console.error('Error checking admin role:', error);
+    return false;
+  }
+}
+
 // Subscribe to auth state changes
 export function onAuthStateChange(callback: (event: string, session: any) => void) {
   return supabase.auth.onAuthStateChange(callback);
