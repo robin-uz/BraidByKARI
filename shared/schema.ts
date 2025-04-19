@@ -1,6 +1,63 @@
-import { pgTable, text, serial, integer, boolean, timestamp, pgEnum, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, pgEnum, jsonb, numeric } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Loyalty system tables
+export const loyaltyTiers = pgTable("loyalty_tiers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(), // Bronze, Silver, Gold, Platinum
+  threshold: integer("threshold").notNull(), // Points required to reach this tier
+  multiplier: numeric("multiplier").notNull().default("1"), // Points multiplier for this tier
+  icon: text("icon"), // Icon representing this tier
+  color: text("color"), // Color code for UI
+  perks: text("perks"), // Description of tier perks
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const loyaltyRewards = pgTable("loyalty_rewards", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  pointsCost: integer("points_cost").notNull(),
+  type: text("type").notNull(), // discount, service, product, exclusive
+  value: text("value"), // Discount amount, free service name, etc.
+  active: boolean("active").default(true),
+  imageUrl: text("image_url"),
+  tierRequirement: integer("tier_requirement").references(() => loyaltyTiers.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  expiresAt: timestamp("expires_at"), // When this reward expires from catalog
+});
+
+export const loyaltyTransactions = pgTable("loyalty_transactions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id), 
+  amount: integer("amount").notNull(), // Can be positive (earned) or negative (redeemed)
+  type: text("type").notNull(), // earn, redeem, expire, bonus
+  reason: text("reason").notNull(), // booking, referral, promotion, discount_redemption
+  reference: text("reference"), // Booking ID, promotion name, etc.
+  createdAt: timestamp("created_at").defaultNow(),
+  expiresAt: timestamp("expires_at"), // When these points expire, if applicable
+});
+
+export const loyaltyAchievements = pgTable("loyalty_achievements", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  type: text("type").notNull(), // booking_count, referral, spending, social
+  threshold: integer("threshold").notNull(), // Number required to unlock
+  pointsReward: integer("points_reward").default(0), // Points awarded for achieving
+  icon: text("icon"),
+  active: boolean("active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userAchievements = pgTable("user_achievements", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  achievementId: integer("achievement_id").notNull().references(() => loyaltyAchievements.id),
+  awardedAt: timestamp("awarded_at").defaultNow(),
+  progress: integer("progress").default(0), // Track progress toward achievement
+});
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -9,6 +66,13 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   fullName: text("full_name"),
   role: text("role").default("customer").notNull(),
+  
+  // Loyalty system fields
+  loyaltyPoints: integer("loyalty_points").default(0), // Current points balance
+  loyaltyTierId: integer("loyalty_tier_id").references(() => loyaltyTiers.id),
+  loyaltyJoinDate: timestamp("loyalty_join_date"),
+  totalPointsEarned: integer("total_points_earned").default(0), // Lifetime points
+  lastActivityAt: timestamp("last_activity_at"),
 });
 
 export const statusEnum = pgEnum("status", ["pending", "confirmed", "cancelled"]);
@@ -25,6 +89,11 @@ export const bookings = pgTable("bookings", {
   status: statusEnum("status").default("pending").notNull(),
   depositPaid: boolean("deposit_paid").default(false),
   createdAt: timestamp("created_at").defaultNow(),
+  
+  // Loyalty fields
+  userId: integer("user_id").references(() => users.id), // Link to user (if logged in)
+  pointsEarned: integer("points_earned").default(0), // Points awarded for this booking
+  loyaltyTransactionId: integer("loyalty_transaction_id").references(() => loyaltyTransactions.id), // Reference to transaction
 });
 
 export const gallery = pgTable("gallery", {
@@ -86,6 +155,53 @@ export const stylists = pgTable("stylists", {
 });
 
 // Insert Schemas
+// Loyalty schemas
+export const insertLoyaltyTierSchema = createInsertSchema(loyaltyTiers).pick({
+  name: true,
+  threshold: true,
+  multiplier: true,
+  icon: true,
+  color: true,
+  perks: true,
+});
+
+export const insertLoyaltyRewardSchema = createInsertSchema(loyaltyRewards).pick({
+  name: true,
+  description: true,
+  pointsCost: true,
+  type: true,
+  value: true,
+  active: true,
+  imageUrl: true,
+  tierRequirement: true,
+  expiresAt: true,
+});
+
+export const insertLoyaltyTransactionSchema = createInsertSchema(loyaltyTransactions).pick({
+  userId: true,
+  amount: true,
+  type: true,
+  reason: true,
+  reference: true,
+  expiresAt: true,
+});
+
+export const insertLoyaltyAchievementSchema = createInsertSchema(loyaltyAchievements).pick({
+  name: true,
+  description: true,
+  type: true,
+  threshold: true,
+  pointsReward: true,
+  icon: true,
+  active: true,
+});
+
+export const insertUserAchievementSchema = createInsertSchema(userAchievements).pick({
+  userId: true,
+  achievementId: true,
+  progress: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -171,6 +287,20 @@ export type BusinessHours = typeof businessHours.$inferSelect;
 export type SpecialDate = typeof specialDates.$inferSelect;
 export type Stylist = typeof stylists.$inferSelect;
 export type BookingFormData = z.infer<typeof bookingFormSchema>;
+
+// Loyalty types
+export type LoyaltyTier = typeof loyaltyTiers.$inferSelect;
+export type LoyaltyReward = typeof loyaltyRewards.$inferSelect;
+export type LoyaltyTransaction = typeof loyaltyTransactions.$inferSelect;
+export type LoyaltyAchievement = typeof loyaltyAchievements.$inferSelect;
+export type UserAchievement = typeof userAchievements.$inferSelect;
+
+// Loyalty insert types
+export type InsertLoyaltyTier = z.infer<typeof insertLoyaltyTierSchema>;
+export type InsertLoyaltyReward = z.infer<typeof insertLoyaltyRewardSchema>;
+export type InsertLoyaltyTransaction = z.infer<typeof insertLoyaltyTransactionSchema>;
+export type InsertLoyaltyAchievement = z.infer<typeof insertLoyaltyAchievementSchema>;
+export type InsertUserAchievement = z.infer<typeof insertUserAchievementSchema>;
 
 // Custom interface for calendar events
 export interface CalendarEvent {
