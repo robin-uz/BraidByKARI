@@ -13,7 +13,7 @@ import {
 import Stripe from "stripe";
 import { verifySupabaseSession, getUserBySupabaseId } from "./supabase";
 import { eq } from "drizzle-orm";
-import { db } from "./db";
+import { db, pool } from "./db";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
