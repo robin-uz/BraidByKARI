@@ -24,6 +24,7 @@ import TestPage from "@/pages/test-page";
 // Client pages
 import ClientDashboard from "@/pages/client/dashboard";
 import ClientDashboardPage from "@/pages/client/dashboard-page";
+import SupabaseDashboard from "@/pages/client/supabase-dashboard";
 import HairSimulator from "@/pages/client/hair-simulator";
 import ProfilePage from "@/pages/client/profile";
 
@@ -44,6 +45,7 @@ function Router() {
         <Route path="/auth" component={ServerAuthPage} />
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
+        <Route path="/auth/supabase" component={SupabaseAuth} />
         
         {/* Booking - protection optional as guests can book too, 
             but if logged in we'll use their profile info */}
@@ -56,13 +58,12 @@ function Router() {
         <Route path="/test-page" component={TestPage} />
         
         {/* Supabase Auth Routes */}
-        <Route path="/auth/supabase" component={SupabaseAuth} />
         
         {/* Client routes - protected with server auth */}
         <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
         
         {/* Client routes - protected with Supabase auth */}
-        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={ClientDashboardPage} />
+        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboard} />
         <SupabaseProtectedRoute path="/client/supabase-profile" component={ProfilePage} />
         <SupabaseProtectedRoute path="/client/supabase-simulator" component={HairSimulator} />
         

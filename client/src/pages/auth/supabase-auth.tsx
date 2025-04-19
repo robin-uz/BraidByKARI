@@ -11,7 +11,13 @@ import { Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { useLocation } from 'wouter';
-import { supabase, signIn, signUp, resetPassword } from '@/lib/supabase-client';
+import { 
+  supabase, 
+  signIn, 
+  signUp, 
+  resetPassword,
+  getSession
+} from '@/lib/supabase-client';
 
 // Login form schema
 const loginSchema = z.object({
@@ -39,9 +45,8 @@ export default function SupabaseAuthPage() {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('login');
-  const [location, navigate] = useLocation();
+  const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [currentUser, setCurrentUser] = useState<any>(null);
 
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -70,16 +75,15 @@ export default function SupabaseAuthPage() {
     },
   });
   
-  // Check for existing Supabase session on component mount
+  // Check for existing session on page load
   useEffect(() => {
     async function checkSession() {
       try {
-        const { data } = await supabase.auth.getSession();
-        if (data.session?.user) {
-          setCurrentUser(data.session.user);
+        const session = await getSession();
+        if (session) {
           toast({
             title: "Already signed in",
-            description: "You're already signed in to Supabase"
+            description: "You're already logged in with Supabase"
           });
           navigate('/client/supabase-dashboard');
         }
@@ -92,12 +96,11 @@ export default function SupabaseAuthPage() {
     
     // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          setCurrentUser(session.user);
+      (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
           toast({
             title: "Signed in successfully",
-            description: `Welcome, ${session.user.email}!`,
+            description: `Welcome back!`,
           });
           navigate('/client/supabase-dashboard');
         }
@@ -114,9 +117,8 @@ export default function SupabaseAuthPage() {
     setAuthError(null);
     
     try {
-      const result = await signIn(values.email, values.password);
-      console.log("Supabase login result:", result);
-      // The auth state listener will handle the toast and navigation
+      await signIn(values.email, values.password);
+      // Auth state listener handles redirect
     } catch (error: any) {
       setAuthError(error.message || 'Failed to sign in');
       toast({
@@ -134,8 +136,7 @@ export default function SupabaseAuthPage() {
     setAuthError(null);
     
     try {
-      const result = await signUp(values.email, values.password);
-      console.log("Supabase signup result:", result);
+      await signUp(values.email, values.password);
       toast({
         title: "Account created",
         description: "Please check your email to confirm your registration.",

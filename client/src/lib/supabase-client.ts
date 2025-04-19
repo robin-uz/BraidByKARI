@@ -1,27 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Explicitly extract environment variables from Vite
+// Get Supabase URL and anon key from environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('CRITICAL ERROR: Supabase credentials are missing. Authentication will not work correctly.');
+  console.error("Supabase environment variables are missing!");
 }
 
-// Create the Supabase client
-export const supabase = createClient(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    }
-  }
-);
+// Create Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Helper functions for auth operations
+// Sign up with email and password
 export async function signUp(email: string, password: string) {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -40,6 +30,7 @@ export async function signUp(email: string, password: string) {
   return data;
 }
 
+// Sign in with email and password
 export async function signIn(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -55,6 +46,7 @@ export async function signIn(email: string, password: string) {
   return data;
 }
 
+// Sign out
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
   
@@ -66,6 +58,7 @@ export async function signOut() {
   console.log('Logged out');
 }
 
+// Reset password
 export async function resetPassword(email: string) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/auth/reset-password`
@@ -79,6 +72,7 @@ export async function resetPassword(email: string) {
   console.log('Password reset email sent');
 }
 
+// Update password
 export async function updatePassword(newPassword: string) {
   const { data, error } = await supabase.auth.updateUser({
     password: newPassword
@@ -93,6 +87,7 @@ export async function updatePassword(newPassword: string) {
   return data;
 }
 
+// Get current session
 export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   
@@ -104,6 +99,7 @@ export async function getSession() {
   return data.session;
 }
 
+// Get current user
 export async function getUser() {
   const { data, error } = await supabase.auth.getUser();
   
@@ -115,6 +111,7 @@ export async function getUser() {
   return data.user;
 }
 
+// Subscribe to auth state changes
 export function onAuthStateChange(callback: (event: string, session: any) => void) {
   return supabase.auth.onAuthStateChange(callback);
 }

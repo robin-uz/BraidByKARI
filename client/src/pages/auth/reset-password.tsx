@@ -1,92 +1,169 @@
-import { NewPasswordForm } from '@/components/auth/new-password-form';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
-import { supabase, getSession } from '@/lib/supabase-client';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { AlertCircle, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
+import { updatePassword, supabase } from '@/lib/supabase-client';
+
+// New password schema
+const passwordSchema = z.object({
+  password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
+  confirmPassword: z.string(),
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
 
 export default function ResetPasswordPage() {
-  const [isValidToken, setIsValidToken] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [location] = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [, navigate] = useLocation();
   const { toast } = useToast();
-  
+
+  // Password form
+  const passwordForm = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  // Check if the user has a valid reset token 
   useEffect(() => {
-    const verifyToken = async () => {
+    const checkResetToken = async () => {
       try {
-        // Check if we have a hash from Supabase auth
+        // Get the hash from the URL (contains the access token)
         const hash = window.location.hash;
-        
         if (!hash) {
-          setIsValidToken(false);
-          setIsLoading(false);
+          // No access token in URL, show error and redirect to login after a delay
+          setError('No reset token found. Please request a new password reset link.');
+          setTimeout(() => {
+            navigate('/auth/supabase');
+          }, 3000);
           return;
         }
-        
-        // Verification is automatic, just check if we have a valid session
-        const session = await getSession();
-        setIsValidToken(!!session);
-      } catch (error) {
-        console.error('Error verifying token:', error);
-        setIsValidToken(false);
-      } finally {
-        setIsLoading(false);
+
+        // Try to get the current session to verify the token
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          setError('Invalid or expired token. Please request a new password reset link.');
+          setTimeout(() => {
+            navigate('/auth/supabase');
+          }, 3000);
+        }
+      } catch (err: any) {
+        console.error('Error checking reset token:', err);
+        setError(err.message || 'An error occurred. Please try again.');
       }
     };
+
+    checkResetToken();
+  }, [navigate]);
+
+  const onResetPassword = async (values: z.infer<typeof passwordSchema>) => {
+    setLoading(true);
+    setError(null);
     
-    verifyToken();
-  }, []);
-  
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-  
-  if (isValidToken === false) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg max-w-md text-center">
-          <h2 className="text-xl font-semibold text-red-600 dark:text-red-400 mb-2">Invalid or Expired Link</h2>
-          <p className="text-gray-700 dark:text-gray-300 mb-4">
-            The password reset link you used is invalid or has expired. Please request a new password reset link.
-          </p>
-          <a 
-            href="/auth/forgot-password" 
-            className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-          >
-            Request New Link
-          </a>
-        </div>
-      </div>
-    );
-  }
-  
-  return (
-    <div className="flex min-h-screen">
-      {/* Reset Password Form Column */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
-        <NewPasswordForm />
-      </div>
+    try {
+      await updatePassword(values.password);
+      toast({
+        title: "Password updated",
+        description: "Your password has been successfully updated. You can now login with your new password.",
+      });
       
-      {/* Hero Section Column */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-r from-purple-700 to-pink-600 items-center justify-center">
-        <div className="max-w-md text-white p-8">
-          <h2 className="text-3xl font-bold mb-4">Create a New Password</h2>
-          <p className="mb-6">
-            Your account security is important to us. Please create a strong, 
-            unique password that you don't use for other services.
-          </p>
-          <div className="bg-white/10 p-4 rounded-lg">
-            <p className="text-sm">
-              A strong password helps protect your account. Make sure 
-              your new password includes uppercase and lowercase letters,
-              numbers, and is at least 8 characters long.
-            </p>
-          </div>
-        </div>
-      </div>
+      // Redirect to login page after successful password reset
+      setTimeout(() => {
+        navigate('/auth/supabase');
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to update password');
+      toast({
+        variant: "destructive",
+        title: "Password update failed",
+        description: err.message || 'An error occurred while updating your password',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center font-bold">KARI STYLEZ</CardTitle>
+          <CardDescription className="text-center">
+            Reset Your Password
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error ? (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          ) : (
+            <Form {...passwordForm}>
+              <form onSubmit={passwordForm.handleSubmit(onResetPassword)} className="space-y-4">
+                <FormField
+                  control={passwordForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>New Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={passwordForm.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    "Update Password"
+                  )}
+                </Button>
+              </form>
+            </Form>
+          )}
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button 
+            variant="link" 
+            onClick={() => navigate('/auth/supabase')}
+            className="text-sm"
+          >
+            Back to Login
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
