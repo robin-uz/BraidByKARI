@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { z } from "zod";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { insertBookingSchema, insertGallerySchema, insertServiceSchema, insertTestimonialSchema } from "@shared/schema";
+import { insertBookingSchema, insertGallerySchema, insertServiceSchema, insertTestimonialSchema, users } from "@shared/schema";
 import { processReminderBatch, scheduleReminderCheck } from "./reminder";
 import { 
   sendBookingConfirmationEmail, 
@@ -12,6 +12,8 @@ import {
 } from "./mailer";
 import Stripe from "stripe";
 import { verifySupabaseSession, getUserBySupabaseId } from "./supabase";
+import { eq } from "drizzle-orm";
+import { db } from "./db";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -40,6 +42,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Schedule the email reminder system to run automatically
   console.log('Starting email reminder service for KARI STYLEZ...');
   scheduleReminderCheck();
+  
+  // Admin setup endpoint - make a user an admin
+  app.post("/api/admin/setup", async (req, res) => {
+    try {
+      const { email, supabaseToken } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ success: false, message: "Email is required" });
+      }
+      
+      // Verify the Supabase token if provided
+      if (supabaseToken) {
+        const session = await verifySupabaseSession(supabaseToken);
+        if (!session) {
+          return res.status(401).json({ success: false, message: "Invalid authentication token" });
+        }
+      }
+      
+      // Find the user by email
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        // Create a user if it doesn't exist with admin role
+        // We need to make a raw query to include the role field
+        // We'll use pool.query instead of db.execute for simpler execution
+        const result = await pool.query(
+          `INSERT INTO users (username, email, password, role) 
+           VALUES ($1, $2, $3, $4) 
+           RETURNING id, email, role`,
+          [email.split('@')[0], email, Math.random().toString(36).slice(-10), 'admin']
+        );
+        
+        if (result.rows[0]) {
+          return res.status(201).json({ 
+            success: true, 
+            message: "Admin user created successfully", 
+            user: result.rows[0]
+          });
+        } else {
+          return res.status(500).json({ success: false, message: "Failed to create user" });
+        }
+      }
+      
+      // Update existing user to admin role
+      const result = await pool.query(
+        `UPDATE users SET role = 'admin' WHERE email = $1 RETURNING id, email, role`, 
+        [email]
+      );
+      
+      if (result.rows[0]) {
+        return res.json({ 
+          success: true, 
+          message: "User promoted to admin successfully", 
+          user: result.rows[0]
+        });
+      } else {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+      
+    } catch (error) {
+      console.error("Admin setup error:", error);
+      res.status(500).json({ success: false, message: "Server error setting up admin user" });
+    }
+  });
   
   // Payment routes
   app.post("/api/create-payment-intent", async (req, res, next) => {

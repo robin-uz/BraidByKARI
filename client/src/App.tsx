@@ -19,6 +19,7 @@ import AdminDashboard from "@/pages/admin/dashboard";
 import AdminBookings from "@/pages/admin/bookings";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminReminders from "@/pages/admin/reminders";
+import AdminSetup from "@/pages/admin/setup";
 import NotFound from "@/pages/not-found";
 import TestPage from "@/pages/test-page";
 
@@ -65,6 +66,9 @@ function Router() {
         <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
         <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
 
+        {/* Admin setup page - public but requires authentication to create admin */}
+        <Route path="/admin/setup" component={AdminSetup} />
+        
         {/* Admin routes - protected with Supabase auth + admin role */}
         <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
         <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
