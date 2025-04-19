@@ -57,7 +57,7 @@ export default function SupabaseAuth() {
     setError(null);
 
     try {
-      console.log("Attempting login with email:", email);
+      console.log("Attempting login with:", email);
       const result = await signIn(email, password);
       console.log("Login successful:", result);
       toast({
@@ -65,16 +65,35 @@ export default function SupabaseAuth() {
         description: 'You have successfully logged in.',
       });
       
-      // Check if user is admin
+      // Check if user is admin - with different handling for server auth vs supabase auth
       if (result && result.user) {
         console.log("User object:", result.user);
-        const userIsAdmin = await isAdmin(result.user.id);
-        console.log("Is admin?", userIsAdmin);
-        if (userIsAdmin) {
-          console.log("Redirecting to admin dashboard");
-          navigate('/admin/dashboard');
+        
+        // Handle server authentication response
+        if (result.user.role) {
+          console.log("Server auth user role:", result.user.role);
+          if (result.user.role === 'admin') {
+            console.log("Server auth redirecting to admin dashboard");
+            navigate('/admin/dashboard');
+          } else {
+            console.log("Server auth redirecting to client dashboard");
+            navigate('/client/dashboard');
+          }
+        }
+        // Handle Supabase authentication response
+        else if (result.user.id) {
+          console.log("Supabase auth user, checking admin status");
+          const userIsAdmin = await isAdmin(result.user.id);
+          console.log("Is admin?", userIsAdmin);
+          if (userIsAdmin) {
+            console.log("Redirecting to admin dashboard");
+            navigate('/admin/dashboard');
+          } else {
+            console.log("Redirecting to client dashboard");
+            navigate('/client/dashboard');
+          }
         } else {
-          console.log("Redirecting to client dashboard");
+          console.log("Unexpected user format, redirecting to client dashboard");
           navigate('/client/dashboard');
         }
       } else {

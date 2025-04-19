@@ -31,21 +31,62 @@ export async function signUp(email: string, password: string) {
   return data;
 }
 
-// Sign in with email and password
-export async function signIn(email: string, password: string) {
-  console.log('Signing in with email:', email);
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  
-  if (error) {
-    console.error('Login error:', error.message);
+// Sign in with email or username and password
+export async function signIn(emailOrUsername: string, password: string) {
+  try {
+    console.log('Attempting to sign in with:', emailOrUsername);
+    
+    // First try server authentication
+    try {
+      console.log('Trying server login first');
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          username: emailOrUsername, 
+          password 
+        }),
+        credentials: 'include',
+      });
+      
+      console.log('Server auth response status:', response.status);
+      
+      if (response.ok) {
+        const userData = await response.json();
+        console.log('Server login successful:', userData);
+        return { user: userData };
+      } else {
+        const errorData = await response.json();
+        console.log('Server login failed:', errorData.message);
+      }
+    } catch (serverAuthError) {
+      console.error('Server auth error:', serverAuthError);
+    }
+    
+    // If server auth failed and input looks like an email, try Supabase authentication
+    if (emailOrUsername.includes('@')) {
+      console.log('Trying Supabase auth with email:', emailOrUsername);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailOrUsername,
+        password,
+      });
+      
+      if (error) {
+        console.error('Supabase login error:', error.message);
+        throw error;
+      }
+      
+      console.log('Supabase login success:', data);
+      return data;
+    } else {
+      throw new Error('Login failed. If using username, please ensure it exists and password is correct.');
+    }
+  } catch (error: any) {
+    console.error('All authentication methods failed:', error.message);
     throw error;
   }
-  
-  console.log('Login success:', data);
-  return data;
 }
 
 // Sign in with magic link

@@ -146,8 +146,14 @@ export function setupAuth(app: Express) {
           return next(err);
         }
         
-        console.log("User logged in successfully:", user.username);
-        res.status(200).json(user);
+        // Remove password from the returned user object
+        const userResponse = { ...user };
+        delete userResponse.password;
+        
+        console.log("User logged in successfully:", userResponse.username);
+        console.log("User role:", userResponse.role);
+        console.log("Session established, cookie should be set");
+        res.status(200).json(userResponse);
       });
     })(req, res, next);
   });
