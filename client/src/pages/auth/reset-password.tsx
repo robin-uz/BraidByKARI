@@ -10,7 +10,7 @@ import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { useLocation } from 'wouter';
-import { updatePassword, supabase } from '@/lib/supabase-client';
+import { updateUser, supabase } from '@/lib/supabase-client';
 
 // New password schema
 const passwordSchema = z.object({
@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
     setError(null);
     
     try {
-      await updatePassword(values.password);
+      await updateUser({ password: values.password });
       toast({
         title: "Password updated",
         description: "Your password has been successfully updated. You can now login with your new password.",

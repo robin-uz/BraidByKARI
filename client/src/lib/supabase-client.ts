@@ -13,11 +13,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Sign up with email and password
 export async function signUp(email: string, password: string) {
+  console.log('Signing up with email:', email);
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${window.location.origin}/auth/supabase`
+      emailRedirectTo: `${window.location.origin}/auth/callback`
     }
   });
   
@@ -32,6 +33,7 @@ export async function signUp(email: string, password: string) {
 
 // Sign in with email and password
 export async function signIn(email: string, password: string) {
+  console.log('Signing in with email:', email);
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -46,8 +48,25 @@ export async function signIn(email: string, password: string) {
   return data;
 }
 
+// Sign in with magic link
+export async function signInWithMagicLink(email: string) {
+  console.log('Sending magic link to:', email);
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email
+  });
+  
+  if (error) {
+    console.error('Magic link error:', error.message);
+    throw error;
+  }
+  
+  console.log('Magic link sent successfully');
+  return data;
+}
+
 // Sign out
 export async function signOut() {
+  console.log('Signing out user');
   const { error } = await supabase.auth.signOut();
   
   if (error) {
@@ -55,11 +74,12 @@ export async function signOut() {
     throw error;
   }
   
-  console.log('Logged out');
+  console.log('Logged out successfully');
 }
 
 // Reset password
 export async function resetPassword(email: string) {
+  console.log('Resetting password for:', email);
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/auth/reset-password`
   });
@@ -72,18 +92,17 @@ export async function resetPassword(email: string) {
   console.log('Password reset email sent');
 }
 
-// Update password
-export async function updatePassword(newPassword: string) {
-  const { data, error } = await supabase.auth.updateUser({
-    password: newPassword
-  });
+// Update user
+export async function updateUser(updates: { email?: string, password?: string, data?: any }) {
+  console.log('Updating user with:', updates);
+  const { data, error } = await supabase.auth.updateUser(updates);
   
   if (error) {
-    console.error('Password update error:', error.message);
+    console.error('Update user error:', error.message);
     throw error;
   }
   
-  console.log('Password updated successfully');
+  console.log('User updated successfully');
   return data;
 }
 
@@ -101,14 +120,13 @@ export async function getSession() {
 
 // Get current user
 export async function getUser() {
-  const { data, error } = await supabase.auth.getUser();
-  
-  if (error) {
-    console.error('Get user error:', error.message);
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+  } catch (error) {
+    console.error('Get user error:', error);
     throw error;
   }
-  
-  return data.user;
 }
 
 // Subscribe to auth state changes
