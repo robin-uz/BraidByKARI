@@ -27,7 +27,7 @@ export default function SupabaseAuth() {
       try {
         const user = await getUser();
         if (user) {
-          navigate('/client/supabase-dashboard');
+          navigate('/client/dashboard');
         }
       } catch (err) {
         // Not authenticated, stay on auth page
@@ -49,7 +49,7 @@ export default function SupabaseAuth() {
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       });
-      navigate('/client/supabase-dashboard');
+      navigate('/client/dashboard');
     } catch (err: any) {
       setError(err.message);
       toast({

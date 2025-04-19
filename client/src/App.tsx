@@ -43,10 +43,9 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
-        <Route path="/auth" component={ServerAuthPage} />
+        <Route path="/auth" component={SupabaseAuth} />
         <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
         <Route path="/auth/reset-password" component={ResetPasswordPage} />
-        <Route path="/auth/supabase" component={SupabaseAuth} />
         <Route path="/auth/callback" component={AuthCallback} />
         
         {/* Booking - protection optional as guests can book too, 
@@ -61,25 +60,16 @@ function Router() {
         
         {/* Supabase Auth Routes */}
         
-        {/* Client routes - protected with server auth */}
-        <ServerProtectedRoute path="/client/dashboard" component={ClientDashboardPage} />
-        
         {/* Client routes - protected with Supabase auth */}
-        <SupabaseProtectedRoute path="/client/supabase-dashboard" component={SupabaseDashboard} />
-        <SupabaseProtectedRoute path="/client/supabase-profile" component={ProfilePage} />
-        <SupabaseProtectedRoute path="/client/supabase-simulator" component={HairSimulator} />
-        
-        {/* Legacy routes - will be migrated */}
-        <ProtectedRoute path="/client/dashboard-new" component={ClientDashboardPage} />
-        <ServerProtectedRoute path="/client/dashboard-old" component={ClientDashboard} />
-        <ServerProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
-        <ServerProtectedRoute path="/client/profile" component={ProfilePage} />
+        <SupabaseProtectedRoute path="/client/dashboard" component={SupabaseDashboard} />
+        <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
+        <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
 
-        {/* Admin routes - protected with server auth */}
-        <ServerProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
-        <ServerProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
+        {/* Admin routes - protected with Supabase auth */}
+        <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
+        <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} />
+        <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} />
+        <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
