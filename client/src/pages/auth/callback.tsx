@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
-import { supabase } from '@/lib/supabase-client';
+import { supabase, isAdmin } from '@/lib/supabase-client';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCallback() {
@@ -33,7 +33,14 @@ export default function AuthCallback() {
         // Get the current session to verify it worked
         const { data } = await supabase.auth.getSession();
         if (data.session) {
-          navigate('/client/supabase-dashboard');
+          // Check if the user is an admin
+          const userIsAdmin = data.session.user ? await isAdmin(data.session.user.id) : false;
+          
+          if (userIsAdmin) {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/client/dashboard');
+          }
         } else {
           navigate('/auth/supabase');
         }

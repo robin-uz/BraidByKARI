@@ -1,8 +1,7 @@
 import { Route, Redirect } from "wouter";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import { getUser } from "./supabase-client";
-import { supabase } from "./supabase-client";
+import { getUser, isAdmin as checkIsAdmin } from "./supabase-client";
 
 type SupabaseProtectedRouteProps = {
   path: string;
@@ -25,19 +24,14 @@ export function SupabaseProtectedRoute({ path, component: Component, adminOnly =
         if (user) {
           setUserId(user.id);
           
-          // Check if admin by querying the users table
+          // Check if admin using our utility function
           if (adminOnly) {
-            const { data, error } = await supabase
-              .from('users')
-              .select('role')
-              .eq('auth_id', user.id)
-              .single();
-            
-            if (error) {
-              console.error('Error fetching user role:', error);
+            try {
+              const adminStatus = await checkIsAdmin(user.id);
+              setIsAdmin(adminStatus);
+            } catch (error) {
+              console.error('Error checking admin status:', error);
               setIsAdmin(false);
-            } else {
-              setIsAdmin(data?.role === 'admin');
             }
           }
         }

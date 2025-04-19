@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Mail } from 'lucide-react';
-import { signIn, signUp, signInWithMagicLink, getUser } from '@/lib/supabase-client';
+import { signIn, signUp, signInWithMagicLink, getUser, isAdmin } from '@/lib/supabase-client';
 
 export default function SupabaseAuth() {
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,13 @@ export default function SupabaseAuth() {
       try {
         const user = await getUser();
         if (user) {
-          navigate('/client/dashboard');
+          // Check if user is admin and redirect accordingly
+          const userIsAdmin = await isAdmin(user.id);
+          if (userIsAdmin) {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/client/dashboard');
+          }
         }
       } catch (err) {
         // Not authenticated, stay on auth page
@@ -44,12 +50,23 @@ export default function SupabaseAuth() {
     setError(null);
 
     try {
-      await signIn(email, password);
+      const result = await signIn(email, password);
       toast({
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       });
-      navigate('/client/dashboard');
+      
+      // Check if user is admin
+      if (result && result.user) {
+        const userIsAdmin = await isAdmin(result.user.id);
+        if (userIsAdmin) {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/client/dashboard');
+        }
+      } else {
+        navigate('/client/dashboard');
+      }
     } catch (err: any) {
       setError(err.message);
       toast({
