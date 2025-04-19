@@ -14,6 +14,7 @@ import Stripe from "stripe";
 import { verifySupabaseSession, getUserBySupabaseId } from "./supabase";
 import { eq } from "drizzle-orm";
 import { db, pool } from "./db";
+import loyaltyRouter from "./loyalty-routes";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
