@@ -2,6 +2,7 @@ import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { LoyaltyTier, LoyaltyReward, LoyaltyAchievement } from "@shared/schema";
 import { Loader2, Plus, Award, Settings, Users, Gift, Target } from "lucide-react";
+import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -193,8 +194,8 @@ export default function LoyaltyDashboard() {
         <p className="text-gray-500 mb-4">
           Please log in to access the loyalty dashboard.
         </p>
-        <Button href="/auth" asChild>
-          <a>Login</a>
+        <Button asChild>
+          <Link href="/auth">Login</Link>
         </Button>
       </div>
     );
