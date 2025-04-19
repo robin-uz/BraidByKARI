@@ -65,11 +65,11 @@ function Router() {
         <SupabaseProtectedRoute path="/client/profile" component={ProfilePage} />
         <SupabaseProtectedRoute path="/client/hair-simulator" component={HairSimulator} />
 
-        {/* Admin routes - protected with Supabase auth */}
-        <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
-        <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} />
-        <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} />
-        <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} />
+        {/* Admin routes - protected with Supabase auth + admin role */}
+        <SupabaseProtectedRoute path="/admin/dashboard" component={AdminDashboard} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/bookings" component={AdminBookings} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/analytics" component={AdminAnalytics} adminOnly={true} />
+        <SupabaseProtectedRoute path="/admin/reminders" component={AdminReminders} adminOnly={true} />
         
         {/* Fallback to 404 */}
         <Route component={NotFound} />
