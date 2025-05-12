@@ -107,22 +107,7 @@ export function StepTime({ selectedDate, selectedTime, onSelect }: StepTimeProps
         </div>
       )}
       
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(255, 255, 255, 0.2);
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: rgba(255, 255, 255, 0.3);
-        }
-      `}</style>
+      {/* Custom scrollbar styles added to index.css instead */}
     </motion.div>
   );
 }
