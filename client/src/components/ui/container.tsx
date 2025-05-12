@@ -237,6 +237,7 @@ export function HeroContainer({
         "max-h-[var(--hero-max-height)]", // Max height (desktop only)
         "w-full",
         "relative",
+        "overflow-hidden", // Add overflow hidden to prevent image overflow
         className
       )}
       {...props}

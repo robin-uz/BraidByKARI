@@ -15,19 +15,19 @@ interface HeroImage {
 // Define hero images
 const HERO_IMAGES: HeroImage[] = [
   {
-    url: '/images/hero-braids-1.jpg',
+    url: '/images-new/hero-braids-1.png',
     alt: 'Woman with elegant box braids in warm golden lighting',
     heading: 'LUXURY BRAIDING EXPERIENCE',
     subheading: 'Where skill meets artistry in every strand',
   },
   {
-    url: '/images/hero-braids-2.jpg',
+    url: '/images-new/hero-braids-2.png',
     alt: 'Woman with golden-brown twisted braids in warm lighting',
     heading: 'ELEVATE YOUR NATURAL BEAUTY',
     subheading: 'Premium styles that celebrate your unique essence',
   },
   {
-    url: '/images/hero-braids-3.jpg',
+    url: '/images-new/hero-braids-3.png',
     alt: 'Woman with long box braids and rust-colored top',
     heading: 'MASTER CRAFTED STYLES',
     subheading: 'Detail-oriented artistry for unforgettable looks',
@@ -60,23 +60,29 @@ export default function HeroSection() {
   return (
     <HeroContainer className="relative overflow-hidden">
       {/* Background rotating images with crossfade */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentImageIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 2 }}
-          className="absolute inset-0 w-full h-full"
-        >
-          <div 
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${HERO_IMAGES[currentImageIndex].url})` }}
-          />
-          {/* Gradient overlay for readability - follows spec */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        </motion.div>
-      </AnimatePresence>
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={currentImageIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <div 
+              className="w-full h-full bg-cover bg-center bg-no-repeat"
+              style={{ 
+                backgroundImage: `url(${HERO_IMAGES[currentImageIndex].url})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+            {/* Gradient overlay for readability - follows spec */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
       
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col justify-center px-[var(--gutter-mobile)] sm:px-[var(--gutter-tablet)] lg:px-[var(--gutter)]">
