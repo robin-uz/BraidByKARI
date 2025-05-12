@@ -6,7 +6,7 @@ import MainLayout from "@/components/layout/main-layout";
 
 // Pages
 import HomePage from "@/pages/home-page";
-import GalleryPage from "@/pages/gallery-page";
+import GalleryPage from "@/pages/gallery-page-new";
 import ServicesPage from "@/pages/services-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
