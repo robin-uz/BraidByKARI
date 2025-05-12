@@ -16,7 +16,7 @@ interface HeroImage {
 const HERO_IMAGES: HeroImage[] = [
   {
     url: '/images/hero-braids-1.jpg',
-    alt: 'Woman with elegant box braids in luxurious setting',
+    alt: 'Woman with elegant box braids',
     heading: 'LUXURY BRAIDING EXPERIENCE',
     subheading: 'Where skill meets artistry in every strand',
   },
@@ -27,9 +27,8 @@ const HERO_IMAGES: HeroImage[] = [
     subheading: 'Premium styles that celebrate your unique essence',
   },
   {
-    // Third image placeholder - will be updated when third image is received
-    url: '/images/hero-braids-2.jpg', // Temporarily use second image until third is received
-    alt: 'Woman with detailed hair braiding',
+    url: '/images/hero-braids-3.jpg',
+    alt: 'Woman with curly braids hairstyle',
     heading: 'MASTER CRAFTED STYLES',
     subheading: 'Detail-oriented artistry for unforgettable looks',
   },
