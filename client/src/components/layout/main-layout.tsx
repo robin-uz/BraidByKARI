@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
-import MainNav from "./main-nav";
-import Footer from "./footer";
 import { useLocation } from "wouter";
+import { NavHeader } from "./nav-header";
+import { Footer } from "./layout";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -22,8 +22,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAdminPage && !isPasswordResetPage && <MainNav />}
-      <main className="flex-grow">{children}</main>
+      {!isAdminPage && !isPasswordResetPage && <NavHeader />}
+      <main className="flex-grow pt-[var(--header-height-mobile)] md:pt-[var(--header-height-tablet)] lg:pt-[var(--header-height)]">
+        {children}
+      </main>
       {!isAdminPage && !isPasswordResetPage && <Footer />}
     </div>
   );

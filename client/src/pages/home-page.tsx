@@ -1,37 +1,23 @@
-import HeroSection from "@/components/home/hero-section";
-import ServicesSection from "@/components/home/services-section";
-import TestimonialsSection from "@/components/home/testimonials-section";
-import { Helmet } from "react-helmet";
-import PageTransition from "@/components/ui/page-transition";
-import { useEffect, useContext } from "react";
-import { LoadingContext } from "@/contexts/LoadingContext";
+import React from 'react';
+import { Layout } from '@/components/layout/layout';
+import HeroSection from '@/components/home/hero-section';
+import { motion } from 'framer-motion';
 
-export default function HomePage() {
-  const loadingContext = useContext(LoadingContext);
-  
-  useEffect(() => {
-    // Set loading to false when component mounts
-    if (loadingContext) {
-      const timer = setTimeout(() => {
-        loadingContext.setLoading(false);
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [loadingContext]);
-  
+const HomePage = () => {
   return (
-    <>
-      <Helmet>
-        <title>KARI STYLEZ | Luxury Hair Braiding Salon</title>
-        <meta name="description" content="Experience premium hair braiding at KARI STYLEZ. Our expert stylists create stunning box braids, knotless braids, feed-ins, and more. Book now!" />
-      </Helmet>
-      
-      <PageTransition>
+    <Layout includeHeader={true} includeFooter={true} wrapWithContainer={false}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <HeroSection />
-        <ServicesSection />
-        <TestimonialsSection />
-      </PageTransition>
-    </>
+        
+        {/* Additional content sections will be added here */}
+      </motion.div>
+    </Layout>
   );
-}
+};
+
+export default HomePage;

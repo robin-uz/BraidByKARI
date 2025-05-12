@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'wouter';
+import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { HeroContainer, ResponsiveText } from '@/components/ui/container';
@@ -17,26 +17,28 @@ const HERO_IMAGES: HeroImage[] = [
   {
     url: '/images/hero-braids-1.jpg',
     alt: 'Woman with elegant box braids',
-    heading: 'Stunning Braids for Every Occasion',
-    subheading: 'Expert stylists crafting luxury hair experiences',
+    heading: 'LUXURY BRAIDING EXPERIENCE',
+    subheading: 'Where skill meets artistry in every strand',
   },
   {
-    url: '/images/hero-braids-2.jpg',
+    // Temp placeholders - these will be replaced with the real images
+    url: '/images/hero-braids-1.jpg',
     alt: 'Woman with stylish knotless braids',
-    heading: 'Elevate Your Natural Beauty',
-    subheading: 'Premium styles that celebrate your unique hair',
+    heading: 'ELEVATE YOUR NATURAL BEAUTY',
+    subheading: 'Premium styles that celebrate your unique essence',
   },
   {
-    url: '/images/hero-braids-3.jpg',
+    // Temp placeholders - these will be replaced with the real images
+    url: '/images/hero-braids-1.jpg',
     alt: 'Woman with detailed hair braiding',
-    heading: 'Art of Precision Braiding',
-    subheading: 'Meticulous attention to every detail for flawless results',
+    heading: 'MASTER CRAFTED STYLES',
+    subheading: 'Detail-oriented artistry for unforgettable looks',
   },
 ];
 
-export function HeroSection() {
+export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [, navigate] = useRouter();
+  const [, navigate] = useLocation();
   
   // Image rotation every 6 seconds
   useEffect(() => {
@@ -80,7 +82,7 @@ export function HeroSection() {
       
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col justify-center px-[var(--gutter-mobile)] sm:px-[var(--gutter-tablet)] lg:px-[var(--gutter)]">
-        <div className="max-w-4xl">
+        <div className="max-w-5xl">
           {/* Animated text content */}
           <AnimatePresence mode="wait">
             <motion.div
@@ -90,17 +92,22 @@ export function HeroSection() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 1, delay: 0.5 }}
             >
-              <ResponsiveText 
-                as="h1" 
-                variant="display"
-                className="font-bold text-white mb-4 drop-shadow-lg"
-              >
-                {HERO_IMAGES[currentImageIndex].heading}
-              </ResponsiveText>
+              {/* Gold gradient styling for main heading */}
+              <div className="mb-4">
+                <ResponsiveText 
+                  as="h1" 
+                  variant="display"
+                  className="font-bold text-white drop-shadow-lg tracking-wider font-serif"
+                >
+                  <span className="bg-gradient-to-r from-amber-300 to-amber-600 text-transparent bg-clip-text">
+                    {HERO_IMAGES[currentImageIndex].heading}
+                  </span>
+                </ResponsiveText>
+              </div>
               
               <ResponsiveText 
                 variant="h3"
-                className="text-neutral-200 mb-8 max-w-2xl drop-shadow-md"
+                className="text-neutral-200 mb-10 max-w-2xl drop-shadow-md font-light"
               >
                 {HERO_IMAGES[currentImageIndex].subheading}
               </ResponsiveText>
@@ -116,7 +123,7 @@ export function HeroSection() {
                 "bg-amber-600 hover:bg-amber-700 text-white",
                 "w-full sm:w-[var(--hero-button-width)]",
                 "h-[var(--hero-button-height-mobile)] sm:h-[var(--hero-button-height)]",
-                "shadow-lg"
+                "shadow-lg text-base"
               )}
             >
               Book Appointment
@@ -127,9 +134,10 @@ export function HeroSection() {
               variant="outline"
               size="lg"
               className={cn(
-                "bg-transparent border-2 border-white text-white hover:bg-white/10",
+                "bg-transparent border-2 border-amber-500 text-amber-300 hover:bg-amber-500/10",
                 "w-full sm:w-[var(--hero-button-width)]",
-                "h-[var(--hero-button-height-mobile)] sm:h-[var(--hero-button-height)]"
+                "h-[var(--hero-button-height-mobile)] sm:h-[var(--hero-button-height)]",
+                "text-base"
               )}
             >
               Explore Services

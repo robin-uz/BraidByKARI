@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { useAuth } from '@/hooks/auth';
 import { 
   Menu, X, Moon, Sun, User, LogOut, Settings, 
   ChevronDown, ShoppingBag, Calendar 
@@ -38,7 +37,10 @@ export function NavHeader() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [location] = useLocation();
-  const { user, logout } = useAuth();
+  
+  // Mock user data - in a real app this would come from an auth hook
+  const user = null; // No user logged in by default
+  const logout = () => console.log('Logging out');
 
   // Toggle dark mode
   const toggleDarkMode = () => {
