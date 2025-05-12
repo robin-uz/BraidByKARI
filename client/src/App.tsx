@@ -9,6 +9,7 @@ import HomePage from "@/pages/home-page";
 import GalleryPage from "@/pages/gallery-page";
 import ServicesPage from "@/pages/services-page";
 import BookingPage from "@/pages/booking-page";
+import AboutPage from "@/pages/about-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
 import ServerAuthPage from "@/pages/auth/server-auth-page";
@@ -46,6 +47,7 @@ function Router() {
       <Route path="/gallery" component={GalleryPage} />
       <Route path="/services" component={ServicesPage} />
       <Route path="/pricing" component={PricingPage} />
+      <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/auth" component={SupabaseAuth} />
       <Route path="/auth/forgot-password" component={ForgotPasswordPage} />
