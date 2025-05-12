@@ -10,9 +10,9 @@ interface WizardLayoutProps {
 
 export function WizardLayout({ children, progress, summary }: WizardLayoutProps) {
   return (
-    <div className="min-h-[calc(100vh-var(--header-height))] bg-purple-950">
+    <div className="min-h-[calc(100vh-var(--header-height))]">
       {/* Progress Bar */}
-      <div className="sticky top-0 z-10 bg-purple-950/80 backdrop-blur-sm py-2 border-b border-white/10">
+      <div className="sticky top-0 z-10 bg-black/50 backdrop-blur-sm py-2 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs text-amber-300">

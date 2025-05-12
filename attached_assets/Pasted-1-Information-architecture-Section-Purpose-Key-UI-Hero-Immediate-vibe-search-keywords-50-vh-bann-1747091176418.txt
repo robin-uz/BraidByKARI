@@ -1,0 +1,35 @@
+1 · Information architecture
+Section	Purpose	Key UI
+Hero	Immediate vibe + search keywords	50 vh banner, founder headshot in gold circle, headline “Luxury Braiding Rooted in Culture”
+Founder Story	Personal connection	Two‑column: image left, 250‑word story right
+Mission & Values	Brand pillars	3 glass cards: Healthy Hair • Luxury Experience • Cultural Celebration
+Meet the Stylists	Social proof	Horizontal scroll of portrait circles w/ names, specialties, IG icons
+Milestones Timeline	Credibility	Vertical line with dates & achievements
+Press & Certifications	Trust badges	Logo strip (Cosmetology License, Essence, Elle, etc.)
+CTA Strip	Conversion	Gold bar: “Ready to elevate your crown? → Book Appointment”
+
+2 · Design tokens
+arduino
+Copy
+Edit
+about-bg      bg-purple-950/90
+card-glass    bg-white/5 backdrop-blur-lg ring-1 ring-white/10 rounded-2xl
+brand-gold    #d9a43b
+timeline-line bg-brand-gold/60 w-1
+3 · Replit AI agent prompt (copy → paste)
+**You’re a senior Next.js + Tailwind engineer inside repo kari-stylez-web.
+Goal: build /about page that matches brand.
+Steps
+1. Add app/about/page.tsx (or pages/about.tsx).
+2. Hero section: 50 vh, bg /public/hero/about-banner.jpg, black/60 overlay, arc gradient; place founder headshot in 160 px gold‑ring circle bottom‑left.
+3. Section: Founder Story – two‑col grid on ≥ md, stacked mobile; 250‑word lorem w/ signature image /public/about/signature.png.
+4. Section: Mission & Values – 3 card-glass items with braid‑icon emojis.
+5. Section: “Meet the Stylists” – horizontal scroll (snap-x) portrait list; reuse components/AvatarCard.tsx if exists or build small component.
+6. Section: Timeline – flex column; dot + timeline-line between items.
+7. Section: Press Logos – wrap logos in grayscale→hover‑color effect.
+8. CTA strip – gold gradient bar, center text + button /booking.
+9. Use Framer Motion fade‑up on each section (whileInView).
+10. Add about-bg to body via className in page wrapper; do not touch global background logic.
+11. Run npm run dev; ensure /about loads w/out TS or ESLint errors.
+Output: only new/updated file contents (page + optional tiny component), no explanations.
+
