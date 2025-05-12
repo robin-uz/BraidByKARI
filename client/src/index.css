@@ -5,101 +5,136 @@
 @tailwind utilities;
 
 /* 
-  Layout System Variables - Based on Layout Guide
+  Layout System Variables - Based on Detailed Layout Guide & Specifications
   These variables provide consistent spacing, sizing and visual hierarchy
 */
 @layer base {
   :root {
-    /* Page width constraints */
-    --page-width-desktop: 1280px;
-    --page-width-tablet: 92vw;
-    --page-width-mobile: 94vw;
+    /* 1. Global Canvas */
+    --page-max: 1240px;          /* Desktop (≥1280px) */
+    --page-max-tablet: 96vw;     /* Tablet (768-1279px) */
+    --page-max-mobile: 96vw;     /* Mobile (≤767px) */
     
-    /* Grid configuration */
-    --grid-columns-desktop: 12;
-    --grid-columns-tablet: 8;
-    --grid-columns-mobile: 4;
-    --grid-outer-gutter-desktop: 72px;
-    --grid-outer-gutter-tablet: 56px;
-    --grid-outer-gutter-mobile: 16px;
-    --grid-inner-gutter-desktop: 24px;
-    --grid-inner-gutter-tablet: 20px;
-    --grid-inner-gutter-mobile: 12px;
+    --gutter: 72px;              /* Desktop horizontal breathing room */
+    --gutter-tablet: 48px;       /* Tablet horizontal breathing room */
+    --gutter-mobile: 20px;       /* Mobile horizontal breathing room */
     
-    /* Card dimensions */
-    --card-width-desktop: 720px;
-    --card-width-tablet: 90vw;
-    --card-width-mobile: 100%;
-    --card-shadow-blur: 8px;
-    --card-shadow-spread: 2px;
-    --card-shadow-opacity: 20%;
+    --section-gap: 96px;         /* Vertical section spacing desktop */
+    --section-gap-tablet: 64px;  /* Vertical section spacing tablet */
+    --section-gap-mobile: 48px;  /* Vertical section spacing mobile */
     
-    /* Modal configurations */
-    --modal-width-desktop: 600px;
-    --modal-max-width-desktop: 90vw;
-    --modal-width-tablet: 520px;
-    --modal-max-width-tablet: 94vw;
-    --modal-width-mobile: 100%;
-    --modal-border-radius: 16px;
-    --modal-padding-desktop: 32px;
-    --modal-padding-tablet: 24px;
-    --modal-padding-mobile: 20px;
-    --modal-max-height: calc(100vh - 120px);
+    --radius-lg: 24px;           /* Shared by modals, cards, curved dividers */
+    --radius-lg-tablet: 20px;    /* Tablet border radius */
+    --radius-lg-mobile: 16px;    /* Mobile border radius */
     
-    /* Button specifications */
-    --button-min-width: 140px;
-    --button-height: 48px;
-    --button-border-radius: 16px;
-    --button-vertical-spacing: 24px;
+    /* 2. Navigation (MainNav) */
+    --header-height: 88px;       /* Desktop header height */
+    --header-height-tablet: 72px;/* Tablet header height */
+    --header-height-mobile: 64px;/* Mobile header height */
     
-    /* Typography scales */
-    --font-size-display-desktop: 56px;
-    --font-size-h1-desktop: 40px;
-    --font-size-h2-desktop: 32px;
-    --font-size-h3-desktop: 24px;
-    --font-size-h4-desktop: 20px;
-    --font-size-body-desktop: 16px;
+    --logo-max-width: 160px;     /* Desktop logo max width */
+    --logo-max-height: 48px;     /* Desktop logo max height */
+    --logo-max-width-mobile: 120px; /* Mobile logo max width */
+    --logo-max-height-mobile: 36px; /* Mobile logo max height */
     
-    --font-size-display-tablet: 48px;
-    --font-size-h1-tablet: 32px;
-    --font-size-h2-tablet: 28px;
-    --font-size-h3-tablet: 22px;
-    --font-size-h4-tablet: 18px;
-    --font-size-body-tablet: 15px;
+    --nav-link-gap: 32px;        /* Desktop navigation link spacing */
+    --mobile-drawer-width: 280px;/* Mobile menu drawer width */
+    --mobile-drawer-padding: 24px;/* Mobile menu drawer padding */
     
-    --font-size-display-mobile: 36px;
-    --font-size-h1-mobile: 28px;
-    --font-size-h2-mobile: 24px;
-    --font-size-h3-mobile: 20px;
-    --font-size-h4-mobile: 18px;
-    --font-size-body-mobile: 15px;
+    /* 3. Hero Section */
+    --hero-height: 80vh;         /* Desktop hero height */
+    --hero-min-height: 640px;    /* Desktop hero min height */
+    --hero-max-height: 720px;    /* Desktop hero max height */
+    --hero-height-mobile: 70vh;  /* Mobile hero height */
+    --hero-min-height-mobile: 480px; /* Mobile hero min height */
     
-    --line-height-heading: 1.2;
-    --line-height-body: 1.4;
+    --hero-button-width: 180px;  /* Desktop hero button width */
+    --hero-button-height: 56px;  /* Desktop hero button height */
+    --hero-button-gap: 24px;     /* Desktop hero button gap */
+    --hero-button-height-mobile: 52px; /* Mobile hero button height */
+    --hero-button-gap-mobile: 16px; /* Mobile hero button gap */
     
-    /* Section spacing (vertical rhythm) */
-    --vertical-spacing-desktop: 64px;
-    --vertical-spacing-tablet: 48px;
-    --vertical-spacing-mobile: 32px;
+    /* 4. Services Section */
+    --services-grid-gap: 40px;   /* Desktop services grid gap */
+    --services-grid-gap-tablet: 32px; /* Tablet services grid gap */
+    --services-grid-gap-mobile: 24px; /* Mobile services grid gap */
     
-    /* Form field dimensions */
-    --form-field-width-desktop: 420px;
-    --form-field-width-tablet: 90%;
-    --form-field-width-mobile: 100%;
-    --form-field-height: 44px;
-    --form-error-text-size: 12px;
+    --service-card-min-height: 420px; /* Services card min height */
+    --service-card-padding: 32px; /* Desktop service card padding */
+    --service-card-padding-tablet: 28px; /* Tablet service card padding */
+    --service-card-padding-mobile: 24px; /* Mobile service card padding */
+    
+    /* 5. Testimonials Carousel */
+    --testimonial-card-width: 440px; /* Desktop testimonial card width */
+    --testimonial-card-width-tablet: 320px; /* Tablet testimonial card width */
+    --testimonial-card-width-mobile: 280px; /* Mobile testimonial card width */
+    --testimonial-card-height: 260px; /* Testimonial card height */
+    
+    --testimonial-avatar-size: 72px; /* Desktop testimonial avatar size */
+    --testimonial-avatar-size-mobile: 56px; /* Mobile testimonial avatar size */
+    
+    /* 6. Gallery Grid */
+    --gallery-grid-gap: 20px;    /* Desktop gallery grid gap */
+    --gallery-grid-gap-lg: 16px; /* Large screen gallery grid gap */
+    --gallery-grid-gap-md: 14px; /* Medium screen gallery grid gap */
+    --gallery-grid-gap-sm: 12px; /* Small screen gallery grid gap */
+    
+    /* 7. Pricing Page */
+    --pricing-table-max-width: 820px; /* Pricing table max width */
+    --pricing-row-height: 56px;  /* Pricing table row height */
+    --pricing-thumbnail-size: 64px; /* Pricing thumbnail size */
+    --pricing-accent-height: 4px; /* Pricing accent divider height */
+    
+    /* 8. Booking Modal */
+    --booking-modal-max-width: 560px; /* Desktop booking modal max width */
+    --booking-modal-padding: 32px; /* Desktop booking modal padding */
+    --booking-modal-padding-mobile: 24px; /* Mobile booking modal padding */
+    --booking-field-height: 48px; /* Booking form field height */
+    --booking-close-zone: 48px;  /* Booking modal close button size */
+    --booking-close-offset: 16px; /* Booking modal close button offset */
+    --booking-drag-bar-width: 32px; /* Mobile booking drag bar width */
+    --booking-drag-bar-height: 4px; /* Mobile booking drag bar height */
+    
+    /* 9. Client Portal */
+    --portal-card-padding: 24px; /* Client portal card padding */
+    --portal-section-gap: 48px;  /* Client portal section gap */
+    
+    /* 10. Admin Area */
+    --admin-header-height: 72px; /* Admin header height */
+    --admin-sidebar-width: 260px; /* Admin sidebar width */
+    --admin-sidebar-mini: 72px;  /* Admin sidebar mini width */
+    --admin-content-padding-x: 40px; /* Admin content horizontal padding */
+    --admin-content-padding-y: 32px; /* Admin content vertical padding */
+    --admin-table-row-height: 52px; /* Admin table row height */
+    --admin-checkbox-width: 48px; /* Admin checkbox column width */
+    
+    /* Shared Touch-target & Typography Tokens */
+    --tap-min: 44px;             /* Minimum touch target size */
+    --font-display: 48px;        /* Display font size */
+    --font-display-line-height: 1.1; /* Display line height */
+    --font-h1: 40px;             /* H1 font size */
+    --font-h1-line-height: 1.2;  /* H1 line height */
+    --font-body: 16px;           /* Body font size */
+    --font-body-line-height: 1.6; /* Body line height */
+    --font-label: 14px;          /* Label font size */
+    --font-label-line-height: 1.4; /* Label line height */
     
     /* Animation settings */
-    --animation-duration: 200ms;
-    --animation-easing: ease-out;
-    --animation-translate-y: 8px;
+    --animation-duration: 300ms; /* Animation duration */
+    --animation-easing: cubic-bezier(0.4, 0, 0.2, 1); /* Animation easing */
+    --animation-translate-y: 8px; /* Animation translate Y amount */
     
     /* KARI STYLEZ Brand Colors */
     --kari-gold: #D4AF37;
+    --kari-amber: #FFCB70;
     --kari-bronze: #CD7F32;
     --kari-brown: #A47551;  
     --kari-cream: #FCF5E5;
     --kari-black: #121212;
+    
+    /* Motion Presets for Framer Motion */
+    --motion-fade-translate: translateY(var(--animation-translate-y));
+    --motion-modal-scale: 0.96;
   }
 }
 

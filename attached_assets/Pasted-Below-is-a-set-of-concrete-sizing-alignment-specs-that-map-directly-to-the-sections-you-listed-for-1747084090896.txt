@@ -1,0 +1,125 @@
+Below is a set of concrete sizing & alignment specs that map directly to the sections you listed for KARI STYLEZ. Think of them as starting‑point tokens you can drop into Tailwind config or global CSS variables; tweak ±8 px for brand personality, but these ranges will keep everything balanced across breakpoints.
+
+1. Global Canvas
+Token	Desktop (≥1280 px)	Tablet (768‑1279 px)	Mobile (≤767 px)	Why
+--page-max	1240 px	96 vw	96 vw	Prevents ultra‑wide hero stretch while staying fluid.
+--gutter	72 px	48 px	20 px	Horizontal breathing room for glassmorphism cards.
+--section-gap	96 px	64 px	48 px	Consistent vertical rhythm between Hero → Services → Testimonials.
+--radius-lg	24 px	20 px	16 px	Shared by modals, cards, curved dividers.
+
+2. Navigation (MainNav)
+Element	Size & Spacing	Notes
+Header height	88 px (desktop), 72 px (tablet), 64 px (mobile)	Enough for logo + theme toggle without crowding.
+Logo	160 × 48 px max	Scales down to 120 × 36 px on mobile.
+Desktop link spacing	32 px gap	Maintain luxury “air.”
+Mobile drawer width	280 px	Slide‑in from right; padding: 24px.
+Theme toggle button	40 × 40 px touch target	Corner radius --radius-lg.
+
+Sticky behaviour: backdrop-blur-md shadow-md after 16 px scroll.
+
+3. Hero Section
+Property	Desktop	Mobile
+Height	80 vh (min 640 px, max 720 px)	70 vh (min 480 px)
+Image rotation	6 s fade‑cross @20% opacity gradient overlay	
+CTA group	Buttons 180 × 56 px, gap 24 px	Buttons 100% width, height 52 px, stacked with 16 px gap
+
+Gradient overlay stops: #000 0%, #00000080 35%, transparent 100% for gold/amber foreground legibility.
+
+4. Services Section
+Grid:
+
+txt
+Copy
+Edit
+Desktop   : 3 columns × 1fr (card width 320‑360 px)
+Tablet    : 2 columns
+Mobile    : 1 column
+Gap       : 40 / 32 / 24 px
+Card:
+
+Width: 100 %
+
+Height: auto, min 420 px
+
+Padding: 32 px / 28 px / 24 px
+
+Shadow: 0 12px 40px -12px rgba(255, 203, 112, .25) (luxury gold tint)
+
+5. Testimonials Carousel
+Metric	Value
+Card width	440 px desktop, 320 px tablet, 280 px mobile
+Card height	260 px
+Avatar size	72 px desktop, 56 px mobile
+Scroll snap	scroll-snap-type: x mandatory; snap-align: start;
+
+6. Gallery Page (Instagram grid)
+Breakpoint	Columns	Gap
+≥1280 px	5	20 px
+1024‑1279 px	4	16 px
+768‑1023 px	3	14 px
+≤767 px	2	12 px
+
+Thumbnail aspect‑ratio 1:1; use <Image fill> lazy‑loaded.
+
+7. Pricing Page
+Pricing table card:
+
+Max width: 820 px
+
+Row height: 56 px list items
+
+Thumbnail: 64 × 64 px rounded
+
+Accent divider atop card: 4 px high gradient amber‑500 → purple‑600.
+
+8. Booking Modal / Flow
+Property	Desktop Sheet	Mobile Bottom‑Sheet
+Max‑width	560 px	100 %
+Padding	32 px	24 px
+Field height	48 px	same
+Step indicator	Height 48 px, border‑bottom amber‑400 progress bar 4 px	Fixed top within sheet
+Close zone	48 px square, offset 16 px from top‑right	100 % width drag‑bar 32 × 4 px
+
+Set height: max-height: calc(100vh - 128px) to keep backdrop visible.
+
+9. Client Portal Dashboard
+Column layout	Desktop	Tablet	Mobile
+Main content	8 / 12	7 / 12	12 / 12
+Sidebar (loyalty / hair simulator links)	4 / 12	5 / 12 collapsible	Off‑canvas drawer
+
+Card padding 24px; section gap 48px.
+
+10. Admin Area
+Header: 72 px, sticky inside admin layout (nav hidden).
+
+Left sidebar: 260 px fixed (desktop), collapsible 72 px mini icons.
+
+Content wrapper: padding: 32px 40px.
+
+Table rows: 52 px height, checkbox column 48 px.
+
+Shared Touch‑target & Typography Tokens
+Token	Value
+--tap-min	44 × 44 px
+--font-display	48‑56 px / 1.1
+--font-h1	36‑40 px / 1.2
+--font-body	16 px / 1.6
+--font-label	14 px / 1.4
+
+Implementation Tips
+Tailwind plugin: Create a tailwind.theme.extend block with the tokens above, e.g.
+
+js
+Copy
+Edit
+maxWidth: { 'booking': '560px' },
+spacing: { 'section': '96px', 'gutter': '72px' },
+Framer Motion presets:
+
+Fade + translate‑y 8 px for cards (0.3 s)
+
+Scale‑in modal-root from 0.96 → 1.
+
+Dark mode: keep amber accents identical; swap purple 600 → purple 300 for contrast.
+
+With these concrete numbers you can wireframe or drop into Storybook to validate quickly. Adjust once live screenshots reveal real‑world content edge‑cases (extra‑long service names, 5‑star testimonial overflow, etc.), but the ratios will remain rock‑solid.
