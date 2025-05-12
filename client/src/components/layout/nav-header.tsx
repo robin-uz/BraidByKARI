@@ -39,6 +39,11 @@ export function NavHeader() {
   const [location] = useLocation();
   
   // Mock user data - in a real app this would come from an auth hook
+  const mockUser = {
+    username: "Customer",
+    email: "customer@example.com",
+    isAdmin: false
+  };
   const user = null; // No user logged in by default
   const logout = () => console.log('Logging out');
 
@@ -118,7 +123,7 @@ export function NavHeader() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-[var(--nav-link-gap)]">
-          {NAV_LINKS.filter(link => link.admin ? user?.isAdmin : true).map((link) => (
+          {NAV_LINKS.filter(link => link.admin ? false : true).map((link) => (
             <Link 
               key={link.href} 
               href={link.href}
@@ -152,7 +157,7 @@ export function NavHeader() {
                 <TouchableArea>
                   <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-amber-400">
                     <User size={20} />
-                    <span className="font-medium">{user.username}</span>
+                    <span className="font-medium">{mockUser.username}</span>
                     <ChevronDown size={16} />
                   </div>
                 </TouchableArea>
@@ -178,7 +183,7 @@ export function NavHeader() {
                     <span>Loyalty Points</span>
                   </DropdownMenuItem>
                 </Link>
-                {user.isAdmin && (
+                {false && (
                   <Link href="/admin">
                     <DropdownMenuItem className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
@@ -258,11 +263,11 @@ export function NavHeader() {
             <div className="mb-6 pb-6 border-b border-neutral-200 dark:border-neutral-800">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-800 flex items-center justify-center text-amber-800 dark:text-amber-200 text-lg font-bold">
-                  {user.username.charAt(0).toUpperCase()}
+                  {mockUser.username.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="font-semibold text-neutral-900 dark:text-white">{user.username}</p>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{user.email}</p>
+                  <p className="font-semibold text-neutral-900 dark:text-white">{mockUser.username}</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{mockUser.email}</p>
                 </div>
               </div>
               
@@ -291,7 +296,7 @@ export function NavHeader() {
           
           {/* Mobile Navigation Links */}
           <nav className="flex flex-col space-y-1">
-            {NAV_LINKS.filter(link => link.admin ? user?.isAdmin : true).map((link) => (
+            {NAV_LINKS.filter(link => link.admin ? false : true).map((link) => (
               <Link 
                 key={link.href} 
                 href={link.href} 

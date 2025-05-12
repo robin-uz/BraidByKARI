@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useLocation } from "wouter";
 import { NavHeader } from "./nav-header";
-import { Footer } from "./layout";
+import { Footer } from "./footer";
 
 interface MainLayoutProps {
   children: ReactNode;
