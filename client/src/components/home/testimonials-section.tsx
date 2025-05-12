@@ -31,7 +31,7 @@ export default function TestimonialsSection() {
       name: "Jasmine Williams",
       testimonial: "I've been getting my braids done at different salons for years, but Divine Braids is on another level. The attention to detail is amazing, and my knotless braids lasted for 3 months!",
       rating: 5,
-      imageUrl: "/testimonials/jasmine-testimonial.png",
+      imageUrl: "/testimonials/jasmine-braids.jpg",
       isActive: true
     },
     {
