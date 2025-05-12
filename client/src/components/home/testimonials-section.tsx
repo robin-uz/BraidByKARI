@@ -190,7 +190,8 @@ export default function TestimonialsSection() {
         
         {/* More testimonials */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {displayTestimonials.slice(1).map((testimonial, index) => (
+          {displayTestimonials.length > 1 ? (
+            displayTestimonials.slice(1).map((testimonial, index) => (
             <div key={testimonial.id} className="luxury-card group">
               <div className="relative z-10 bg-white dark:bg-neutral-900 p-8 rounded-xl h-full flex flex-col">
                 {/* Decorative element */}
