@@ -16,20 +16,19 @@ interface HeroImage {
 const HERO_IMAGES: HeroImage[] = [
   {
     url: '/images/hero-braids-1.jpg',
-    alt: 'Woman with elegant box braids',
+    alt: 'Woman with elegant box braids in luxurious setting',
     heading: 'LUXURY BRAIDING EXPERIENCE',
     subheading: 'Where skill meets artistry in every strand',
   },
   {
-    // Temp placeholders - these will be replaced with the real images
-    url: '/images/hero-braids-1.jpg',
-    alt: 'Woman with stylish knotless braids',
+    url: '/images/hero-braids-2.jpg',
+    alt: 'Woman with stylish knotless braids in warm amber lighting',
     heading: 'ELEVATE YOUR NATURAL BEAUTY',
     subheading: 'Premium styles that celebrate your unique essence',
   },
   {
-    // Temp placeholders - these will be replaced with the real images
-    url: '/images/hero-braids-1.jpg',
+    // Third image placeholder - will be updated when third image is received
+    url: '/images/hero-braids-2.jpg', // Temporarily use second image until third is received
     alt: 'Woman with detailed hair braiding',
     heading: 'MASTER CRAFTED STYLES',
     subheading: 'Detail-oriented artistry for unforgettable looks',
