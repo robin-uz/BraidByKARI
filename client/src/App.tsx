@@ -7,6 +7,7 @@ import MainLayout from "@/components/layout/main-layout";
 // Pages
 import HomePage from "@/pages/home-page";
 import GalleryPage from "@/pages/gallery-page";
+import ServicesPage from "@/pages/services-page";
 import BookingPage from "@/pages/booking-page";
 import ContactPage from "@/pages/contact-page";
 import PricingPage from "@/pages/pricing-page";
@@ -44,6 +45,7 @@ function Router() {
         {/* Public routes */}
         <Route path="/" component={HomePage} />
         <Route path="/gallery" component={GalleryPage} />
+        <Route path="/services" component={ServicesPage} />
         <Route path="/pricing" component={PricingPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/auth" component={SupabaseAuth} />
