@@ -139,18 +139,18 @@ export default function TestimonialsSection() {
           
           <div className="relative glassmorphism rounded-xl overflow-hidden z-10">
             <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* Image side */}
-              <div className="relative h-80 md:h-full">
+              {/* Image side - Optimized for both mobile and desktop */}
+              <div className="relative h-96 md:h-full flex items-center justify-center overflow-hidden">
                 <img 
-                  src={displayTestimonials[0]?.imageUrl || "/testimonials/client-testimonial.jpg"} 
+                  src={displayTestimonials[0]?.imageUrl || "/testimonials/jasmine-braids.jpg"} 
                   alt={`${displayTestimonials[0]?.name || "Happy client"}`} 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/70 via-transparent to-transparent"></div>
               </div>
               
-              {/* Content side */}
-              <div className="p-8 md:p-12 flex flex-col justify-center bg-white/95 dark:bg-neutral-900/95">
+              {/* Content side - Improved spacing on mobile */}
+              <div className="p-6 md:p-12 flex flex-col justify-center bg-white/95 dark:bg-neutral-900/95">
                 <svg className="w-14 h-14 text-purple-500 dark:text-purple-400 mb-6 opacity-80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.5 7C9.5 8.38071 8.38071 9.5 7 9.5C5.61929 9.5 4.5 8.38071 4.5 7C4.5 5.61929 5.61929 4.5 7 4.5C8.38071 4.5 9.5 5.61929 9.5 7Z" fill="currentColor"/>
                   <path d="M9.5 7C9.5 8.38071 8.38071 9.5 7 9.5V16.5H14V9.5C12.6193 9.5 11.5 8.38071 11.5 7C11.5 5.61929 12.6193 4.5 14 4.5C15.3807 4.5 16.5 5.61929 16.5 7C16.5 8.38071 15.3807 9.5 14 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -188,14 +188,14 @@ export default function TestimonialsSection() {
           </div>
         </div>
         
-        {/* More testimonials */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* More testimonials - Responsive grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {displayTestimonials.slice(1).map((testimonial, index) => (
             <div key={testimonial.id} className="luxury-card group">
-              <div className="relative z-10 bg-white dark:bg-neutral-900 p-8 rounded-xl h-full flex flex-col">
+              <div className="relative z-10 bg-white dark:bg-neutral-900 p-6 md:p-8 rounded-xl h-full flex flex-col">
                 {/* Decorative element */}
                 <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 rounded-full blur-xl"></div>
+                  <div className="w-16 md:w-20 h-16 md:h-20 bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 rounded-full blur-xl"></div>
                 </div>
                 
                 <svg className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6 opacity-80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -203,12 +203,12 @@ export default function TestimonialsSection() {
                   <path d="M9.5 7C9.5 8.38071 8.38071 9.5 7 9.5V16.5H14V9.5C12.6193 9.5 11.5 8.38071 11.5 7C11.5 5.61929 12.6193 4.5 14 4.5C15.3807 4.5 16.5 5.61929 16.5 7C16.5 8.38071 15.3807 9.5 14 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 
-                <p className="mb-6 italic text-neutral-700 dark:text-neutral-300 leading-relaxed flex-grow">
+                <p className="mb-6 italic text-neutral-700 dark:text-neutral-300 leading-relaxed flex-grow text-sm md:text-base line-clamp-4 md:line-clamp-none">
                   {testimonial.testimonial}
                 </p>
                 
                 <div className="flex items-center mt-auto pt-4 border-t border-neutral-200 dark:border-neutral-800">
-                  <div className="h-14 w-14 rounded-full overflow-hidden shadow-md border-2 border-purple-100 dark:border-purple-900">
+                  <div className="h-12 w-12 md:h-14 md:w-14 rounded-full overflow-hidden shadow-md border-2 border-purple-100 dark:border-purple-900">
                     {testimonial.imageUrl ? (
                       <img 
                         src={testimonial.imageUrl}
@@ -221,8 +221,8 @@ export default function TestimonialsSection() {
                       </div>
                     )}
                   </div>
-                  <div className="ml-4">
-                    <h4 className="font-semibold bg-gradient-to-r from-purple-600 to-fuchsia-600 dark:from-purple-400 dark:to-fuchsia-400 text-transparent bg-clip-text">
+                  <div className="ml-3 md:ml-4">
+                    <h4 className="font-semibold text-sm md:text-base bg-gradient-to-r from-purple-600 to-fuchsia-600 dark:from-purple-400 dark:to-fuchsia-400 text-transparent bg-clip-text">
                       {testimonial.name}
                     </h4>
                     <div className="text-purple-600 dark:text-purple-400 flex">
