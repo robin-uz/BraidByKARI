@@ -1,100 +1,200 @@
-import { Helmet } from "react-helmet";
-import ContactInfo from "@/components/contact/contact-info";
-import GoogleMap from "@/components/ui/google-map";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Instagram, Facebook, Phone, Clock, MapPin } from 'lucide-react';
+import MainLayout from '@/components/layout/main-layout';
+import ContactForm from '@/components/contact/contact-form';
+import { HeroWrapper } from '@/components/home/hero-wrapper';
+import { ResponsiveText } from '@/components/ui/container';
+import { SiTiktok } from 'react-icons/si';
 
-export default function ContactPage() {
+const ContactPage = () => {
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
+  
   return (
-    <>
-      <Helmet>
-        <title>Contact Us | Divine Braids</title>
-        <meta name="description" content="Get in touch with Divine Braids. Find our location, contact information, and business hours." />
-      </Helmet>
-      
-      <section className="py-20 bg-white dark:bg-neutral-900">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-10 md:mb-16">
-            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4">Get In Touch</h1>
-            <p className="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto px-4">
-              Have questions? We're here to help. Contact us through any of the methods below.
-            </p>
+    <MainLayout>
+      <div className="w-full">
+        {/* Slim Hero Section */}
+        <HeroWrapper 
+          img="/images-new/contact-banner.png" 
+          className="h-[30vh]"
+          overlayOpacity="bg-black/60"
+        >
+          <div className="container mx-auto px-4 md:px-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="max-w-3xl"
+            >
+              <ResponsiveText
+                as="h1"
+                variant="h1"
+                className="font-bold text-white drop-shadow-lg font-serif mb-2"
+              >
+                <span className="bg-gradient-to-r from-amber-300 to-amber-600 text-transparent bg-clip-text">
+                  Get in Touch
+                </span>
+              </ResponsiveText>
+              <ResponsiveText
+                variant="h3"
+                className="text-neutral-200 max-w-2xl drop-shadow-md font-light"
+              >
+                We're here to answer your questions
+              </ResponsiveText>
+            </motion.div>
           </div>
-          
-          {/* On mobile, contact info first, then form, then map */}
-          <div className="flex flex-col md:flex-row flex-wrap gap-6 md:gap-8">
-            <div className="w-full md:w-[calc(50%-1rem)] order-1">
-              {/* Contact Information */}
-              <ContactInfo />
-            </div>
-            
-            <div className="w-full md:w-[calc(50%-1rem)] order-3 md:order-2 mt-6 md:mt-0 h-[350px] md:h-auto">
-              {/* Google Map - Fixed height on mobile */}
-              <GoogleMap 
-                address="123 Braiding Avenue, Los Angeles, CA 90001" 
-                height="100%"
-              />
-            </div>
-            
-            <div className="w-full order-2 md:order-3 mt-6">
-              <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg shadow-lg p-4 sm:p-6 md:p-8 max-w-3xl mx-auto">
-                <h2 className="font-heading text-xl sm:text-2xl font-semibold mb-4 md:mb-6 text-center text-purple-700 dark:text-purple-300">Send Us a Message</h2>
+        </HeroWrapper>
+
+        {/* Contact + Map Grid */}
+        <section className="py-12 md:py-16 bg-purple-950">
+          <div className="container mx-auto px-4 md:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              
+              {/* Contact Information Card */}
+              <motion.div 
+                {...fadeIn}
+                className="bg-white/5 backdrop-blur-lg ring-1 ring-white/10 rounded-3xl p-8 md:p-10 flex flex-col"
+              >
+                <ResponsiveText
+                  as="h2"
+                  variant="h2"
+                  className="text-amber-400 font-serif mb-6"
+                >
+                  Contact Information
+                </ResponsiveText>
                 
-                <form className="space-y-4 md:space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="space-y-6 mb-10">
+                  <div className="flex items-start">
+                    <MapPin className="text-amber-500 mr-4 mt-1 shrink-0" />
                     <div>
-                      <label htmlFor="name" className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base">Your Name <span className="text-red-500">*</span></label>
-                      <input 
-                        type="text" 
-                        id="name" 
-                        className="w-full px-3 py-2 text-sm sm:text-base border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base">Your Email <span className="text-red-500">*</span></label>
-                      <input 
-                        type="email" 
-                        id="email" 
-                        className="w-full px-3 py-2 text-sm sm:text-base border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
-                        required
-                      />
+                      <h3 className="text-white font-medium mb-1">Our Location</h3>
+                      <p className="text-gray-300">
+                        123 Braiding Avenue<br />
+                        Atlanta, GA 30303
+                      </p>
                     </div>
                   </div>
                   
-                  <div>
-                    <label htmlFor="subject" className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base">Subject <span className="text-red-500">*</span></label>
-                    <input 
-                      type="text" 
-                      id="subject" 
-                      className="w-full px-3 py-2 text-sm sm:text-base border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900"
-                      required
-                    />
+                  <div className="flex items-start">
+                    <Phone className="text-amber-500 mr-4 mt-1 shrink-0" />
+                    <div>
+                      <h3 className="text-white font-medium mb-1">Phone</h3>
+                      <p className="text-gray-300">(404) 555-1234</p>
+                    </div>
                   </div>
                   
-                  <div>
-                    <label htmlFor="message" className="block mb-1 sm:mb-2 font-medium text-sm sm:text-base">Your Message <span className="text-red-500">*</span></label>
-                    <textarea 
-                      id="message" 
-                      rows={5}
-                      className="w-full px-3 py-2 text-sm sm:text-base border border-purple-200 dark:border-purple-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-neutral-900 resize-none"
-                      required
-                    ></textarea>
+                  <div className="flex items-start">
+                    <Clock className="text-amber-500 mr-4 mt-1 shrink-0" />
+                    <div>
+                      <h3 className="text-white font-medium mb-1">Hours</h3>
+                      <p className="text-gray-300">
+                        Monday - Friday: 10am - 8pm<br />
+                        Saturday: 9am - 6pm<br />
+                        Sunday: 11am - 5pm
+                      </p>
+                    </div>
                   </div>
-                  
-                  <div className="flex justify-center">
-                    <button 
-                      type="submit" 
-                      className="bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm sm:text-base py-2 sm:py-3 px-6 sm:px-8 rounded-lg transition-all shadow-md hover:shadow-lg"
+                </div>
+                
+                <div className="mt-auto">
+                  <h3 className="text-white font-medium mb-3">Connect With Us</h3>
+                  <div className="flex gap-4">
+                    <a 
+                      href="https://instagram.com/karistylez" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-black/20 rounded-full hover:text-[#d9a43b] transition-colors"
+                      aria-label="Instagram"
                     >
-                      Send Message
-                    </button>
+                      <Instagram size={24} />
+                    </a>
+                    <a 
+                      href="https://tiktok.com/@karistylez" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-black/20 rounded-full hover:text-[#d9a43b] transition-colors"
+                      aria-label="TikTok"
+                    >
+                      <SiTiktok size={24} />
+                    </a>
+                    <a 
+                      href="https://facebook.com/karistylez" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-black/20 rounded-full hover:text-[#d9a43b] transition-colors"
+                      aria-label="Facebook"
+                    >
+                      <Facebook size={24} />
+                    </a>
                   </div>
-                </form>
-              </div>
+                </div>
+              </motion.div>
+              
+              {/* Google Map Card */}
+              <motion.div 
+                {...fadeIn}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="bg-white/5 backdrop-blur-lg ring-1 ring-white/10 rounded-3xl overflow-hidden"
+              >
+                <div className="aspect-[16/9] w-full">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106162.92927441687!2d-84.47670364179685!3d33.78118360000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88f5045d6993098d%3A0x66fede2f990b630b!2sAtlanta%2C%20GA!5e0!3m2!1sen!2sus!4v1647294882553!5m2!1sen!2sus" 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }} 
+                    allowFullScreen={false} 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="KARI STYLEZ Location"
+                    className="grayscale hover:grayscale-0 transition-all duration-300"
+                  ></iframe>
+                </div>
+                <div className="p-4 flex justify-end">
+                  <a 
+                    href="https://maps.google.com/?q=Atlanta,GA" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+                  >
+                    Get Directions
+                  </a>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      </section>
-    </>
+        </section>
+
+        {/* Contact Form Section */}
+        <section className="py-12 md:py-16 bg-gradient-to-b from-purple-950 to-purple-900">
+          <div className="container mx-auto px-4 md:px-8">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="max-w-3xl mx-auto"
+            >
+              <ResponsiveText
+                as="h2"
+                variant="h2"
+                className="text-amber-400 font-serif mb-6 text-center"
+              >
+                Send Us a Message
+              </ResponsiveText>
+              <p className="text-gray-300 text-center mb-10">
+                Have questions about our services or want to book an appointment? Send us a message and we'll get back to you as soon as possible.
+              </p>
+              
+              <ContactForm />
+            </motion.div>
+          </div>
+        </section>
+      </div>
+    </MainLayout>
   );
-}
+};
+
+export default ContactPage;
