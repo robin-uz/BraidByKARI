@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Testimonial } from "@shared/schema";
 import { Loader2 } from "lucide-react";
 import { Star } from "lucide-react";
-import JasmineTestimonial from "../../assets/testimonials/jasmine-testimonial.png";
 
 export default function TestimonialsSection() {
   const { data: testimonials, isLoading, error } = useQuery<Testimonial[]>({
@@ -32,7 +31,7 @@ export default function TestimonialsSection() {
       name: "Jasmine Williams",
       testimonial: "I've been getting my braids done at different salons for years, but Divine Braids is on another level. The attention to detail is amazing, and my knotless braids lasted for 3 months!",
       rating: 5,
-      imageUrl: JasmineTestimonial,
+      imageUrl: "/testimonials/jasmine-testimonial.png",
       isActive: true
     },
     {
