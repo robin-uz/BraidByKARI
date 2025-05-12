@@ -142,8 +142,8 @@ export default function TestimonialsSection() {
               {/* Image side */}
               <div className="relative h-80 md:h-full">
                 <img 
-                  src="https://images.unsplash.com/photo-1605980776566-0486c3ac7065?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
-                  alt="Happy client" 
+                  src={displayTestimonials[0]?.imageUrl || "/testimonials/client-testimonial.jpg"} 
+                  alt={`${displayTestimonials[0]?.name || "Happy client"}`} 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/70 via-transparent to-transparent"></div>
