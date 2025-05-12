@@ -16,19 +16,19 @@ interface HeroImage {
 const HERO_IMAGES: HeroImage[] = [
   {
     url: '/images/hero-braids-1.jpg',
-    alt: 'Woman with elegant box braids',
+    alt: 'Woman with elegant box braids in warm golden lighting',
     heading: 'LUXURY BRAIDING EXPERIENCE',
     subheading: 'Where skill meets artistry in every strand',
   },
   {
     url: '/images/hero-braids-2.jpg',
-    alt: 'Woman with stylish knotless braids in warm amber lighting',
+    alt: 'Woman with golden-brown twisted braids in warm lighting',
     heading: 'ELEVATE YOUR NATURAL BEAUTY',
     subheading: 'Premium styles that celebrate your unique essence',
   },
   {
     url: '/images/hero-braids-3.jpg',
-    alt: 'Woman with curly braids hairstyle',
+    alt: 'Woman with long box braids and rust-colored top',
     heading: 'MASTER CRAFTED STYLES',
     subheading: 'Detail-oriented artistry for unforgettable looks',
   },
