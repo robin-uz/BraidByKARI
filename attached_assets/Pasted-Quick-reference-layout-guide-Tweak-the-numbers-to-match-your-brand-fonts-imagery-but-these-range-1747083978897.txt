@@ -1,0 +1,28 @@
+Quick‑reference layout guide
+(Tweak the numbers to match your brand fonts + imagery, but these ranges keep things comfortable on most screens.)
+
+Area	Desktop (≥ 1024 px)	Tablet (768‑1023 px)	Mobile (≤ 767 px)	Notes
+Overall page width	1140‑1280 px max‑width, centered	92 % viewport	94 % viewport	Keeps hero photos crisp without feeling “boxed in.”
+Grid	12‑col, 72 px gutters, 24 px internal gutters	8‑col, 56 px / 20 px	4‑col, 16 px / 12 px	Lets card + form blocks re‑flow cleanly at each breakpoint.
+Primary booking card	640‑720 px wide	90 % viewport	100 % viewport	Card shadows at 8 px blur, 2 px spread, 20 % opacity.
+Modal (appointment flow, policy pop‑ups)	480‑600 px wide (max‑width: 90 vw), border‑radius 16 px	440‑520 px (max‑width: 94 vw)	100 % width, slide‑up sheet	Keep height auto; scroll inner content, not the page.
+CTA buttons	Min‑width ≥ 140 px, height 44‑48 px	Same	100 % width in sheets	12‑16 px corner radius; 24 px vertical space before/after.
+Typography	Display (hero) 48‑56 px, H1 36‑40 px, body 16 px	H1 32 px, body 15 px	H1 28 px, body 15 px	Line‑height ~1.4 for body, 1.2 for headings.
+Vertical rhythm	64 px sections	48 px	32 px	Keeps breathing room around pricing tables & gallery.
+Form fields	320‑420 px row or full width of card	80‑90 %	100 %	Row height 44 px; icon + label left, error text 12 px red.
+
+Alignment & visual flow
+Center‑align hero copy, then left‑align everything below the fold. It draws eyes to the headline but lets users scan prices/forms quickly.
+
+Sticky booking button (bottom‑right on desktop, full‑width bar on mobile) ensures conversion without hunting.
+
+Progress indicator (steps 1‑3) sits 32 px above the form on every modal; reserve 64 px min for close button & safe‑touch zone.
+
+Practical tips
+Modal padding: 32 px desktop, 24 px tablet, 20 px mobile.
+
+Safe‑area insets (iOS notch) add padding-bottom: env(safe-area-inset-bottom) for mobile bottom sheets.
+
+Max modal height: calc(100vh - 120px) so the dimmed background always peeks through; scroll the internal .modal-body.
+
+Animation: 200 ms ease‑out fade + 8 px translate‑up feels snappy and unobtrusive.

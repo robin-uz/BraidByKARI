@@ -4,6 +4,105 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 
+  Layout System Variables - Based on Layout Guide
+  These variables provide consistent spacing, sizing and visual hierarchy
+*/
+@layer base {
+  :root {
+    /* Page width constraints */
+    --page-width-desktop: 1280px;
+    --page-width-tablet: 92vw;
+    --page-width-mobile: 94vw;
+    
+    /* Grid configuration */
+    --grid-columns-desktop: 12;
+    --grid-columns-tablet: 8;
+    --grid-columns-mobile: 4;
+    --grid-outer-gutter-desktop: 72px;
+    --grid-outer-gutter-tablet: 56px;
+    --grid-outer-gutter-mobile: 16px;
+    --grid-inner-gutter-desktop: 24px;
+    --grid-inner-gutter-tablet: 20px;
+    --grid-inner-gutter-mobile: 12px;
+    
+    /* Card dimensions */
+    --card-width-desktop: 720px;
+    --card-width-tablet: 90vw;
+    --card-width-mobile: 100%;
+    --card-shadow-blur: 8px;
+    --card-shadow-spread: 2px;
+    --card-shadow-opacity: 20%;
+    
+    /* Modal configurations */
+    --modal-width-desktop: 600px;
+    --modal-max-width-desktop: 90vw;
+    --modal-width-tablet: 520px;
+    --modal-max-width-tablet: 94vw;
+    --modal-width-mobile: 100%;
+    --modal-border-radius: 16px;
+    --modal-padding-desktop: 32px;
+    --modal-padding-tablet: 24px;
+    --modal-padding-mobile: 20px;
+    --modal-max-height: calc(100vh - 120px);
+    
+    /* Button specifications */
+    --button-min-width: 140px;
+    --button-height: 48px;
+    --button-border-radius: 16px;
+    --button-vertical-spacing: 24px;
+    
+    /* Typography scales */
+    --font-size-display-desktop: 56px;
+    --font-size-h1-desktop: 40px;
+    --font-size-h2-desktop: 32px;
+    --font-size-h3-desktop: 24px;
+    --font-size-h4-desktop: 20px;
+    --font-size-body-desktop: 16px;
+    
+    --font-size-display-tablet: 48px;
+    --font-size-h1-tablet: 32px;
+    --font-size-h2-tablet: 28px;
+    --font-size-h3-tablet: 22px;
+    --font-size-h4-tablet: 18px;
+    --font-size-body-tablet: 15px;
+    
+    --font-size-display-mobile: 36px;
+    --font-size-h1-mobile: 28px;
+    --font-size-h2-mobile: 24px;
+    --font-size-h3-mobile: 20px;
+    --font-size-h4-mobile: 18px;
+    --font-size-body-mobile: 15px;
+    
+    --line-height-heading: 1.2;
+    --line-height-body: 1.4;
+    
+    /* Section spacing (vertical rhythm) */
+    --vertical-spacing-desktop: 64px;
+    --vertical-spacing-tablet: 48px;
+    --vertical-spacing-mobile: 32px;
+    
+    /* Form field dimensions */
+    --form-field-width-desktop: 420px;
+    --form-field-width-tablet: 90%;
+    --form-field-width-mobile: 100%;
+    --form-field-height: 44px;
+    --form-error-text-size: 12px;
+    
+    /* Animation settings */
+    --animation-duration: 200ms;
+    --animation-easing: ease-out;
+    --animation-translate-y: 8px;
+    
+    /* KARI STYLEZ Brand Colors */
+    --kari-gold: #D4AF37;
+    --kari-bronze: #CD7F32;
+    --kari-brown: #A47551;  
+    --kari-cream: #FCF5E5;
+    --kari-black: #121212;
+  }
+}
+
 /* KARI STYLEZ Custom Styling */
 :root {
   --kari-gold: #d89a3e;
