@@ -1,11 +1,11 @@
 import React from 'react';
-import { Layout } from '@/components/layout/layout';
+import MainLayout from '@/components/layout/main-layout';
 import HeroSection from '@/components/home/hero-section';
 import { motion } from 'framer-motion';
 
 const HomePage = () => {
   return (
-    <Layout includeHeader={true} includeFooter={true} wrapWithContainer={false}>
+    <MainLayout>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -16,7 +16,7 @@ const HomePage = () => {
         
         {/* Additional content sections will be added here */}
       </motion.div>
-    </Layout>
+    </MainLayout>
   );
 };
 
