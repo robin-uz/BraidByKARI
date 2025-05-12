@@ -1,0 +1,40 @@
+1 · UX / Information Architecture
+Step	Purpose	Key UI Elements
+1. Service	Pick a style	Gallery‑style cards (image, name, price, duration) + category filter pills
+2. Date	Choose day	Calendar with available days highlighted in gold; disabled days dimmed
+3. Time	Pick slot	30‑min slot buttons; auto‑scroll to first available
+4. Review & Pay	Confirm + deposit	Summary card (style, date, time, price); Stripe deposit field
+
+Sticky “Booking Summary” card lives on the right (desktop) or slides up from bottom (mobile).
+Progress bar across top: 25 % / 50 % / 75 % / 100 % with Framer Motion.
+
+2 · Visual & Motion Tokens
+css
+Copy
+Edit
+wizard-bg            bg-purple-950
+step-card            bg-white/5 backdrop-blur-lg ring-1 ring-white/10 rounded-3xl
+primary-gold         #d9a43b
+progress-track       bg-white/15 h-1 rounded
+progress-fill        bg-primary-gold h-1 rounded
+fadeIn               initial:{opacity:0,y:16} animate:{opacity:1,y:0} transition:{duration:.4}
+3 · Replit AI Prompt (copy‑paste)
+**You’re a senior Next.js + Tailwind dev inside kari-stylez-web.
+Task: Replace the existing /booking page with a 4‑step wizard.
+1. Delete old /booking markup (keep route).
+2. Create app/booking/page.tsx (or pages/booking.tsx).
+3. Implement WizardLayout component:
+   • top progress bar (progress prop 0–100)
+   • children render current step
+   • sticky summary card → right of wizard on ≥ lg, full‑width slide‑up on mobile.
+4. Implement steps as separate files under components/booking/:
+   • StepService.tsx – filter pills + masonry StyleCard gallery (use 8 sample services with /public/styles/ imgs).
+   • StepDate.tsx – calendar from @headlessui/react (days array).
+   • StepTime.tsx – grid of slot buttons (9 am–7 pm).
+   • StepReview.tsx – summary, Stripe “Pay deposit” placeholder.
+5. State mgmt: useReducer in parent to store {service, date, time}.
+6. Framer Motion page transitions: slide‑x between steps.
+7. Style with tokens above; buttons bg-primary-gold text-black hover:bg-primary-gold/90.
+8. Validate form before advancing (Next disabled until choice made).
+9. Run npm run dev; lint & TS clean.
+Return only new/updated file contents – no explanations.

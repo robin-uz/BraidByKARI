@@ -1,0 +1,44 @@
+1 · Information architecture
+Fold	Purpose	Elements
+Slim hero	Sets context (“Our Craft”)	40 vh banner, arc overlay
+Filter bar	Let guests browse by style type	Pills: All • Knotless • Locs • Cornrows • Kids
+Masonry grid	Visual proof of skill	Responsive 5 → 4 → 3 → 2 → 1 columns
+Lightbox modal	Deep‑dive & share	Full‑screen image, caption, nav arrows, Close
+CTA strip	Nudge to book	“Inspired? Book Now” button
+
+2 · Design tokens
+css
+Copy
+Edit
+grid-gap          14px (mobile) → 18px (desktop)
+column-count      2/3/4/5 via CSS columns
+card-radius       12px
+overlay-gradient  from-brandGold/10 via-purple-900/60 to-black/80
+tap-target        44px
+3 · Replit AI agent prompt (copy–paste)
+**You are a senior Next.js + Tailwind dev inside repo kari-stylez-web.
+Goal: add /gallery page that showcases salon work in a masonry grid with lightbox.
+Steps
+1. Create app/gallery/page.tsx (or pages/gallery.tsx if Pages Router).
+2. Hero section 40 vh with background /public/hero/gallery-banner.jpg, dark overlay, arc gradient top‑left.
+3. Filter pills All, Knotless, Locs, Cornrows, Kids. Clicking pill filters thumbnails client‑side—use useState + CSS hidden.
+4. Masonry grid: <section className="columns-2 sm:columns-3 lg:columns-4 xl:columns-5 gap-x-4 space-y-4">. Each image inside <GalleryItem /> with break-inside-avoid.
+5. components/GalleryItem.tsx
+
+Props: { src, alt, category }
+
+Wrapper: rounded, overflow-hidden, hover scale 1.03 transition.
+
+On click, open <LightboxModal src alt />.
+6. components/LightboxModal.tsx
+
+Portal w/ fixed inset-0 bg-black/80 z-50 flex items-center justify-center.
+
+Image max‑w-screen-md w/ keyboard Esc & outside click to close.
+
+Prev/Next arrows (chevrons) appear on hover desktop; swipe gestures mobile (optional).
+7. Seed with 15 sample images in /public/gallery/ named knotless-01.jpg, locs-01.jpg, etc. Put metadata array in page.
+8. CTA strip at bottom: gold gradient bar + “Inspired? Book Now” linking to /booking.
+9. Use Framer Motion fade‑up for images as they enter viewport (whileInView).
+10. Run npm run dev, confirm /gallery works, no TS or ESLint errors.
+Output only code for new/updated files—no explanations.
