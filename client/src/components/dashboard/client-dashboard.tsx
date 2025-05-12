@@ -8,7 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Card, Grid, Section, Container, ResponsiveText } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
-import { Layout } from '@/components/layout/layout';
+import MainLayout from '@/components/layout/main-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 
@@ -107,17 +107,17 @@ export default function ClientDashboard() {
   
   if (isLoading) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="h-[50vh] flex items-center justify-center">
           <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full"></div>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
   
   if (!user) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="h-[50vh] flex flex-col items-center justify-center">
           <ResponsiveText variant="h2" className="text-red-500 mb-4">
             Authentication Required
@@ -131,18 +131,18 @@ export default function ClientDashboard() {
             </Button>
           </Link>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
   
   return (
-    <Layout>
+    <MainLayout>
       <Section className="bg-neutral-100 dark:bg-neutral-900">
         <Container>
           <DashboardContent user={user} />
         </Container>
       </Section>
-    </Layout>
+    </MainLayout>
   );
 }
 
