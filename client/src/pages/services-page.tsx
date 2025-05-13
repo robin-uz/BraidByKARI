@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import MainLayout from '@/components/layout/main-layout';
-import { ServiceCard } from '@/components/services/service-card';
+import { SimplifiedServiceCard } from '@/components/services/simplified-service-card';
 import { Container, Section, ResponsiveText } from '@/components/ui/container';
 import { 
   Accordion, 
@@ -13,79 +13,142 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Star } from 'lucide-react';
 
-// Sample service data
+// KARI STYLEZ authentic service data
 const SERVICES = [
   {
-    id: "knotless-lg",
-    name: "Knotless Box Braids (Large)",
-    description: "Protective style with a natural-looking part and less tension on the scalp. Our large knotless braids offer a lightweight feel.",
+    id: "classic-knotless",
+    name: "Classic Knotless Box Braids",
+    description: "Medium size knotless box braids with natural hair color.",
     duration: "4-5 hours",
     price: 180,
-    imageUrl: "/images/styles/knotless-braids-lg.jpg",
+    imageUrl: "/assets/kari-stylez/braids-model-1.png",
     category: "Knotless"
   },
   {
-    id: "knotless-sm",
-    name: "Knotless Box Braids (Small)",
-    description: "Finer braids with all the benefits of the knotless technique. More braids for a fuller look that lasts longer.",
-    duration: "6-7 hours",
+    id: "feed-in-cornrows",
+    name: "Feed-in Cornrows",
+    description: "Straight-back feed-in cornrows with clean parts.",
+    duration: "3-4 hours",
+    price: 160,
+    imageUrl: "/assets/kari-stylez/braids-model-3.png",
+    category: "Cornrows"
+  },
+  {
+    id: "knotless-color",
+    name: "Knotless Braids with Color",
+    description: "Medium knotless braids with burgundy color accents.",
+    duration: "5-6 hours",
     price: 220,
-    imageUrl: "/images/styles/knotless-braids-sm.jpg",
+    imageUrl: "/assets/kari-stylez/braids-auburn.png",
     category: "Knotless"
   },
   {
-    id: "goddess-locs",
-    name: "Goddess Locs",
-    description: "Bohemian-inspired locs with a soft, curly texture. Perfect for a natural yet elegant protective style.",
-    duration: "5-6 hours",
-    price: 240,
-    imageUrl: "/images/styles/goddess-locs.jpg",
-    category: "Locs"
+    id: "kids-twist",
+    name: "Kids Twist Style",
+    description: "Cute twist style for children with accessories.",
+    duration: "2-3 hours",
+    price: 120,
+    imageUrl: "/assets/kari-stylez/braids-bob.png",
+    category: "Kids"
   },
   {
-    id: "butterfly-locs",
-    name: "Butterfly Locs",
-    description: "Textured, distressed locs with a bohemian flair. Lightweight and perfect for summer.",
-    duration: "5-6 hours",
-    price: 200,
-    imageUrl: "/images/styles/butterfly-locs.jpg",
-    category: "Locs"
+    id: "long-knotless",
+    name: "Long Knotless Braids",
+    description: "Waist-length knotless braids with golden highlights.",
+    duration: "6-7 hours",
+    price: 240,
+    imageUrl: "/assets/kari-stylez/braids-model-2.png",
+    category: "Knotless"
   },
   {
     id: "stitch-cornrows",
     name: "Stitch Cornrows",
-    description: "Intricate cornrow design with clean parts and sleek finish. Can be styled in various patterns.",
+    description: "Detailed stitch cornrows with zigzag pattern.",
     duration: "3-4 hours",
-    price: 160,
-    imageUrl: "/images/styles/stitch-cornrows.jpg",
+    price: 180,
+    imageUrl: "/assets/kari-stylez/braids-model-3.png",
     category: "Cornrows"
   },
   {
-    id: "kids-braids",
-    name: "Kids Braided Styles",
-    description: "Gentle braided styles specifically for children. Includes beads and cute accessories.",
-    duration: "2-3 hours",
-    price: 120,
-    imageUrl: "/images/styles/kids-braids.jpg",
+    id: "faux-locs",
+    name: "Faux Locs",
+    description: "Bohemian faux locs with wrapped accents.",
+    duration: "5-6 hours",
+    price: 220,
+    imageUrl: "/assets/kari-stylez/braids-model-5.jpg",
+    category: "Locs"
+  },
+  {
+    id: "distressed-locs",
+    name: "Distressed Locs",
+    description: "Bohemian distressed locs with natural finish.",
+    duration: "5-6 hours",
+    price: 220,
+    imageUrl: "/assets/kari-stylez/braids-model-6.jpg",
+    category: "Locs"
+  },
+  {
+    id: "goddess-locs",
+    name: "Goddess Locs",
+    description: "Bohemian-inspired goddess locs with curly ends.",
+    duration: "5-6 hours",
+    price: 240,
+    imageUrl: "/assets/kari-stylez/braids-model-7.jpg",
+    category: "Locs"
+  },
+  {
+    id: "kids-box-braids",
+    name: "Kids Box Braids",
+    description: "Colorful box braids for children with beads.",
+    duration: "3-4 hours",
+    price: 150,
+    imageUrl: "/assets/kari-stylez/braids-model-8.jpg",
     category: "Kids"
   },
   {
-    id: "scalp-detox",
-    name: "Scalp Detox Treatment",
-    description: "Deep cleansing treatment that removes buildup, soothes the scalp, and prepares hair for styling.",
-    duration: "45 min",
-    price: 70,
-    imageUrl: "/images/styles/scalp-treatment.jpg",
-    category: "Treatments"
+    id: "jumbo-knotless",
+    name: "Jumbo Knotless Braids",
+    description: "Extra large knotless braids for a bold look.",
+    duration: "4-5 hours",
+    price: 200,
+    imageUrl: "/assets/kari-stylez/braids-curls.png",
+    category: "Knotless"
   },
   {
-    id: "bead-addons",
-    name: "Bead & Cuff Add-ons",
-    description: "Elevate your style with our selection of beads, cuffs, and hair jewelry. Price varies by quantity.",
-    duration: "30-60 min",
-    price: 50,
-    imageUrl: "/images/styles/bead-addons.jpg",
-    category: "Add-ons"
+    id: "small-knotless",
+    name: "Small Knotless Braids",
+    description: "Fine knotless braids with intricate parts.",
+    duration: "7-8 hours",
+    price: 260,
+    imageUrl: "/assets/kari-stylez/braids-model-4.jpg",
+    category: "Knotless"
+  },
+  {
+    id: "butterfly-locs",
+    name: "Butterfly Locs",
+    description: "Textured butterfly locs with distressed loops.",
+    duration: "5-6 hours",
+    price: 220,
+    imageUrl: "/assets/kari-stylez/braids-side.png",
+    category: "Locs"
+  },
+  {
+    id: "kids-cornrows",
+    name: "Kids Cornrows",
+    description: "Gentle cornrows with heart design for kids.",
+    duration: "2-3 hours",
+    price: 120,
+    imageUrl: "/assets/kari-stylez/braids-model-4.jpg",
+    category: "Kids"
+  },
+  {
+    id: "cornrow-updo",
+    name: "Cornrow Updo",
+    description: "Elegant cornrow updo style for special occasions.",
+    duration: "4-5 hours",
+    price: 180,
+    imageUrl: "/assets/kari-stylez/braids-bun.png",
+    category: "Cornrows"
   }
 ];
 
@@ -170,7 +233,7 @@ const ServicesPage = () => {
           <Container>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {filteredServices.map(service => (
-                <ServiceCard key={service.id} {...service} />
+                <SimplifiedServiceCard key={service.id} {...service} />
               ))}
             </div>
             
