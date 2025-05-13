@@ -3,50 +3,12 @@ import { motion } from 'framer-motion';
 import MainLayout from '@/components/layout/main-layout';
 import { Link } from 'wouter';
 
-// Service Card Component
-function ServiceCard({ id, name, description, imageUrl, category }: {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  category: string;
-}) {
-  return (
-    <Link href={`/booking?service=${id}`}>
-      <div className="rounded-xl overflow-hidden relative group cursor-pointer h-full">
-        {/* Image */}
-        <div className="aspect-square overflow-hidden">
-          <img 
-            src={imageUrl} 
-            alt={name} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80"></div>
-        </div>
-        
-        {/* Category Tag */}
-        <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium bg-amber-500 text-black">
-          {category}
-        </div>
-        
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-          <h3 className="text-lg font-bold mb-1">{name}</h3>
-          <p className="text-sm text-neutral-200">{description}</p>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-// KARI STYLEZ authentic service data
+// Services data with KARI STYLEZ folder images
 const SERVICES = [
   {
     id: "classic-knotless",
     name: "Classic Knotless Box Braids",
     description: "Medium size knotless box braids with natural hair color.",
-    duration: "4-5 hours",
-    price: 180,
     imageUrl: "/assets/kari-stylez/braids-model-1.png",
     category: "Knotless"
   },
@@ -54,8 +16,6 @@ const SERVICES = [
     id: "feed-in-cornrows",
     name: "Feed-in Cornrows",
     description: "Straight-back feed-in cornrows with clean parts.",
-    duration: "3-4 hours",
-    price: 160,
     imageUrl: "/assets/kari-stylez/braids-model-3.png",
     category: "Cornrows"
   },
@@ -63,8 +23,6 @@ const SERVICES = [
     id: "knotless-color",
     name: "Knotless Braids with Color",
     description: "Medium knotless braids with burgundy color accents.",
-    duration: "5-6 hours",
-    price: 220,
     imageUrl: "/assets/kari-stylez/braids-auburn.png",
     category: "Knotless"
   },
@@ -72,8 +30,6 @@ const SERVICES = [
     id: "kids-twist",
     name: "Kids Twist Style",
     description: "Cute twist style for children with accessories.",
-    duration: "2-3 hours",
-    price: 120,
     imageUrl: "/assets/kari-stylez/braids-bob.png",
     category: "Kids"
   },
@@ -81,8 +37,6 @@ const SERVICES = [
     id: "long-knotless",
     name: "Long Knotless Braids",
     description: "Waist-length knotless braids with golden highlights.",
-    duration: "6-7 hours",
-    price: 240,
     imageUrl: "/assets/kari-stylez/braids-model-2.png",
     category: "Knotless"
   },
@@ -90,8 +44,6 @@ const SERVICES = [
     id: "stitch-cornrows",
     name: "Stitch Cornrows",
     description: "Detailed stitch cornrows with zigzag pattern.",
-    duration: "3-4 hours",
-    price: 180,
     imageUrl: "/assets/kari-stylez/braids-model-3.png",
     category: "Cornrows"
   },
@@ -99,8 +51,6 @@ const SERVICES = [
     id: "faux-locs",
     name: "Faux Locs",
     description: "Bohemian faux locs with wrapped accents.",
-    duration: "5-6 hours",
-    price: 220,
     imageUrl: "/assets/kari-stylez/braids-model-5.jpg",
     category: "Locs"
   },
@@ -108,8 +58,6 @@ const SERVICES = [
     id: "distressed-locs",
     name: "Distressed Locs",
     description: "Bohemian distressed locs with natural finish.",
-    duration: "5-6 hours",
-    price: 220,
     imageUrl: "/assets/kari-stylez/braids-model-6.jpg",
     category: "Locs"
   },
@@ -117,8 +65,6 @@ const SERVICES = [
     id: "goddess-locs",
     name: "Goddess Locs",
     description: "Bohemian-inspired goddess locs with curly ends.",
-    duration: "5-6 hours",
-    price: 240,
     imageUrl: "/assets/kari-stylez/braids-model-7.jpg",
     category: "Locs"
   },
@@ -126,8 +72,6 @@ const SERVICES = [
     id: "kids-box-braids",
     name: "Kids Box Braids",
     description: "Colorful box braids for children with beads.",
-    duration: "3-4 hours",
-    price: 150,
     imageUrl: "/assets/kari-stylez/braids-model-8.jpg",
     category: "Kids"
   },
@@ -135,8 +79,6 @@ const SERVICES = [
     id: "jumbo-knotless",
     name: "Jumbo Knotless Braids",
     description: "Extra large knotless braids for a bold look.",
-    duration: "4-5 hours",
-    price: 200,
     imageUrl: "/assets/kari-stylez/braids-curls.png",
     category: "Knotless"
   },
@@ -144,14 +86,41 @@ const SERVICES = [
     id: "small-knotless",
     name: "Small Knotless Braids",
     description: "Fine knotless braids with intricate parts.",
-    duration: "7-8 hours",
-    price: 260,
     imageUrl: "/assets/kari-stylez/braids-model-4.jpg",
     category: "Knotless"
   }
 ];
 
 const CATEGORIES = ["All", "Knotless", "Locs", "Cornrows", "Kids"];
+
+// Service Card Component that matches the screenshot
+function ServiceCard({ id, name, description, imageUrl, category }) {
+  return (
+    <div className="rounded-lg overflow-hidden shadow-lg relative group cursor-pointer">
+      {/* Image */}
+      <div className="aspect-square overflow-hidden">
+        <img 
+          src={imageUrl} 
+          alt={name} 
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+        />
+        {/* Overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80"></div>
+      </div>
+      
+      {/* Category Badge */}
+      <div className="absolute top-3 right-3 px-3 py-1 bg-amber-500 text-black text-xs font-medium rounded-full">
+        {category}
+      </div>
+      
+      {/* Service Description */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+        <h3 className="text-lg font-bold mb-1">{name}</h3>
+        <p className="text-sm text-neutral-200">{description}</p>
+      </div>
+    </div>
+  );
+}
 
 const ServicesPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -163,23 +132,9 @@ const ServicesPage = () => {
   return (
     <MainLayout>
       <div className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden bg-gradient-to-b from-purple-950 to-black py-16">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Our Services</h1>
-              <p className="text-lg text-neutral-300 max-w-2xl mx-auto">
-                Explore our premium hair styling services, all expertly crafted by KARI STYLEZ 
-                professional stylists with years of experience.
-              </p>
-            </div>
-          </div>
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-amber-500/10 to-transparent opacity-30"></div>
-        </div>
-        
         {/* Category Filters */}
-        <div className="py-8">
-          <div className="container mx-auto px-4">
+        <div className="pt-8 pb-4">
+          <div className="container mx-auto">
             <div className="flex flex-wrap gap-3 justify-center mb-8">
               {CATEGORIES.map(category => (
                 <button
@@ -187,7 +142,7 @@ const ServicesPage = () => {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     selectedCategory === category
-                      ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
+                      ? "bg-amber-600 text-white shadow-lg shadow-amber-600/20"
                       : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
                   }`}
                 >
@@ -200,31 +155,12 @@ const ServicesPage = () => {
         
         {/* Services Grid */}
         <div className="py-8">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredServices.map(service => (
-                <ServiceCard 
-                  key={service.id}
-                  id={service.id}
-                  name={service.name}
-                  description={service.description}
-                  imageUrl={service.imageUrl}
-                  category={service.category}
-                />
+                <ServiceCard key={service.id} {...service} />
               ))}
             </div>
-          </div>
-        </div>
-        
-        {/* Book Now CTA */}
-        <div className="py-16 bg-gradient-to-b from-black to-purple-950">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6 text-white">Ready to transform your look?</h2>
-            <Link href="/booking">
-              <button className="px-8 py-3 bg-amber-500 text-black font-semibold rounded-full hover:bg-amber-400 transition-colors">
-                Book an Appointment
-              </button>
-            </Link>
           </div>
         </div>
       </div>
